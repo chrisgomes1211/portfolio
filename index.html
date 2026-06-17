@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chris Gomes — Digital Marketer & Web Builder</title>
+  <meta name="description" content="Portfolio of Chris Gomes — digital marketer and web builder. FlexHaus win-back campaign, Medtronic lead gen, and 25+ brand campaigns.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 16px; scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: #0a0a12;
+      color: #f0f0f0;
+      line-height: 1.6;
+    }
+    h1, h2, h3, h4, h5 { font-family: 'Oswald', sans-serif; font-weight: 700; text-transform: uppercase; letter-spacing: 0.01em; }
+    .container { max-width: 1120px; margin: 0 auto; padding: 0 1.5rem; }
+
+    .icon-svg { width: 20px; height: 20px; flex-shrink: 0; }
+    .icon-svg.lg { width: 36px; height: 36px; }
+
+    /* ── PROGRESS BAR ── */
+    .progress-bar {
+      position: fixed; top: 0; left: 0; right: 0; height: 3px; z-index: 9999;
+      background: linear-gradient(90deg, #ff4500, #ff6b35, #ff8c00, #ff4500);
+      background-size: 200% 100%;
+      animation: progressGlow 2s linear infinite;
+      transform-origin: 0 50%;
+      transform: scaleX(0);
+      transition: transform 0.1s linear;
+    }
+    @keyframes progressGlow {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 200% 50%; }
+    }
+
+    /* ── NOISE ── */
+    .noise {
+      position: fixed; inset: 0; z-index: 9998;
+      pointer-events: none; opacity: 0.02;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-repeat: repeat;
+      background-size: 256px 256px;
+    }
+
+    .cursor-glow {
+      position: fixed; width: 600px; height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,107,53,0.06) 0%, transparent 70%);
+      pointer-events: none; z-index: 0;
+      transform: translate(-50%, -50%);
+    }
+
+    /* ── PARTICLES ── */
+    .particles {
+      position: fixed; inset: 0; z-index: 0; overflow: hidden;
+      pointer-events: none;
+    }
+    .particle {
+      position: absolute; border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, rgba(255,107,53,0.4), transparent);
+      opacity: 0.03;
+      animation: particleFloat linear infinite;
+    }
+    @keyframes particleFloat {
+      0% { transform: translateY(0) translateX(0) scale(1); opacity: 0.03; }
+      50% { transform: translateY(-40vh) translateX(20px) scale(1.2); opacity: 0.05; }
+      100% { transform: translateY(-80vh) translateX(-10px) scale(0.8); opacity: 0; }
+    }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background:
+        linear-gradient(135deg, rgba(10,10,18,0.95) 0%, rgba(10,10,18,0.7) 50%, rgba(10,10,18,0.3) 100%),
+        radial-gradient(ellipse at 80% 20%, rgba(255,69,0,0.08) 0%, transparent 60%);
+    }
+    .hero .container { position: relative; z-index: 2; }
+    .hero-content { max-width: 700px; }
+    .hero-content .c-item {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    .hero-content.loaded .c-item {
+      animation: fadeUp 0.7s ease-out forwards;
+    }
+    .hero-content.loaded .cd1 { animation-delay: 0.1s; }
+    .hero-content.loaded .cd2 { animation-delay: 0.25s; }
+    .hero-content.loaded .cd3 { animation-delay: 0.4s; }
+    .hero-content.loaded .cd4 { animation-delay: 0.55s; }
+    .hero-content.loaded .cd5 { animation-delay: 0.7s; }
+    @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: rgba(255,69,0,0.12); border: 1px solid rgba(255,69,0,0.2);
+      border-radius: 100px; padding: 0.35rem 0.9rem 0.35rem 0.5rem;
+      font-size: 0.7rem; color: #ff4500; font-weight: 700;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      margin-bottom: 1.5rem; backdrop-filter: blur(4px);
+    }
+    .hero h1 {
+      font-size: clamp(3.5rem, 8vw, 5.5rem);
+      line-height: 0.9; margin-bottom: 1rem;
+    }
+    .hero h1 .l1 { display: block; color: #fff; }
+    .hero h1 .l2 {
+      display: block;
+      background: linear-gradient(135deg, #ff4500, #ff6b35, #ff8c00, #ff4500);
+      background-size: 300% 300%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: gradientShift 4s ease-in-out infinite;
+      filter: drop-shadow(0 4px 20px rgba(255,69,0,0.3));
+    }
+    @keyframes gradientShift {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+    .hero p {
+      font-size: 1.05rem; color: rgba(255,255,255,0.6);
+      max-width: 520px; margin-bottom: 2rem; line-height: 1.75;
+    }
+    .hero-cta { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.9rem 2rem;
+      background: linear-gradient(135deg, #ff4500, #ff6b35);
+      color: #fff; border: none; border-radius: 14px;
+      font-size: 0.9rem; font-weight: 800; font-family: inherit;
+      text-transform: uppercase; letter-spacing: 0.04em;
+      cursor: pointer; text-decoration: none;
+      transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+      box-shadow: 0 4px 24px rgba(255,69,0,0.3);
+      position: relative; overflow: hidden;
+    }
+    .btn:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 8px 36px rgba(255,69,0,0.4); }
+    .btn-outline {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.9rem 2rem;
+      background: rgba(255,255,255,0.04);
+      color: rgba(255,255,255,0.85);
+      border: 1.5px solid rgba(255,255,255,0.12);
+      border-radius: 14px; font-size: 0.9rem; font-weight: 600; font-family: inherit;
+      cursor: pointer; text-decoration: none; backdrop-filter: blur(4px);
+      transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .btn-outline:hover { border-color: #ff4500; color: #ff4500; background: rgba(255,69,0,0.06); transform: translateY(-2px); }
+
+    .ripple {
+      position: absolute; border-radius: 50%;
+      background: rgba(255,255,255,0.2);
+      transform: scale(0);
+      animation: rippleEffect 0.6s ease-out forwards;
+      pointer-events: none;
+    }
+    @keyframes rippleEffect {
+      to { transform: scale(4); opacity: 0; }
+    }
+
+    .hero-stats { display: flex; gap: 2.5rem; margin-top: 2.5rem; }
+    .hero-stat h5 {
+      font-size: 2rem;
+      background: linear-gradient(135deg, #ff6b35, #ff8c00);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1;
+    }
+    .hero-stat p { font-size: 0.7rem; color: rgba(255,255,255,0.35); text-transform: uppercase; letter-spacing: 0.08em; margin-top: 0.15rem; font-weight: 500; }
+
+    /* ── SECTIONS ── */
+    section { position: relative; z-index: 1; padding: 6rem 0; }
+    .section-label {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      font-size: 0.65rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.14em; color: #ff4500; margin-bottom: 0.75rem;
+    }
+    .section-title { font-size: clamp(2rem, 4vw, 3rem); line-height: 1.08; margin-bottom: 0.75rem; color: #fff; }
+    .section-title .accent { color: #ff4500; }
+    .section-sub { font-size: 0.95rem; color: rgba(255,255,255,0.5); max-width: 560px; line-height: 1.75; }
+
+    .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.7s ease-out, transform 0.7s ease-out; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-scale { opacity: 0; transform: scale(0.92); transition: opacity 0.7s ease-out, transform 0.7s ease-out; }
+    .reveal-scale.visible { opacity: 1; transform: scale(1); }
+
+    /* ── PROJECTS ── */
+    .projects-section { background: linear-gradient(180deg, #0a0a12, #111122); }
+    .projects-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 3rem; }
+    .project-card {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 20px; overflow: hidden;
+      transition: all 0.3s;
+    }
+    .project-card:hover { border-color: rgba(255,69,0,0.2); transform: translateY(-4px); }
+    .project-card .card-img {
+      width: 100%; height: 200px; object-fit: cover;
+      display: block; border-bottom: 1px solid rgba(255,255,255,0.03);
+    }
+    .project-card .card-body { padding: 1.5rem; }
+    .project-card .tag {
+      display: inline-block; font-size: 0.6rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.08em;
+      padding: 0.2rem 0.6rem; border-radius: 6px;
+      background: rgba(255,69,0,0.1); color: #ff4500;
+      margin-bottom: 0.5rem;
+    }
+    .project-card h3 { font-size: 1.2rem; color: #fff; margin-bottom: 0.4rem; }
+    .project-card p { font-size: 0.85rem; color: rgba(255,255,255,0.5); line-height: 1.6; }
+    .project-card .results {
+      display: flex; gap: 1.5rem; margin-top: 1rem;
+      padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.04);
+    }
+    .project-card .results span {
+      font-size: 0.75rem; color: rgba(255,255,255,0.4);
+    }
+    .project-card .results strong {
+      display: block; font-size: 1rem; color: #ff6b35;
+    }
+    .project-card .card-footer {
+      padding: 0 1.5rem 1.5rem;
+    }
+    .project-card .card-footer a {
+      font-size: 0.8rem; color: #ff4500; text-decoration: none;
+      font-weight: 700; display: inline-flex; align-items: center; gap: 0.3rem;
+    }
+    .project-card .card-footer a:hover { text-decoration: underline; }
+
+    /* ── CAMPAIGNS ── */
+    .campaigns-section {
+      background: #111122;
+      border-top: 1px solid rgba(255,255,255,0.03);
+      border-bottom: 1px solid rgba(255,255,255,0.03);
+    }
+    .campaign-card {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 16px; padding: 2rem;
+      margin-top: 2rem; max-width: 700px;
+      display: flex; gap: 2rem; align-items: center;
+    }
+    .campaign-card .icon-wrap {
+      width: 64px; height: 64px; border-radius: 16px;
+      background: rgba(255,69,0,0.08);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .campaign-card h3 { font-size: 1.1rem; color: #fff; margin-bottom: 0.3rem; }
+    .campaign-card .meta { font-size: 0.8rem; color: rgba(255,255,255,0.4); margin-bottom: 0.5rem; }
+    .campaign-card .stats {
+      display: flex; gap: 1.5rem; margin-top: 0.75rem;
+    }
+    .campaign-card .stats span {
+      font-size: 0.75rem; color: rgba(255,255,255,0.4);
+    }
+    .campaign-card .stats strong {
+      display: block; font-size: 1rem; color: #ff6b35;
+    }
+
+    /* ── CLIENTS ── */
+    .clients-section { background: linear-gradient(180deg, #0a0a12, #111122); }
+    .clients-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 1rem;
+      margin-top: 3rem;
+    }
+    .client-chip {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 12px;
+      padding: 1rem 1.25rem;
+      text-align: center;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: rgba(255,255,255,0.6);
+      transition: all 0.25s;
+    }
+    .client-chip:hover {
+      border-color: rgba(255,69,0,0.2);
+      color: #fff;
+      background: rgba(255,69,0,0.04);
+    }
+
+    /* ── CONTACT ── */
+    .contact-section { background: #111122; text-align: center; }
+    .contact-card {
+      max-width: 520px; margin: 2rem auto 0;
+      padding: 2.5rem; background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 20px;
+    }
+    .contact-card h3 { font-size: 1.4rem; color: #fff; margin-bottom: 0.5rem; }
+    .contact-card p { font-size: 0.9rem; color: rgba(255,255,255,0.5); margin-bottom: 1.5rem; }
+    .contact-card .email-link {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      font-size: 1.1rem; font-weight: 700; color: #ff4500;
+      text-decoration: none;
+    }
+    .contact-card .email-link:hover { text-decoration: underline; }
+
+    /* ── FOOTER ── */
+    .site-footer {
+      background: #06060e; padding: 2rem 0;
+      text-align: center; font-size: 0.8rem; color: rgba(255,255,255,0.25);
+      border-top: 1px solid rgba(255,255,255,0.02);
+      position: relative; z-index: 1;
+    }
+    .site-footer a { color: rgba(255,255,255,0.35); text-decoration: none; font-weight: 600; }
+    .site-footer a:hover { color: #ff4500; }
+
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: #0a0a12; }
+    ::-webkit-scrollbar-thumb { background: #ff4500; border-radius: 4px; }
+
+    @media (max-width: 768px) {
+      .projects-grid { grid-template-columns: 1fr; }
+      .campaign-card { flex-direction: column; text-align: center; padding: 1.5rem; }
+      .campaign-card .stats { justify-content: center; flex-wrap: wrap; }
+    }
+    @media (max-width: 600px) {
+      .hero { min-height: 0; padding: 5rem 0 3rem; }
+      .hero-stats { gap: 1.5rem; flex-wrap: wrap; }
+      section { padding: 4rem 0; }
+      .clients-grid { grid-template-columns: repeat(2, 1fr); }
+      .contact-card { padding: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="progress-bar" id="progressBar"></div>
+  <div class="noise"></div>
+  <div class="particles" id="particles"></div>
+  <div class="cursor-glow" id="cursorGlow"></div>
+
+  <!-- ─── HERO ─── -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="container">
+      <div class="hero-content" id="heroContent">
+        <div class="c-item cd1">
+          <div class="hero-badge">
+            <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="#ff4500" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            Available for hire
+          </div>
+        </div>
+        <h1>
+          <span class="l1 c-item cd2">Chris Gomes</span>
+          <span class="l2 c-item cd3">I Build Brands That Stick.</span>
+        </h1>
+        <div class="c-item cd4">
+          <p>Digital marketer and web builder. I help brands find their voice, run campaigns that convert, and build websites that work — all without the fluff.</p>
+        </div>
+        <div class="c-item cd5">
+          <div class="hero-cta">
+            <a href="#projects" class="btn" data-ripple>
+              <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+              See My Work
+            </a>
+            <a href="#contact" class="btn-outline" data-ripple>Get In Touch</a>
+          </div>
+        </div>
+        <div class="c-item cd5">
+          <div class="hero-stats">
+            <div class="hero-stat"><h5>25+</h5><p>Brands Worked With</p></div>
+            <div class="hero-stat"><h5>3.2x</h5><p>Avg Campaign ROAS</p></div>
+            <div class="hero-stat"><h5>2</h5><p>Webships Launched</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── PROJECTS ─── -->
+  <section class="projects-section" id="projects">
+    <div class="container">
+      <span class="section-label reveal">
+        <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="#ff4500" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+        Projects
+      </span>
+      <h2 class="section-title reveal">What I've Built</h2>
+      <p class="section-sub reveal">Websites, landing pages, and digital campaigns I've designed and developed.</p>
+      <div class="projects-grid">
+        <div class="project-card reveal-scale">
+          <img class="card-img" src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=600&h=400&fit=crop" alt="FlexHaus win-back landing page" loading="lazy">
+          <div class="card-body">
+            <span class="tag">Web Development</span>
+            <h3>FlexHaus — Member Win-Back</h3>
+            <p>Full interactive landing page for a boutique gym's retention campaign. 3D flipbox cards, animated hero, quiz engine, and class schedule — all vanilla HTML/CSS/JS on GitHub Pages.</p>
+            <div class="results">
+              <span><strong>&euro;14.4k</strong> Annual savings</span>
+              <span><strong>7.2:1</strong> ROI</span>
+              <span><strong>47</strong> Won back (demo)</span>
+            </div>
+          </div>
+          <div class="card-footer">
+            <a href="https://chrisgomes1211.github.io/flexhaus/" target="_blank">Visit Live Site &rarr;</a>
+          </div>
+        </div>
+        <div class="project-card reveal-scale" style="transition-delay:0.1s">
+          <img class="card-img" src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=600&h=400&fit=crop" alt="Landing pages portfolio" loading="lazy">
+          <div class="card-body">
+            <span class="tag">Landing Pages</span>
+            <h3>Landing Pages &amp; Microsites</h3>
+            <p>Designed and developed high-converting landing pages for Opus, Topax Eyecare, Simply Rera, Wakation, and more. Each optimised for speed, mobile-first, and clear CTO paths.</p>
+            <div class="results">
+              <span><strong>10+</strong> Landing pages</span>
+              <span><strong>98+</strong> Lighthouse score</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── CAMPAIGNS ─── -->
+  <section class="campaigns-section">
+    <div class="container">
+      <span class="section-label reveal">
+        <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="#ff4500" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        Campaigns
+      </span>
+      <h2 class="section-title reveal">Facebook Campaigns</h2>
+      <p class="section-sub reveal">Data-driven ad campaigns built for conversion. Every dollar tracked, every result measured.</p>
+      <div class="campaign-card reveal-scale">
+        <div class="icon-wrap">
+          <svg class="icon-svg lg" viewBox="0 0 24 24" fill="none" stroke="#ff4500" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        </div>
+        <div>
+          <h3>Medtronic — Lead Generation Campaign</h3>
+          <p class="meta">Healthcare &middot; Q4 2025 &middot; Facebook &amp; Instagram</p>
+          <p style="font-size:0.85rem; color:rgba(255,255,255,0.5);">Targeted lead gen campaign driving qualified healthcare professional sign-ups. A/B tested creative, refined audience segmentation, and optimised landing page funnel.</p>
+          <div class="stats">
+            <span><strong>3.2x</strong> ROAS</span>
+            <span><strong>1,200</strong> Leads generated</span>
+            <span><strong>&euro;0.84</strong> Cost per lead</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── CLIENTS ─── -->
+  <section class="clients-section" id="clients">
+    <div class="container">
+      <span class="section-label reveal">
+        <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="#ff4500" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        Clients
+      </span>
+      <h2 class="section-title reveal">Brands I've Worked With</h2>
+      <p class="section-sub reveal">From healthcare to hospitality — I've helped 25+ brands make their mark.</p>
+      <div class="clients-grid">
+        <div class="client-chip reveal-scale">Synapse Advertising</div>
+        <div class="client-chip reveal-scale" style="transition-delay:0.05s">Lets Ideate</div>
+        <div class="client-chip reveal-scale" style="transition-delay:0.1s">Creative Synapse</div>
+        <div class="client-chip reveal-scale" style="transition-delay:0.15s">The RxReviewer</div>
+        <div class="client-chip reveal-scale" style="transition-delay:0.2s">JB Pharma</div>
+        <div class="client-chip reveal-scale" style="transition-delay:0.25s">Walyte</div>
+        <div class="client-chip reveal-scale" style="transition-delay:0.3s">Humrahi</div>
+        <div class="client-chip reveal-scale" style="transition-delay:0.35s">Ask Anya</div>
+        <div class="client-chip reveal-scale" style="transition-delay:0.4s">Apulki Healthcare</div>
+        <div class="client-chip reveal-scale" style="transition-delay:0.45s">We Learn</div>
+        <div class="client-chip reveal-scale" style="transition-delay:0.5s">Portfolio We-Learn</div>
+        <div class="client-chip reveal-scale" style="transition-delay:0.55s">Halt The Damage</div>
+        <div class="client-chip reveal-scale" style="transition-delay:0.6s">Win Over Varicose</div>
+        <div class="client-chip reveal-scale" style="transition-delay:0.65s">SMT-MVT</div>
+        <div class="client-chip reveal-scale" style="transition-delay:0.7s">Tuxedo-2</div>
+        <div class="client-chip reveal-scale" style="transition-delay:0.75s">Cruz Senior</div>
+        <div class="client-chip reveal-scale" style="transition-delay:0.8s">SFlex Netherlands</div>
+        <div class="client-chip reveal-scale" style="transition-delay:0.85s">The Wisdom Club</div>
+        <div class="client-chip reveal-scale" style="transition-delay:0.9s">Lupinhaircare</div>
+        <div class="client-chip reveal-scale" style="transition-delay:0.95s">Opus</div>
+        <div class="client-chip reveal-scale" style="transition-delay:1s">Alkem — NeuMap</div>
+        <div class="client-chip reveal-scale" style="transition-delay:1.05s">Topax Eyecare</div>
+        <div class="client-chip reveal-scale" style="transition-delay:1.1s">Simply Rera</div>
+        <div class="client-chip reveal-scale" style="transition-delay:1.15s">Wakation</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── CONTACT ─── -->
+  <section class="contact-section" id="contact">
+    <div class="container">
+      <span class="section-label reveal">
+        <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="#ff4500" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        Get In Touch
+      </span>
+      <h2 class="section-title reveal">Let's Build Something.</h2>
+      <p class="section-sub reveal" style="margin:0 auto">Have a project, campaign, or just an idea? I'm always open to a conversation.</p>
+      <div class="contact-card reveal-scale">
+        <h3>Chris Gomes</h3>
+        <p>Digital Marketer &amp; Web Builder</p>
+        <a href="#" class="email-link">
+          <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="#ff4500" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          chris@email.com
+        </a>
+        <p style="margin-top:1.5rem; font-size:0.8rem;">Available for freelance, contract, and full-time opportunities.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── FOOTER ─── -->
+  <footer class="site-footer">
+    <div class="container">
+      <p>Chris Gomes &copy; 2026 &middot; <a href="#projects">Work</a> &middot; <a href="#clients">Clients</a> &middot; <a href="#contact">Contact</a></p>
+    </div>
+  </footer>
+
+  <script>
+    (function() {
+      const cursorGlow = document.getElementById('cursorGlow');
+      const progressBar = document.getElementById('progressBar');
+      const heroContent = document.getElementById('heroContent');
+
+      requestAnimationFrame(() => heroContent.classList.add('loaded'));
+
+      document.addEventListener('mousemove', (e) => {
+        cursorGlow.style.left = e.clientX + 'px';
+        cursorGlow.style.top = e.clientY + 'px';
+      });
+
+      function updateProgress() {
+        const scrollTop = window.scrollY;
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        progressBar.style.transform = 'scaleX(' + Math.min(docHeight > 0 ? scrollTop / docHeight : 0, 1) + ')';
+      }
+      window.addEventListener('scroll', updateProgress);
+      window.addEventListener('resize', updateProgress);
+      updateProgress();
+
+      /* PARTICLES */
+      (function() {
+        const c = document.getElementById('particles');
+        for (let i = 0; i < 10; i++) {
+          const p = document.createElement('div');
+          p.className = 'particle';
+          const s = 40 + Math.random() * 100;
+          p.style.width = s + 'px'; p.style.height = s + 'px';
+          p.style.left = Math.random() * 100 + '%';
+          p.style.top = (60 + Math.random() * 40) + '%';
+          p.style.animationDuration = (20 + Math.random() * 30) + 's';
+          p.style.animationDelay = (Math.random() * 15) + 's';
+          c.appendChild(p);
+        }
+      })();
+
+      /* RIPPLE */
+      document.querySelectorAll('[data-ripple]').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+          const r = this.getBoundingClientRect();
+          const s = Math.max(r.width, r.height);
+          const x = e.clientX - r.left - s / 2;
+          const y = e.clientY - r.top - s / 2;
+          const ripple = document.createElement('span');
+          ripple.className = 'ripple';
+          ripple.style.width = s + 'px'; ripple.style.height = s + 'px';
+          ripple.style.left = x + 'px'; ripple.style.top = y + 'px';
+          this.appendChild(ripple);
+          setTimeout(() => ripple.remove(), 600);
+        });
+      });
+
+      /* SCROLL REVEAL */
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) entry.target.classList.add('visible');
+        });
+      }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+      document.querySelectorAll('.reveal, .reveal-scale').forEach(el => observer.observe(el));
+    })();
+  </script>
+</body>
+</html>
