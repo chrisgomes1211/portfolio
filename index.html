@@ -187,17 +187,24 @@
     .hero {
       position: relative; z-index: 1;
       height: 100vh; min-height: 680px;
-      display: flex; align-items: center;
       overflow: hidden;
+    }
+    .hero-content {
+      position: absolute; inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 2;
     }
     .hero-media {
       position: absolute; inset: 0; z-index: -1;
       overflow: hidden;
     }
-    .hero-media img {
+    .hero-media img, .hero-media video {
       width: 100%; height: 100%;
       object-fit: cover;
-      will-change: transform, opacity;
+      will-change: transform;
     }
     .hero-media .overlay {
       position: absolute; inset: 0;
@@ -228,7 +235,7 @@
       transform-origin: left center;
       font-size: 0.6rem; font-weight: 700; text-transform: uppercase;
       letter-spacing: 0.12em; color: var(--text-muted);
-      white-space: nowrap; z-index: 2;
+      white-space: nowrap;
     }
     .hero .tagline::after {
       content: ''; display: inline-block;
@@ -260,14 +267,10 @@
     }
     .btn-o:hover { border-color: var(--accent); color: var(--accent); }
 
-    /* Name — center */
+    /* Name — flex centered */
     .hero .hero-name {
-      position: absolute;
-      top: 50%; left: 50%;
-      transform: translate(-50%, -55%);
-      z-index: 2;
       text-align: center;
-      width: 100%; padding: 0 1.5rem;
+      padding: 0 1.5rem;
     }
     .hero .hero-name h1 {
       font-family: var(--font-display);
@@ -293,7 +296,6 @@
     .hero .hero-sub {
       position: absolute; bottom: 2.5rem;
       left: 50%; transform: translateX(-50%);
-      z-index: 2;
       font-size: 0.7rem; font-weight: 600;
       color: var(--text-muted);
       text-transform: uppercase;
@@ -693,7 +695,6 @@
       .theme-toggle { top: 0.8rem; left: 0.8rem; width: 38px; height: 38px; }
       .hero .tagline { display: none; }
       .hero .hero-name h1 { font-size: clamp(2.2rem, 14vw, 3.5rem); }
-      .hero .hero-name { padding: 0 1rem; }
       .hero .hero-sub { bottom: 1.5rem; font-size: 0.6rem; }
       .hero { min-height: 600px; }
       section, .marquee-band { padding: 3rem 0; }
@@ -1358,6 +1359,17 @@
         }
       });
       updateParallax();
+
+      /* ── HERO MOUSE PARALLAX ── */
+      if (!isTouch) {
+        document.addEventListener('mousemove', (e) => {
+          const x = (e.clientX / window.innerWidth - 0.5) * 8;
+          const y = (e.clientY / window.innerHeight - 0.5) * 5;
+          heroImg.style.setProperty('--mx', x + 'px');
+          heroImg.style.setProperty('--my', y + 'px');
+          heroImg.style.transform = 'translateY(' + (window.scrollY * 0.3) + 'px) translateX(var(--mx, 0px)) translateY(var(--my, 0px)) scale(' + (1.1 - Math.min(window.scrollY / heroSection.offsetHeight, 1) * 0.1) + ')';
+        });
+      }
 
       /* ── NAV THEME INVERSION ── */
       const navLinks = document.querySelectorAll('.nav-link');
