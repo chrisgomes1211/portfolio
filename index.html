@@ -133,17 +133,17 @@
     /* ── SOCIAL BAR ── */
     .social-bar {
       position: fixed; top: 1.25rem; right: 1.5rem; z-index: 200;
-      display: flex; align-items: center; gap: 0.5rem;
+      display: flex; align-items: center; gap: 0.15rem;
     }
     .social-bar a {
       color: var(--text-muted);
       transition: color 0.2s;
       display: flex; align-items: center; gap: 0.25rem;
-      padding: 0.3rem 0.4rem;
-      border-radius: 8px;
+      padding: 0.45rem 0.6rem;
+      border-radius: 10px;
     }
     .social-bar a:hover { color: var(--accent); background: rgba(79,70,229,0.06); }
-    .social-bar a svg { width: 16px; height: 16px; }
+    .social-bar a svg { width: 18px; height: 18px; }
     .social-bar a .sl {
       display: none;
       font-size: 0.7rem; font-weight: 600;
@@ -260,55 +260,14 @@
     }
     .btn-o:hover { border-color: var(--accent); color: var(--accent); }
 
-    /* Floating project card — center */
-    .hero .hero-card {
+    /* Name — center */
+    .hero .hero-name {
       position: absolute;
       top: 50%; left: 50%;
-      transform: translate(-50%, -50%);
-      width: 300px; max-width: 80vw;
-      background: var(--bg-card);
-      border-radius: 16px;
-      padding: 1.25rem;
-      box-shadow: 0 8px 40px rgba(0,0,0,0.06), 0 20px 60px rgba(0,0,0,0.03);
-      border: 1px solid var(--card-border);
+      transform: translate(-50%, -55%);
       z-index: 2;
-      transition: background 0.3s, box-shadow 0.3s, border-color 0.3s;
-    }
-    .hero-card img {
-      width: 100%; height: 150px;
-      object-fit: cover; border-radius: 10px;
-      margin-bottom: 0.75rem;
-    }
-    .hero-card .card-tag {
-      display: inline-block;
-      font-size: 0.55rem; font-weight: 700; text-transform: uppercase;
-      letter-spacing: 0.08em;
-      padding: 0.15rem 0.6rem; border-radius: 100px;
-      background: rgba(79,70,229,0.1); color: var(--accent);
-      margin-bottom: 0.4rem;
-    }
-    .hero-card h3 {
-      font-family: var(--font-display);
-      font-size: 1rem; color: var(--text);
-      margin-bottom: 0.2rem;
-    }
-    .hero-card p {
-      font-size: 0.72rem; color: var(--text-soft);
-      line-height: 1.5; margin-bottom: 0.6rem;
-    }
-    .hero-card .card-link {
-      font-size: 0.72rem; font-weight: 700; color: var(--accent);
-      text-decoration: none;
-      display: inline-flex; align-items: center; gap: 0.3rem;
-      transition: gap 0.2s;
-    }
-    .hero-card .card-link:hover { gap: 0.6rem; }
-
-    /* Name — lower portion */
-    .hero .hero-name {
-      position: absolute; bottom: 3rem;
-      left: 1.5rem; right: 1.5rem;
-      z-index: 2; text-align: left;
+      text-align: center;
+      width: 100%; padding: 0 1.5rem;
     }
     .hero .hero-name h1 {
       font-family: var(--font-display);
@@ -330,14 +289,17 @@
       color: var(--accent);
       font-style: italic;
     }
-    /* Role — bottom-right */
-    .hero .hero-role {
-      position: absolute; right: 1.5rem; bottom: 3.5rem;
+    /* Subtitle — bottom-center */
+    .hero .hero-sub {
+      position: absolute; bottom: 2.5rem;
+      left: 50%; transform: translateX(-50%);
       z-index: 2;
-      font-size: 0.65rem; font-weight: 600;
+      font-size: 0.7rem; font-weight: 600;
       color: var(--text-muted);
-      text-transform: uppercase; letter-spacing: 0.08em;
-      text-align: right; line-height: 1.4;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      text-align: center;
+      white-space: nowrap;
     }
 
     /* ── ENTRANCE ── */
@@ -651,13 +613,11 @@
     .theme-prompt {
       position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%) translateY(20px);
       z-index: 300;
-      background: var(--bg-card);
-      border: 1px solid var(--border);
+      background: #f8fafc;
+      border: 1px solid rgba(79,70,229,0.15);
       border-radius: 14px;
-      box-shadow: 0 8px 40px rgba(0,0,0,0.2);
+      box-shadow: 0 8px 40px rgba(0,0,0,0.25);
       padding: 0.7rem 1.25rem;
-      -webkit-backdrop-filter: blur(16px);
-      backdrop-filter: blur(16px);
       opacity: 0; pointer-events: none;
       transition: opacity 0.5s cubic-bezier(.16,1,.3,1), transform 0.5s cubic-bezier(.16,1,.3,1);
     }
@@ -670,24 +630,24 @@
     }
     .theme-prompt .tp-icon { font-size: 1.1rem; }
     .theme-prompt .tp-text {
-      font-size: 0.8rem; font-weight: 600; color: var(--text);
+      font-size: 0.8rem; font-weight: 600; color: #0f172a;
       white-space: nowrap;
     }
     .theme-prompt .tp-btn {
       padding: 0.35rem 1rem;
-      background: var(--accent); color: #fff;
+      background: #4f46e5; color: #fff;
       border: none; border-radius: 100px;
       font-size: 0.72rem; font-weight: 700; font-family: inherit;
       cursor: pointer; white-space: nowrap;
       transition: background 0.2s, transform 0.2s;
     }
-    .theme-prompt .tp-btn:hover { background: var(--accent-hover); transform: scale(1.04); }
+    .theme-prompt .tp-btn:hover { background: #4338ca; transform: scale(1.04); }
     .theme-prompt .tp-close {
-      background: none; border: none; color: var(--text-muted);
+      background: none; border: none; color: #94a3b8;
       font-size: 1.1rem; cursor: pointer; padding: 0.1rem; line-height: 1;
       transition: color 0.2s;
     }
-    .theme-prompt .tp-close:hover { color: var(--text); }
+    .theme-prompt .tp-close:hover { color: #0f172a; }
 
     /* ── CASE STUDY ── */
     .case-grid {
@@ -714,7 +674,7 @@
 
     @media (max-width: 900px) {
       .hero .hero-name h1 { font-size: clamp(3rem, 10vw, 6rem); }
-      .hero .hero-card { width: 260px; }
+      .social-bar a { padding: 0.35rem 0.45rem; }
       .services-grid { grid-template-columns: 1fr 1fr; }
       .about-split { grid-template-columns: 1fr; gap: 2rem; }
       .about-visual { max-width: 400px; margin: 0 auto; }
@@ -725,19 +685,16 @@
     }
     @media (max-width: 600px) {
       .social-bar a .sl { display: none; }
-      .social-bar { gap: 0.25rem; top: 0.9rem; }
+      .social-bar { gap: 0; top: 0.9rem; }
+      .social-bar a { padding: 0.3rem 0.4rem; }
       nav { top: 0.9rem; padding: 0.3rem 1rem; gap: 1rem; }
       nav a { font-size: 0.7rem; }
       nav .nav-mark { width: 28px; height: 28px; font-size: 0.8rem; }
       .theme-toggle { top: 0.8rem; left: 0.8rem; width: 38px; height: 38px; }
       .hero .tagline { display: none; }
-      .hero .hero-card { width: 220px; padding: 1rem; }
-      .hero-card img { height: 110px; }
-      .hero-card h3 { font-size: 0.85rem; }
-      .hero-card p { font-size: 0.65rem; }
       .hero .hero-name h1 { font-size: clamp(2.2rem, 14vw, 3.5rem); }
-      .hero .hero-name { bottom: 1.5rem; left: 1rem; right: 1rem; }
-      .hero .hero-role { display: none; }
+      .hero .hero-name { padding: 0 1rem; }
+      .hero .hero-sub { bottom: 1.5rem; font-size: 0.6rem; }
       .hero { min-height: 600px; }
       section, .marquee-band { padding: 3rem 0; }
       .services-grid { grid-template-columns: 1fr; }
@@ -918,17 +875,10 @@
     </div>
     <div class="hero-content" id="heroContent">
       <div class="tagline fade-item fd1">Brand &amp; Web Design Specialist</div>
-      <div class="hero-card fade-item fd3">
-        <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=400&h=250&fit=crop" alt="FlexHaus project" loading="lazy">
-        <span class="card-tag">Featured Project</span>
-        <h3>FlexHaus — Member Win-Back</h3>
-        <p>Interactive landing page for a boutique gym's retention campaign. 3D flipbox cards, quiz engine, and seamless booking.</p>
-        <a href="#projects" class="card-link">View Project &rarr;</a>
-      </div>
       <div class="hero-name fade-item fd2">
         <h1 id="heroName"><span>Chris</span><br><span class="accent">Gomes</span></h1>
       </div>
-      <div class="hero-role fade-item fd4">Freelance Digital&nbsp;Marketer</div>
+      <div class="hero-sub fade-item fd4">Digital Marketer</div>
     </div>
   </section>
 
