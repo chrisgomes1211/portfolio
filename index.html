@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <link rel="icon" type="image/png" href="data:image/svg+xml,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='32' height='32' rx='8' fill='%23c97d5e'/%3E%3Ctext x='16' y='23' font-size='18' text-anchor='middle' fill='%23fff' font-family='serif'%3EC%3C/text%3E%3C/svg%3E">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#f5f0e8">
+  <meta name="theme-color" content="#0f172a">
   <title>Chris Gomes — Digital Marketer & Web Builder</title>
   <meta name="description" content="Portfolio of Chris Gomes — digital marketer and web builder. FlexHaus win-back campaign, Medtronic lead gen, and 25+ brand campaigns.">
   <link rel="canonical" href="https://chrisgomes1211.github.io/portfolio/">
@@ -647,6 +647,48 @@
       font-style: italic; margin-top: 1rem;
     }
 
+    /* ── THEME PROMPT ── */
+    .theme-prompt {
+      position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%) translateY(20px);
+      z-index: 300;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.2);
+      padding: 0.7rem 1.25rem;
+      -webkit-backdrop-filter: blur(16px);
+      backdrop-filter: blur(16px);
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.5s cubic-bezier(.16,1,.3,1), transform 0.5s cubic-bezier(.16,1,.3,1);
+    }
+    .theme-prompt.visible {
+      opacity: 1; pointer-events: all;
+      transform: translateX(-50%) translateY(0);
+    }
+    .theme-prompt .tp-row {
+      display: flex; align-items: center; gap: 0.75rem;
+    }
+    .theme-prompt .tp-icon { font-size: 1.1rem; }
+    .theme-prompt .tp-text {
+      font-size: 0.8rem; font-weight: 600; color: var(--text);
+      white-space: nowrap;
+    }
+    .theme-prompt .tp-btn {
+      padding: 0.35rem 1rem;
+      background: var(--accent); color: #fff;
+      border: none; border-radius: 100px;
+      font-size: 0.72rem; font-weight: 700; font-family: inherit;
+      cursor: pointer; white-space: nowrap;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .theme-prompt .tp-btn:hover { background: var(--accent-hover); transform: scale(1.04); }
+    .theme-prompt .tp-close {
+      background: none; border: none; color: var(--text-muted);
+      font-size: 1.1rem; cursor: pointer; padding: 0.1rem; line-height: 1;
+      transition: color 0.2s;
+    }
+    .theme-prompt .tp-close:hover { color: var(--text); }
+
     /* ── CASE STUDY ── */
     .case-grid {
       display: grid;
@@ -1188,12 +1230,32 @@
       /* ── THEME ── */
       const toggle = document.getElementById('themeToggle');
       const html = document.documentElement;
-      let saved = localStorage.getItem('portfolio-theme');
-      if (!saved) {
-        const hour = new Date().getHours();
-        saved = (hour >= 19 || hour < 7) ? 'dark' : 'light';
+      const savedPref = localStorage.getItem('portfolio-theme');
+
+      if (savedPref) {
+        html.dataset.theme = savedPref;
+      } else {
+        html.dataset.theme = 'dark';
+        /* Show theme prompt on first visit */
+        const prompt = document.getElementById('themePrompt');
+        const tpSwitch = document.getElementById('tpSwitch');
+        const tpClose = document.getElementById('tpClose');
+        setTimeout(() => { if (prompt) prompt.classList.add('visible'); }, 1800);
+        if (tpSwitch) {
+          tpSwitch.addEventListener('click', () => {
+            html.dataset.theme = 'light';
+            localStorage.setItem('portfolio-theme', 'light');
+            prompt.classList.remove('visible');
+          });
+        }
+        if (tpClose) {
+          tpClose.addEventListener('click', () => {
+            localStorage.setItem('portfolio-theme', 'dark');
+            prompt.classList.remove('visible');
+          });
+        }
       }
-      html.dataset.theme = saved;
+
       toggle.addEventListener('click', () => {
         const next = html.dataset.theme === 'dark' ? 'light' : 'dark';
         html.dataset.theme = next;
@@ -1432,5 +1494,13 @@
       document.querySelectorAll('.counter[data-target]').forEach(el => counterObserver.observe(el));
     })();
   </script>
+  <div id="themePrompt" class="theme-prompt">
+    <div class="tp-row">
+      <span class="tp-icon">☀️</span>
+      <span class="tp-text">Prefer a lighter look?</span>
+      <button class="tp-btn" id="tpSwitch">Switch to Light</button>
+      <button class="tp-close" id="tpClose" aria-label="Dismiss">✕</button>
+    </div>
+  </div>
 </body>
 </html>
