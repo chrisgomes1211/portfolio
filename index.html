@@ -563,6 +563,98 @@
     }
     .contact-card .email:hover { background: rgba(79,70,229,0.12); }
 
+    /* ── SERVICES ── */
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+    .s-card {
+      background: var(--bg-card);
+      border-radius: 16px;
+      padding: 2rem;
+      border: 1px solid var(--card-border);
+      transition: all 0.3s cubic-bezier(.16,1,.3,1);
+    }
+    .s-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-hover);
+      border-color: var(--border-hover);
+    }
+    .s-card .s-icon {
+      width: 44px; height: 44px; border-radius: 12px;
+      background: rgba(79,70,229,0.08);
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 1rem;
+    }
+    .s-card .s-icon svg { width: 20px; height: 20px; color: var(--accent); }
+    .s-card h3 {
+      font-size: 1rem; font-weight: 700; color: var(--text);
+      margin-bottom: 0.4rem;
+    }
+    .s-card p {
+      font-size: 0.82rem; color: var(--text-soft);
+      line-height: 1.6;
+    }
+
+    /* ── ABOUT ── */
+    .about-split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+    .about-visual { position: relative; }
+    .about-visual img {
+      width: 100%; border-radius: 16px;
+      object-fit: cover; display: block;
+    }
+    .about-visual .badge {
+      position: absolute; bottom: -1rem; right: -1rem;
+      background: var(--accent); color: #fff;
+      padding: 0.75rem 1.25rem;
+      border-radius: 12px;
+      font-size: 0.65rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.06em;
+      line-height: 1.3;
+      box-shadow: 0 4px 20px rgba(79,70,229,0.3);
+    }
+    .about-text p {
+      font-size: 0.9rem; color: var(--text-soft);
+      line-height: 1.7; margin-bottom: 0.75rem;
+    }
+    .about-text .philosophy {
+      font-family: var(--font-display);
+      font-size: 1.3rem; color: var(--text);
+      line-height: 1.3;
+      margin: 1.25rem 0;
+      padding: 1rem 0;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .about-text .sig {
+      font-family: var(--font-display);
+      font-size: 1.1rem; color: var(--accent);
+      font-style: italic; margin-top: 1rem;
+    }
+
+    /* ── CASE STUDY ── */
+    .case-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 0.75rem;
+      margin: 0.75rem 0;
+    }
+    .case-grid .c-label {
+      font-size: 0.55rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.06em; color: var(--text-muted);
+      margin-bottom: 0.15rem;
+    }
+    .case-grid .c-val {
+      font-size: 0.75rem; color: var(--text-soft);
+      line-height: 1.4;
+    }
+
     /* ── SCROLLBAR ── */
     ::-webkit-scrollbar { width: 8px; }
     ::-webkit-scrollbar-track { background: var(--bg); }
@@ -572,6 +664,9 @@
     @media (max-width: 900px) {
       .hero .hero-card { width: 260px; }
       .hero .hero-name h1 { font-size: clamp(2.5rem, 8vw, 5rem); }
+      .services-grid { grid-template-columns: 1fr 1fr; }
+      .about-split { grid-template-columns: 1fr; gap: 2rem; }
+      .about-visual { max-width: 400px; margin: 0 auto; }
       .projects-grid { grid-template-columns: 1fr; }
       .testimonials-grid { grid-template-columns: 1fr 1fr; }
       .contact-card { grid-template-columns: 1fr; text-align: center; }
@@ -594,6 +689,10 @@
       .hero .hero-role { display: none; }
       .hero { min-height: 600px; }
       section, .marquee-band { padding: 3rem 0; }
+      .services-grid { grid-template-columns: 1fr; }
+      .s-card { padding: 1.5rem; }
+      .about-split { gap: 1.5rem; }
+      .about-visual .badge { bottom: -0.5rem; right: -0.5rem; padding: 0.5rem 1rem; font-size: 0.55rem; }
       .client-grid { grid-template-columns: repeat(2, 1fr); }
       .contact-card { padding: 1.5rem; }
       .c-card { flex-direction: column; }
@@ -756,7 +855,7 @@
   <nav>
     <a href="#about" class="nav-link">About</a>
     <a href="#" class="nav-mark" aria-label="Home">C</a>
-    <a href="#projects" class="nav-link">Work</a>
+    <a href="#services" class="nav-link">Work</a>
   </nav>
 
   <!-- ─── HERO ─── -->
@@ -800,6 +899,38 @@
     </div>
   </div>
 
+  <!-- ─── SERVICES ─── -->
+  <section id="services">
+    <div class="container">
+      <div class="eyebrow reveal"><span class="num">What I Do</span><span class="rule"></span></div>
+      <h2 class="section-title reveal">Services &amp; Expertise</h2>
+      <p class="section-desc reveal">Websites, campaigns, and brand systems — built to drive results from concept to launch.</p>
+      <div class="services-grid">
+        <div class="s-card reveal" style="transition-delay:0s">
+          <div class="s-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+          </div>
+          <h3>Websites &amp; Landing Pages</h3>
+          <p>High-converting, mobile-first websites with strong visual storytelling. Every page built for speed, clarity, and measurable conversion.</p>
+        </div>
+        <div class="s-card reveal" style="transition-delay:0.1s">
+          <div class="s-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          </div>
+          <h3>Campaigns &amp; Paid Ads</h3>
+          <p>Data-driven Facebook and Instagram campaigns with A/B tested creative, precise audience targeting, and optimised landing page funnels.</p>
+        </div>
+        <div class="s-card reveal" style="transition-delay:0.2s">
+          <div class="s-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+          </div>
+          <h3>Brand Identity &amp; Strategy</h3>
+          <p>Visual identity systems, brand guidelines, and content strategy for healthcare, hospitality, and service brands. Clear positioning that sticks.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- ─── PROJECTS ─── -->
   <section id="projects">
     <div class="container">
@@ -810,9 +941,13 @@
         <div class="p-card reveal" style="transition-delay:0s">
           <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=600&h=400&fit=crop" alt="FlexHaus landing page" loading="lazy">
           <div class="body">
-            <span class="tag">Web Development</span>
+            <span class="tag">Case Study</span>
             <h3>FlexHaus — Member Win-Back</h3>
-            <p>Interactive landing page for a boutique gym's retention campaign. 3D flipbox cards, animated hero, quiz engine, and class schedule — vanilla HTML/CSS/JS on GitHub Pages.</p>
+            <div class="case-grid">
+              <div><div class="c-label">Challenge</div><div class="c-val">Boutique gym losing members post-promotion — needed a campaign to win back lapsed clients and re-engage the community.</div></div>
+              <div><div class="c-label">Services</div><div class="c-val">Landing page, quiz engine, class booking UI, email capture flow</div></div>
+              <div><div class="c-label">Role</div><div class="c-val">Solo — strategy, design, development (HTML/CSS/JS)</div></div>
+            </div>
             <div class="results">
               <span><strong>&euro;14.4k</strong> Annual savings</span>
               <span><strong>7.2:1</strong> ROI</span>
@@ -826,7 +961,11 @@
           <div class="body">
             <span class="tag">Landing Pages</span>
             <h3>Landing Pages &amp; Microsites</h3>
-            <p>High-converting landing pages for Opus, Topax Eyecare, Simply Rera, Wakation, and more. Each optimised for speed, mobile-first with clear CTA paths.</p>
+            <div class="case-grid">
+              <div><div class="c-label">Challenge</div><div class="c-val">Healthcare and hospitality brands needed fast, mobile-first landing pages with clear CTA paths and high conversion rates.</div></div>
+              <div><div class="c-label">Services</div><div class="c-val">Landing page design, microsite build, performance optimisation</div></div>
+              <div><div class="c-label">Role</div><div class="c-val">Solo — design &amp; development across 10+ projects</div></div>
+            </div>
             <div class="results">
               <span><strong>10+</strong> Landing pages</span>
               <span><strong>98+</strong> Lighthouse score</span>
@@ -949,8 +1088,29 @@
     </div>
   </section>
 
+  <!-- ─── ABOUT ─── -->
+  <section id="about">
+    <div class="container">
+      <div class="eyebrow reveal"><span class="num">About</span><span class="rule"></span></div>
+      <h2 class="section-title reveal">Built Different.</h2>
+      <div class="about-split">
+        <div class="about-visual reveal">
+          <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=600&h=700&fit=crop" alt="Chris Gomes" loading="lazy">
+          <div class="badge">25+ Brands<br>Delivered</div>
+        </div>
+        <div class="about-text reveal">
+          <p>I'm Chris Gomes — a digital marketer and web builder based in India. I help brands find their voice, build websites that convert, and run campaigns that deliver measurable results.</p>
+          <p>My approach is straightforward: understand the business problem, design with intention, and measure everything. No fluff, no jargon — just work that works.</p>
+          <div class="philosophy">&ldquo;Good marketing takes time.<br>Working with me saves it.&rdquo;</div>
+          <p>Over the past few years I've worked with 25+ brands across healthcare, hospitality, and professional services — from boutique startups to established names like Medtronic and JB Pharma. Every project gets the same intensity, regardless of scale.</p>
+          <p>Because when your brand wins, I win too.</p>
+          <div class="sig">&mdash; Chris Gomes</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- ─── CONTACT ─── -->
-  <section id="contact" style="padding-bottom:4rem;">
     <div class="container">
       <div style="max-width:800px; margin:0 auto;">
         <div class="contact-card reveal">
