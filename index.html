@@ -420,7 +420,7 @@
     /* ── CLIENTS ── */
     .client-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
       gap: 0.75rem;
     }
     .client-chip {
@@ -433,8 +433,14 @@
       color: var(--text-soft);
       transition: all 0.2s;
       box-shadow: var(--shadow);
+      display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+      min-height: 52px;
     }
     .client-chip:hover { border-color: rgba(201,125,94,0.15); color: var(--accent); }
+    .client-chip .logo { width: 22px; height: 22px; object-fit: contain; border-radius: 2px; flex-shrink: 0; }
+    .client-chip .logo-fallback { display: none; }
+    .client-chip.img-failed .logo { display: none; }
+    .client-chip.img-failed .logo-fallback { display: inline; }
 
     /* ── CONTACT ── */
     .contact-card {
@@ -684,28 +690,28 @@
       <h2 class="section-title reveal">Brands I've Worked With</h2>
       <p class="section-desc reveal">From healthcare to hospitality — 25+ brands across campaigns, content, and web projects.</p>
       <div class="client-grid">
-        <div class="client-chip reveal" style="transition-delay:0s">Synapse Advertising</div>
-        <div class="client-chip reveal" style="transition-delay:0.03s">Lets Ideate</div>
-        <div class="client-chip reveal" style="transition-delay:0.06s">Creative Synapse</div>
-        <div class="client-chip reveal" style="transition-delay:0.09s">The RxReviewer</div>
-        <div class="client-chip reveal" style="transition-delay:0.12s">JB Pharma</div>
-        <div class="client-chip reveal" style="transition-delay:0.15s">Walyte</div>
-        <div class="client-chip reveal" style="transition-delay:0.18s">Humrahi</div>
-        <div class="client-chip reveal" style="transition-delay:0.21s">Ask Anya</div>
-        <div class="client-chip reveal" style="transition-delay:0.24s">Apulki Healthcare</div>
-        <div class="client-chip reveal" style="transition-delay:0.27s">We Learn</div>
-        <div class="client-chip reveal" style="transition-delay:0.3s">Portfolio We-Learn</div>
-        <div class="client-chip reveal" style="transition-delay:0.33s">Halt The Damage</div>
-        <div class="client-chip reveal" style="transition-delay:0.36s">Win Over Varicose</div>
-        <div class="client-chip reveal" style="transition-delay:0.39s">SMT-MVT</div>
-        <div class="client-chip reveal" style="transition-delay:0.42s">Tuxedo-2</div>
-        <div class="client-chip reveal" style="transition-delay:0.45s">Cruz Senior</div>
-        <div class="client-chip reveal" style="transition-delay:0.48s">SFlex Netherlands</div>
-        <div class="client-chip reveal" style="transition-delay:0.51s">The Wisdom Club</div>
-        <div class="client-chip reveal" style="transition-delay:0.54s">Lupinhaircare</div>
+        <div class="client-chip reveal" style="transition-delay:0s"><img class="logo" src="https://logo.clearbit.com/synapseadvertising.in" alt="" loading="lazy" onerror="this.parentElement.classList.add('img-failed')"><span class="logo-fallback">Synapse Advertising</span><span>Synapse Advertising</span></div>
+        <div class="client-chip reveal" style="transition-delay:0.03s"><img class="logo" src="https://logo.clearbit.com/letsideate.com" alt="" loading="lazy" onerror="this.parentElement.classList.add('img-failed')"><span class="logo-fallback">Lets Ideate</span><span>Lets Ideate</span></div>
+        <div class="client-chip reveal" style="transition-delay:0.06s"><img class="logo" src="https://logo.clearbit.com/synapseadvertising.in" alt="" loading="lazy" onerror="this.parentElement.classList.add('img-failed')"><span class="logo-fallback">Creative Synapse</span><span>Creative Synapse</span></div>
+        <div class="client-chip reveal" style="transition-delay:0.09s"><img class="logo" src="https://logo.clearbit.com/therxreviewer.com" alt="" loading="lazy" onerror="this.parentElement.classList.add('img-failed')"><span class="logo-fallback">The RxReviewer</span><span>The RxReviewer</span></div>
+        <div class="client-chip reveal" style="transition-delay:0.12s"><img class="logo" src="https://logo.clearbit.com/jbpharma.com" alt="" loading="lazy" onerror="this.parentElement.classList.add('img-failed')"><span class="logo-fallback">JB Pharma</span><span>JB Pharma</span></div>
+        <div class="client-chip reveal" style="transition-delay:0.15s"><img class="logo" src="https://logo.clearbit.com/walyte.in" alt="" loading="lazy" onerror="this.parentElement.classList.add('img-failed')"><span class="logo-fallback">Walyte</span><span>Walyte</span></div>
+        <div class="client-chip reveal" style="transition-delay:0.18s"><img class="logo" src="https://logo.clearbit.com/humrahi.co.in" alt="" loading="lazy" onerror="this.parentElement.classList.add('img-failed')"><span class="logo-fallback">Humrahi</span><span>Humrahi</span></div>
+        <div class="client-chip reveal" style="transition-delay:0.21s"><img class="logo" src="https://logo.clearbit.com/askanya.in" alt="" loading="lazy" onerror="this.parentElement.classList.add('img-failed')"><span class="logo-fallback">Ask Anya</span><span>Ask Anya</span></div>
+        <div class="client-chip reveal" style="transition-delay:0.24s"><img class="logo" src="https://logo.clearbit.com/apulki.in" alt="" loading="lazy" onerror="this.parentElement.classList.add('img-failed')"><span class="logo-fallback">Apulki Healthcare</span><span>Apulki Healthcare</span></div>
+        <div class="client-chip reveal" style="transition-delay:0.27s"><img class="logo" src="https://logo.clearbit.com/welearnindia.com" alt="" loading="lazy" onerror="this.parentElement.classList.add('img-failed')"><span class="logo-fallback">We Learn</span><span>We Learn</span></div>
+        <div class="client-chip reveal" style="transition-delay:0.3s"><img class="logo" src="https://logo.clearbit.com/welearnindia.com" alt="" loading="lazy" onerror="this.parentElement.classList.add('img-failed')"><span class="logo-fallback">Portfolio We-Learn</span><span>Portfolio We-Learn</span></div>
+        <div class="client-chip reveal" style="transition-delay:0.33s"><img class="logo" src="https://logo.clearbit.com/halt.in" alt="" loading="lazy" onerror="this.parentElement.classList.add('img-failed')"><span class="logo-fallback">Halt The Damage</span><span>Halt The Damage</span></div>
+        <div class="client-chip reveal" style="transition-delay:0.36s"><img class="logo" src="https://logo.clearbit.com/winovervaricose.com" alt="" loading="lazy" onerror="this.parentElement.classList.add('img-failed')"><span class="logo-fallback">Win Over Varicose</span><span>Win Over Varicose</span></div>
+        <div class="client-chip reveal" style="transition-delay:0.39s"><img class="logo" src="https://logo.clearbit.com/smtpl.com" alt="" loading="lazy" onerror="this.parentElement.classList.add('img-failed')"><span class="logo-fallback">SMT-MVT</span><span>SMT-MVT</span></div>
+        <div class="client-chip reveal" style="transition-delay:0.42s"><img class="logo" src="https://logo.clearbit.com/tuxedo-2.com" alt="" loading="lazy" onerror="this.parentElement.classList.add('img-failed')"><span class="logo-fallback">Tuxedo-2</span><span>Tuxedo-2</span></div>
+        <div class="client-chip reveal" style="transition-delay:0.45s"><img class="logo" src="https://logo.clearbit.com/cruzsenior.com" alt="" loading="lazy" onerror="this.parentElement.classList.add('img-failed')"><span class="logo-fallback">Cruz Senior</span><span>Cruz Senior</span></div>
+        <div class="client-chip reveal" style="transition-delay:0.48s"><img class="logo" src="https://logo.clearbit.com/sflexnetherlands.com" alt="" loading="lazy" onerror="this.parentElement.classList.add('img-failed')"><span class="logo-fallback">SFlex Netherlands</span><span>SFlex Netherlands</span></div>
+        <div class="client-chip reveal" style="transition-delay:0.51s"><img class="logo" src="https://logo.clearbit.com/thewisdomclub.com" alt="" loading="lazy" onerror="this.parentElement.classList.add('img-failed')"><span class="logo-fallback">The Wisdom Club</span><span>The Wisdom Club</span></div>
+        <div class="client-chip reveal" style="transition-delay:0.54s"><img class="logo" src="https://logo.clearbit.com/lupin.com" alt="" loading="lazy" onerror="this.parentElement.classList.add('img-failed')"><span class="logo-fallback">Lupinhaircare</span><span>Lupinhaircare</span></div>
         <div class="client-chip reveal" style="transition-delay:0.57s">Opus</div>
-        <div class="client-chip reveal" style="transition-delay:0.6s">Alkem — NeuMap</div>
-        <div class="client-chip reveal" style="transition-delay:0.63s">Topax Eyecare</div>
+        <div class="client-chip reveal" style="transition-delay:0.6s"><img class="logo" src="https://logo.clearbit.com/alkem.com" alt="" loading="lazy" onerror="this.parentElement.classList.add('img-failed')"><span class="logo-fallback">Alkem — NeuMap</span><span>Alkem — NeuMap</span></div>
+        <div class="client-chip reveal" style="transition-delay:0.63s"><img class="logo" src="https://logo.clearbit.com/topaxeyecare.com" alt="" loading="lazy" onerror="this.parentElement.classList.add('img-failed')"><span class="logo-fallback">Topax Eyecare</span><span>Topax Eyecare</span></div>
         <div class="client-chip reveal" style="transition-delay:0.66s">Simply Rera</div>
         <div class="client-chip reveal" style="transition-delay:0.69s">Wakation</div>
       </div>
