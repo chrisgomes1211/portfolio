@@ -566,15 +566,79 @@
       .c-card { flex-direction: column; }
       .hero-card { padding: 1.25rem; }
       .testimonials-grid { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr; gap: 1.5rem; }
     }
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+    }
+    /* ── LENIS ── */
+    html.lenis, html.lenis body { height: auto; }
+    .lenis.lenis-smooth { scroll-behavior: auto; }
+
+    /* ── CUSTOM CURSOR ── */
+    @media (hover: hover) {
+      body { cursor: none; }
+      input, textarea, select { cursor: auto; }
+    }
+    .cursor-dot, .cursor-ring {
+      position: fixed; pointer-events: none; z-index: 99999;
+      border-radius: 50%; transform: translate(-50%, -50%);
+    }
+    .cursor-dot {
+      width: 6px; height: 6px; background: var(--accent);
+      transition: width 0.15s, height 0.15s;
+    }
+    .cursor-ring {
+      width: 32px; height: 32px;
+      border: 1.5px solid var(--accent);
+      transition: width 0.3s, height 0.3s, background 0.3s, border-color 0.3s;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .cursor-ring.hover { width: 48px; height: 48px; background: rgba(201,125,94,0.08); }
+    .cursor-ring.copy {
+      width: 88px; height: 88px;
+      background: var(--accent); border-color: var(--accent);
+    }
+    .cursor-ring .copy-label {
+      font-size: 0.6rem; font-weight: 700; color: #fff;
+      text-transform: uppercase; letter-spacing: 0.08em;
+      font-family: var(--font-sans); opacity: 0;
+      transition: opacity 0.2s; white-space: nowrap;
+    }
+    .cursor-ring.copy .copy-label { opacity: 1; }
+
+    /* ── NAV THEME ── */
+    .nav-link.is-ember { color: var(--accent) !important; }
+
+    /* ── FOOTER TOOLS ── */
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 2rem;
+      text-align: left;
+      margin-bottom: 2rem;
+    }
+    .footer-grid h4 {
+      font-size: 0.6rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--text-muted);
+      margin-bottom: 0.5rem;
+    }
+    .footer-grid p, .footer-grid a {
+      font-size: 0.8rem; color: var(--text-soft); line-height: 1.6;
+    }
+    .footer-grid a { display: block; text-decoration: none; font-weight: 500; }
+    .footer-grid a:hover { color: var(--accent); }
+    .footer .copy {
+      font-size: 0.7rem; color: var(--text-muted);
+      border-top: 1px solid var(--border); padding-top: 1rem;
     }
   </style>
 </head>
 <body>
   <div class="warm-wash"></div>
   <div class="progress" id="progress"></div>
+  <div class="cursor-dot" id="cursorDot"></div>
+  <div class="cursor-ring" id="cursorRing"><span class="copy-label">Copy</span></div>
 
   <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
     <svg viewBox="0 0 24 24" fill="none">
@@ -602,7 +666,7 @@
   </nav>
 
   <!-- ─── HERO ─── -->
-  <section class="hero">
+  <section data-nav="peach" class="hero">
     <div class="hero-media" id="heroMedia">
       <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=1800&h=1000&fit=crop" alt="" loading="eager">
       <div class="overlay"></div>
@@ -842,13 +906,34 @@
   <!-- ─── FOOTER ─── -->
   <footer>
     <div class="container">
-      <p>Chris Gomes &copy; 2026 &middot; <a href="#projects">Work</a> &middot; <a href="#clients">Clients</a> &middot; <a href="#contact">Contact</a></p>
+      <div class="footer-grid">
+        <div>
+          <h4>Built with</h4>
+          <p>HTML &middot; CSS &middot; Vanilla JS<br>GSAP &middot; Lenis &middot; Google Fonts</p>
+        </div>
+        <div>
+          <h4>Expertise</h4>
+          <p>Facebook Ads &middot; Landing Pages<br>Brand Strategy &middot; Web Development</p>
+        </div>
+        <div>
+          <h4>Connect</h4>
+          <a href="mailto:chrisgomesonwork@gmail.com">Email</a>
+          <a href="https://chrisgomes1211.github.io/portfolio/">Portfolio</a>
+          <a href="https://github.com/chrisgomes1211">GitHub</a>
+        </div>
+      </div>
+      <p class="copy">Chris Gomes &copy; 2026</p>
     </div>
   </footer>
 
+  <script src="https://unpkg.com/lenis@1.3.17/dist/lenis.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.7/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.7/ScrollTrigger.min.js"></script>
   <script>
     (function() {
-      /* THEME */
+      const isTouch = !window.matchMedia('(hover: hover)').matches;
+
+      /* ── THEME ── */
       const toggle = document.getElementById('themeToggle');
       const html = document.documentElement;
       let saved = localStorage.getItem('portfolio-theme');
@@ -857,18 +942,95 @@
         saved = (hour >= 19 || hour < 7) ? 'dark' : 'light';
       }
       html.dataset.theme = saved;
-
       toggle.addEventListener('click', () => {
         const next = html.dataset.theme === 'dark' ? 'light' : 'dark';
         html.dataset.theme = next;
         localStorage.setItem('portfolio-theme', next);
       });
 
-      /* ENTRANCE */
+      /* ── LENIS SMOOTH SCROLL ── */
+      if (typeof Lenis !== 'undefined') {
+        const lenis = new Lenis({ lerp: 0.08, wheelMultiplier: 1 });
+        if (typeof ScrollTrigger !== 'undefined') {
+          lenis.on('scroll', ScrollTrigger.update);
+          gsap.ticker.add((time) => { lenis.raf(time * 1000); });
+          gsap.ticker.lagSmoothing(0);
+        } else {
+          function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
+          requestAnimationFrame(raf);
+        }
+      }
+
+      /* ── CUSTOM CURSOR ── */
+      if (!isTouch && typeof gsap !== 'undefined') {
+        const dot = document.getElementById('cursorDot');
+        const ring = document.getElementById('cursorRing');
+        const mouse = { x: 0, y: 0 };
+        const ringPos = { x: 0, y: 0 };
+
+        document.addEventListener('mousemove', (e) => {
+          mouse.x = e.clientX;
+          mouse.y = e.clientY;
+          gsap.set(dot, { x: mouse.x, y: mouse.y });
+        });
+
+        gsap.ticker.add(() => {
+          ringPos.x += (mouse.x - ringPos.x) * 0.12;
+          ringPos.y += (mouse.y - ringPos.y) * 0.12;
+          gsap.set(ring, { x: ringPos.x, y: ringPos.y });
+        });
+
+        document.querySelectorAll('a, button, .btn, .btn-o, .client-chip, .t-card, .p-card, .email-link').forEach(el => {
+          el.addEventListener('mouseenter', () => ring.classList.add('hover'));
+          el.addEventListener('mouseleave', () => ring.classList.remove('hover'));
+        });
+
+        const emailLink = document.querySelector('.email');
+        if (emailLink) {
+          emailLink.addEventListener('mouseenter', () => {
+            ring.classList.remove('hover');
+            ring.classList.add('copy');
+          });
+          emailLink.addEventListener('mouseleave', () => {
+            ring.classList.remove('copy');
+          });
+          emailLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            navigator.clipboard.writeText('chrisgomesonwork@gmail.com');
+            const fb = document.createElement('span');
+            fb.className = 'copy-feedback';
+            fb.textContent = 'Copied!';
+            emailLink.appendChild(fb);
+            setTimeout(() => fb.remove(), 1500);
+          });
+        }
+      }
+
+      /* ── GSAP ELASTIC BUTTONS ── */
+      if (typeof gsap !== 'undefined' && !isTouch) {
+        gsap.utils.toArray('.btn').forEach(btn => {
+          btn.addEventListener('mouseenter', () => {
+            gsap.to(btn, { scale: 1.04, duration: 0.5, ease: 'back.out(1.7)', overwrite: true });
+          });
+          btn.addEventListener('mouseleave', () => {
+            gsap.to(btn, { scale: 1, duration: 0.3, ease: 'power2.out', overwrite: true });
+          });
+        });
+        gsap.utils.toArray('.btn-o').forEach(btn => {
+          btn.addEventListener('mouseenter', () => {
+            gsap.to(btn, { scale: 1.03, duration: 0.5, ease: 'back.out(1.7)', overwrite: true });
+          });
+          btn.addEventListener('mouseleave', () => {
+            gsap.to(btn, { scale: 1, duration: 0.3, ease: 'power2.out', overwrite: true });
+          });
+        });
+      }
+
+      /* ── ENTRANCE ── */
       const heroText = document.getElementById('heroText');
       requestAnimationFrame(() => heroText.classList.add('loaded'));
 
-      /* PROGRESS */
+      /* ── PROGRESS ── */
       const progress = document.getElementById('progress');
       function updateProgress() {
         const st = window.scrollY;
@@ -879,13 +1041,13 @@
       window.addEventListener('resize', updateProgress);
       updateProgress();
 
-      /* SCROLL REVEAL */
+      /* ── SCROLL REVEAL ── */
       const revealObserver = new IntersectionObserver((entries) => {
         entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
       }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
       document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 
-      /* HERO MEDIA PARALLAX */
+      /* ── HERO MEDIA PARALLAX ── */
       const heroMedia = document.getElementById('heroMedia');
       const heroImg = heroMedia.querySelector('img');
       const heroSection = document.querySelector('.hero');
@@ -907,30 +1069,35 @@
       });
       updateParallax();
 
-      /* COUNTER ANIMATION */
+      /* ── NAV THEME INVERSION ── */
+      const navLinks = document.querySelectorAll('.nav-link');
+      const navObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const theme = entry.target.getAttribute('data-nav');
+            navLinks.forEach(link => {
+              link.classList.toggle('is-ember', theme === 'peach');
+            });
+          }
+        });
+      }, { rootMargin: '-50px 0px -90% 0px', threshold: 0 });
+      document.querySelectorAll('[data-nav]').forEach(el => navObserver.observe(el));
+
+      /* ── COUNTER ANIMATION ── */
       function animateCounter(el) {
         const target = parseFloat(el.dataset.target);
         const duration = 1500;
         const start = performance.now();
         const isFloat = target % 1 !== 0;
-
         function tick(now) {
           const elapsed = now - start;
           const progress = Math.min(elapsed / duration, 1);
           const eased = 1 - Math.pow(1 - progress, 3);
           const current = eased * target;
-
-          if (isFloat) {
-            el.textContent = current.toFixed(1);
-          } else {
-            el.textContent = Math.round(current).toLocaleString();
-          }
-
-          if (progress < 1) {
-            requestAnimationFrame(tick);
-          } else {
-            el.textContent = isFloat ? target.toFixed(1) : Math.round(target).toLocaleString();
-          }
+          if (isFloat) { el.textContent = current.toFixed(1); }
+          else { el.textContent = Math.round(current).toLocaleString(); }
+          if (progress < 1) { requestAnimationFrame(tick); }
+          else { el.textContent = isFloat ? target.toFixed(1) : Math.round(target).toLocaleString(); }
         }
         requestAnimationFrame(tick);
       }
@@ -938,13 +1105,11 @@
       const counterObserver = new IntersectionObserver((entries) => {
         entries.forEach(e => {
           if (e.isIntersecting) {
-            const counter = e.target;
-            animateCounter(counter);
-            counterObserver.unobserve(counter);
+            animateCounter(e.target);
+            counterObserver.unobserve(e.target);
           }
         });
       }, { threshold: 0.5 });
-
       document.querySelectorAll('.counter[data-target]').forEach(el => counterObserver.observe(el));
     })();
   </script>
