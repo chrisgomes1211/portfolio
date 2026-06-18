@@ -196,6 +196,8 @@
       align-items: center;
       justify-content: center;
       z-index: 2;
+      padding: 6rem 2rem 5rem;
+      box-sizing: border-box;
     }
     .hero-media {
       position: absolute; inset: 0; z-index: -1;
@@ -230,9 +232,9 @@
     }
     /* Tagline — left, vertical */
     .hero .tagline {
-      position: absolute; left: 1.25rem;
+      position: absolute; left: 2rem;
       top: 50%; transform: translateY(-50%) rotate(-90deg);
-      transform-origin: left center;
+      transform-origin: center center;
       font-size: 0.6rem; font-weight: 700; text-transform: uppercase;
       letter-spacing: 0.12em; color: var(--text-muted);
       white-space: nowrap;
@@ -274,8 +276,8 @@
     }
     .hero .hero-name h1 {
       font-family: var(--font-display);
-      font-size: clamp(3.5rem, 12vw, 9rem);
-      line-height: 0.85;
+      font-size: clamp(2.8rem, 10vw, 8rem);
+      line-height: 0.9;
       color: var(--text);
       margin: 0;
       text-shadow: var(--hero-text-shadow);
@@ -685,7 +687,7 @@
     ::-webkit-scrollbar-thumb:hover { background: var(--ink-500); }
 
     @media (max-width: 900px) {
-      .hero .hero-name h1 { font-size: clamp(3rem, 10vw, 6rem); }
+      .hero .hero-name h1 { font-size: clamp(2.5rem, 9vw, 5rem); }
       .social-bar a { padding: 0.35rem 0.45rem; }
       .services-grid { grid-template-columns: 1fr 1fr; }
       .about-split { grid-template-columns: 1fr; gap: 2rem; }
@@ -704,9 +706,10 @@
       nav .nav-mark { width: 28px; height: 28px; font-size: 0.8rem; }
       .theme-toggle { top: 0.8rem; left: 0.8rem; width: 38px; height: 38px; }
       .hero .tagline { display: none; }
-      .hero .hero-name h1 { font-size: clamp(2.2rem, 14vw, 3.5rem); }
+      .hero .hero-name h1 { font-size: clamp(1.8rem, 12vw, 3rem); }
       .hero .hero-sub { bottom: 1.5rem; font-size: 0.6rem; }
       .hero { min-height: 600px; }
+      .hero-content { padding: 4rem 1.5rem 3.5rem; }
       section, .marquee-band { padding: 3rem 0; }
       .services-grid { grid-template-columns: 1fr; }
       .s-card { padding: 1.5rem; }
