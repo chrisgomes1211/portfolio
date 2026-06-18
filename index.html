@@ -292,6 +292,16 @@
       color: var(--accent);
       font-style: italic;
     }
+    .hero .hero-bline {
+      font-family: var(--font-sans);
+      font-size: clamp(0.8rem, 1.5vw, 1.05rem);
+      color: var(--text-soft);
+      margin-top: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      text-shadow: var(--hero-text-shadow);
+    }
     /* Subtitle — bottom-center */
     .hero .hero-sub {
       position: absolute; bottom: 2.5rem;
@@ -870,7 +880,10 @@
   <!-- ─── HERO ─── -->
   <section data-nav="peach" class="hero">
     <div class="hero-media" id="heroMedia">
-      <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=1800&h=1000&fit=crop" alt="" loading="eager">
+      <video autoplay loop muted playsinline poster="https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=1800&h=1000&fit=crop">
+        <source src="https://cdn.coverr.co/videos/coverr-a-man-working-on-a-laptop-in-a-modern-office-5814/1080p.mp4" type="video/mp4">
+        <source src="https://cdn.coverr.co/videos/coverr-typing-on-a-laptop-at-a-wooden-desk-5585/1080p.mp4" type="video/mp4">
+      </video>
       <div class="overlay"></div>
       <div class="edge-blur"></div>
     </div>
@@ -878,6 +891,7 @@
       <div class="tagline fade-item fd1">Brand &amp; Web Design Specialist</div>
       <div class="hero-name fade-item fd2">
         <h1 id="heroName"><span>Chris</span><br><span class="accent">Gomes</span></h1>
+        <p class="hero-bline">Websites &middot; Campaigns &middot; Brand Strategy</p>
       </div>
       <div class="hero-sub fade-item fd4">Digital Marketer</div>
     </div>
@@ -1340,15 +1354,17 @@
 
       /* ── HERO MEDIA PARALLAX ── */
       const heroMedia = document.getElementById('heroMedia');
-      const heroImg = heroMedia.querySelector('img');
+      let heroImg = heroMedia.querySelector('img');
+      if (!heroImg) heroImg = heroMedia.querySelector('video');
       const heroSection = document.querySelector('.hero');
 
       function updateParallax() {
         const st = window.scrollY;
         const hh = heroSection.offsetHeight;
         const p = Math.min(st / hh, 1);
-        heroImg.style.transform = 'translateY(' + (st * 0.3) + 'px) scale(' + (1.1 - p * 0.1) + ')';
-        heroImg.style.opacity = 1 - p * 0.35;
+        const mx = parseFloat(heroMedia.dataset.mx) || 0;
+        const my = parseFloat(heroMedia.dataset.my) || 0;
+        heroImg.style.transform = 'translateY(' + (st * 0.25 + my) + 'px) translateX(' + mx + 'px) scale(' + (1.05 - p * 0.05) + ')';
       }
 
       let tickingParallax = false;
@@ -1363,11 +1379,9 @@
       /* ── HERO MOUSE PARALLAX ── */
       if (!isTouch) {
         document.addEventListener('mousemove', (e) => {
-          const x = (e.clientX / window.innerWidth - 0.5) * 8;
-          const y = (e.clientY / window.innerHeight - 0.5) * 5;
-          heroImg.style.setProperty('--mx', x + 'px');
-          heroImg.style.setProperty('--my', y + 'px');
-          heroImg.style.transform = 'translateY(' + (window.scrollY * 0.3) + 'px) translateX(var(--mx, 0px)) translateY(var(--my, 0px)) scale(' + (1.1 - Math.min(window.scrollY / heroSection.offsetHeight, 1) * 0.1) + ')';
+          heroMedia.dataset.mx = ((e.clientX / window.innerWidth - 0.5) * 8).toFixed(1);
+          heroMedia.dataset.my = ((e.clientY / window.innerHeight - 0.5) * 5).toFixed(1);
+          updateParallax();
         });
       }
 
