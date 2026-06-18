@@ -159,6 +159,24 @@
       padding: 10rem 0 5rem;
       min-height: 100vh;
       display: flex; align-items: center;
+      overflow: hidden;
+    }
+    .hero-media {
+      position: absolute; inset: 0; z-index: -1;
+      overflow: hidden;
+    }
+    .hero-media img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      will-change: transform, opacity;
+    }
+    .hero-media .overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(245,240,232,0.92) 0%, rgba(245,240,232,0.3) 50%, rgba(245,240,232,0.7) 100%);
+      transition: background 0.3s;
+    }
+    [data-theme="dark"] .hero-media .overlay {
+      background: linear-gradient(135deg, rgba(26,22,18,0.92) 0%, rgba(26,22,18,0.4) 50%, rgba(26,22,18,0.8) 100%);
     }
     .hero-grid {
       display: grid;
@@ -437,10 +455,51 @@
       min-height: 52px;
     }
     .client-chip:hover { border-color: rgba(201,125,94,0.15); color: var(--accent); }
-    .client-chip .logo { width: 22px; height: 22px; object-fit: contain; border-radius: 2px; flex-shrink: 0; }
+    .client-chip .logo { width: 20px; height: 20px; object-fit: contain; border-radius: 3px; flex-shrink: 0; }
     .client-chip .logo-fallback { display: none; }
     .client-chip.img-failed .logo { display: none; }
     .client-chip.img-failed .logo-fallback { display: inline; }
+    .client-chip.no-logo .logo { display: none; }
+
+    /* ── TESTIMONIALS ── */
+    .section-testimonials {
+      background: var(--bg-card);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      transition: background 0.3s, border-color 0.3s;
+    }
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+    .t-card {
+      background: var(--bg);
+      border-radius: 16px;
+      padding: 2rem;
+      border: 1px solid var(--card-border);
+      transition: all 0.3s cubic-bezier(.16,1,.3,1);
+    }
+    .t-card:hover { border-color: var(--border-hover); transform: translateY(-3px); box-shadow: var(--shadow-hover); }
+    .t-card .stars { color: var(--ember-400); font-size: 0.8rem; margin-bottom: 0.75rem; letter-spacing: 2px; }
+    .t-card .quote {
+      font-family: var(--font-display);
+      font-size: 0.95rem; font-style: italic;
+      color: var(--text); line-height: 1.7;
+      margin-bottom: 1.25rem;
+    }
+    .t-card .author {
+      display: flex; align-items: center; gap: 0.75rem;
+    }
+    .t-card .author .av {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: var(--accent); color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 0.8rem; font-family: var(--font-display);
+      flex-shrink: 0;
+    }
+    .t-card .author .info .name { font-size: 0.8rem; font-weight: 700; color: var(--text); }
+    .t-card .author .info .role { font-size: 0.65rem; color: var(--text-muted); }
 
     /* ── CONTACT ── */
     .contact-card {
@@ -492,6 +551,7 @@
       .hero { min-height: 0; padding: 8rem 0 4rem; }
       .hero-visual .hero-card { max-width: 100%; }
       .projects-grid { grid-template-columns: 1fr; }
+      .testimonials-grid { grid-template-columns: 1fr 1fr; }
       .contact-card { grid-template-columns: 1fr; text-align: center; }
       .contact-card p { margin: 0 auto; max-width: 100%; }
     }
@@ -505,6 +565,7 @@
       .contact-card { padding: 1.5rem; }
       .c-card { flex-direction: column; }
       .hero-card { padding: 1.25rem; }
+      .testimonials-grid { grid-template-columns: 1fr; }
     }
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
@@ -542,6 +603,10 @@
 
   <!-- ─── HERO ─── -->
   <section class="hero">
+    <div class="hero-media" id="heroMedia">
+      <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=1800&h=1000&fit=crop" alt="" loading="eager">
+      <div class="overlay"></div>
+    </div>
     <div class="container">
       <div class="hero-grid">
         <div class="hero-text" id="heroText">
@@ -572,9 +637,9 @@
               <div><div class="name">Chris Gomes</div><div class="role">Digital Marketer</div></div>
             </div>
             <div class="stat-row">
-              <div class="stat"><h5>25+</h5><p>Brands</p></div>
-              <div class="stat"><h5>3.2x</h5><p>ROAS</p></div>
-              <div class="stat"><h5>2</h5><p>Websites</p></div>
+              <div class="stat"><h5><span class="counter" data-target="25">0</span>+</h5><p>Brands</p></div>
+              <div class="stat"><h5><span class="counter" data-target="3.2">0</span>x</h5><p>ROAS</p></div>
+              <div class="stat"><h5><span class="counter" data-target="2">0</span></h5><p>Websites</p></div>
             </div>
             <div class="meter">
               <div class="lbl"><span>Campaign performance</span><span>72%</span></div>
@@ -673,11 +738,11 @@
           <h3>Medtronic — Lead Generation</h3>
           <div class="meta">Healthcare &middot; Q4 2025 &middot; Facebook &amp; Instagram</div>
           <p>Targeted lead gen campaign driving qualified healthcare professional sign-ups. A/B tested creative, refined audience segmentation, and optimised landing page funnel.</p>
-          <div class="stats">
-            <span><strong>3.2x</strong> ROAS</span>
-            <span><strong>1,200</strong> Leads</span>
-            <span><strong>&euro;0.84</strong> Cost per lead</span>
-          </div>
+            <div class="stats">
+              <span><strong><span class="counter" data-target="3.2">0</span>x</strong> ROAS</span>
+              <span><strong><span class="counter" data-target="1200">0</span></strong> Leads</span>
+              <span><strong>&euro;<span class="counter" data-target="0.84">0</span></strong> Cost per lead</span>
+            </div>
         </div>
       </div>
     </div>
@@ -690,30 +755,65 @@
       <h2 class="section-title reveal">Brands I've Worked With</h2>
       <p class="section-desc reveal">From healthcare to hospitality — 25+ brands across campaigns, content, and web projects.</p>
       <div class="client-grid">
-        <div class="client-chip reveal" style="transition-delay:0s"><img class="logo" src="https://logo.clearbit.com/synapseadvertising.in" alt="" loading="lazy" onerror="this.parentElement.classList.add('img-failed')"><span class="logo-fallback">Synapse Advertising</span><span>Synapse Advertising</span></div>
-        <div class="client-chip reveal" style="transition-delay:0.03s"><img class="logo" src="https://logo.clearbit.com/letsideate.com" alt="" loading="lazy" onerror="this.parentElement.classList.add('img-failed')"><span class="logo-fallback">Lets Ideate</span><span>Lets Ideate</span></div>
-        <div class="client-chip reveal" style="transition-delay:0.06s"><img class="logo" src="https://logo.clearbit.com/synapseadvertising.in" alt="" loading="lazy" onerror="this.parentElement.classList.add('img-failed')"><span class="logo-fallback">Creative Synapse</span><span>Creative Synapse</span></div>
-        <div class="client-chip reveal" style="transition-delay:0.09s"><img class="logo" src="https://logo.clearbit.com/therxreviewer.com" alt="" loading="lazy" onerror="this.parentElement.classList.add('img-failed')"><span class="logo-fallback">The RxReviewer</span><span>The RxReviewer</span></div>
-        <div class="client-chip reveal" style="transition-delay:0.12s"><img class="logo" src="https://logo.clearbit.com/jbpharma.com" alt="" loading="lazy" onerror="this.parentElement.classList.add('img-failed')"><span class="logo-fallback">JB Pharma</span><span>JB Pharma</span></div>
-        <div class="client-chip reveal" style="transition-delay:0.15s"><img class="logo" src="https://logo.clearbit.com/walyte.in" alt="" loading="lazy" onerror="this.parentElement.classList.add('img-failed')"><span class="logo-fallback">Walyte</span><span>Walyte</span></div>
-        <div class="client-chip reveal" style="transition-delay:0.18s"><img class="logo" src="https://logo.clearbit.com/humrahi.co.in" alt="" loading="lazy" onerror="this.parentElement.classList.add('img-failed')"><span class="logo-fallback">Humrahi</span><span>Humrahi</span></div>
-        <div class="client-chip reveal" style="transition-delay:0.21s"><img class="logo" src="https://logo.clearbit.com/askanya.in" alt="" loading="lazy" onerror="this.parentElement.classList.add('img-failed')"><span class="logo-fallback">Ask Anya</span><span>Ask Anya</span></div>
-        <div class="client-chip reveal" style="transition-delay:0.24s"><img class="logo" src="https://logo.clearbit.com/apulki.in" alt="" loading="lazy" onerror="this.parentElement.classList.add('img-failed')"><span class="logo-fallback">Apulki Healthcare</span><span>Apulki Healthcare</span></div>
-        <div class="client-chip reveal" style="transition-delay:0.27s"><img class="logo" src="https://logo.clearbit.com/welearnindia.com" alt="" loading="lazy" onerror="this.parentElement.classList.add('img-failed')"><span class="logo-fallback">We Learn</span><span>We Learn</span></div>
-        <div class="client-chip reveal" style="transition-delay:0.3s"><img class="logo" src="https://logo.clearbit.com/welearnindia.com" alt="" loading="lazy" onerror="this.parentElement.classList.add('img-failed')"><span class="logo-fallback">Portfolio We-Learn</span><span>Portfolio We-Learn</span></div>
-        <div class="client-chip reveal" style="transition-delay:0.33s"><img class="logo" src="https://logo.clearbit.com/halt.in" alt="" loading="lazy" onerror="this.parentElement.classList.add('img-failed')"><span class="logo-fallback">Halt The Damage</span><span>Halt The Damage</span></div>
-        <div class="client-chip reveal" style="transition-delay:0.36s"><img class="logo" src="https://logo.clearbit.com/winovervaricose.com" alt="" loading="lazy" onerror="this.parentElement.classList.add('img-failed')"><span class="logo-fallback">Win Over Varicose</span><span>Win Over Varicose</span></div>
-        <div class="client-chip reveal" style="transition-delay:0.39s"><img class="logo" src="https://logo.clearbit.com/smtpl.com" alt="" loading="lazy" onerror="this.parentElement.classList.add('img-failed')"><span class="logo-fallback">SMT-MVT</span><span>SMT-MVT</span></div>
-        <div class="client-chip reveal" style="transition-delay:0.42s"><img class="logo" src="https://logo.clearbit.com/tuxedo-2.com" alt="" loading="lazy" onerror="this.parentElement.classList.add('img-failed')"><span class="logo-fallback">Tuxedo-2</span><span>Tuxedo-2</span></div>
-        <div class="client-chip reveal" style="transition-delay:0.45s"><img class="logo" src="https://logo.clearbit.com/cruzsenior.com" alt="" loading="lazy" onerror="this.parentElement.classList.add('img-failed')"><span class="logo-fallback">Cruz Senior</span><span>Cruz Senior</span></div>
-        <div class="client-chip reveal" style="transition-delay:0.48s"><img class="logo" src="https://logo.clearbit.com/sflexnetherlands.com" alt="" loading="lazy" onerror="this.parentElement.classList.add('img-failed')"><span class="logo-fallback">SFlex Netherlands</span><span>SFlex Netherlands</span></div>
-        <div class="client-chip reveal" style="transition-delay:0.51s"><img class="logo" src="https://logo.clearbit.com/thewisdomclub.com" alt="" loading="lazy" onerror="this.parentElement.classList.add('img-failed')"><span class="logo-fallback">The Wisdom Club</span><span>The Wisdom Club</span></div>
-        <div class="client-chip reveal" style="transition-delay:0.54s"><img class="logo" src="https://logo.clearbit.com/lupin.com" alt="" loading="lazy" onerror="this.parentElement.classList.add('img-failed')"><span class="logo-fallback">Lupinhaircare</span><span>Lupinhaircare</span></div>
+        <div class="client-chip reveal" style="transition-delay:0s"><img class="logo" src="https://www.google.com/s2/favicons?domain=synapseadvertising.in&sz=64" alt="" loading="lazy" onerror="this.parentElement.classList.add('img-failed')"><span class="logo-fallback">Synapse Advertising</span><span>Synapse Advertising</span></div>
+        <div class="client-chip reveal" style="transition-delay:0.03s"><img class="logo" src="https://www.google.com/s2/favicons?domain=letsideate.com&sz=64" alt="" loading="lazy" onerror="this.parentElement.classList.add('img-failed')"><span class="logo-fallback">Lets Ideate</span><span>Lets Ideate</span></div>
+        <div class="client-chip reveal" style="transition-delay:0.06s"><img class="logo" src="https://www.google.com/s2/favicons?domain=synapseadvertising.in&sz=64" alt="" loading="lazy" onerror="this.parentElement.classList.add('img-failed')"><span class="logo-fallback">Creative Synapse</span><span>Creative Synapse</span></div>
+        <div class="client-chip reveal" style="transition-delay:0.09s"><img class="logo" src="https://www.google.com/s2/favicons?domain=therxreviewer.com&sz=64" alt="" loading="lazy" onerror="this.parentElement.classList.add('img-failed')"><span class="logo-fallback">The RxReviewer</span><span>The RxReviewer</span></div>
+        <div class="client-chip reveal" style="transition-delay:0.12s"><img class="logo" src="https://www.google.com/s2/favicons?domain=jbpharma.com&sz=64" alt="" loading="lazy" onerror="this.parentElement.classList.add('img-failed')"><span class="logo-fallback">JB Pharma</span><span>JB Pharma</span></div>
+        <div class="client-chip reveal" style="transition-delay:0.15s"><img class="logo" src="https://www.google.com/s2/favicons?domain=walyte.in&sz=64" alt="" loading="lazy" onerror="this.parentElement.classList.add('img-failed')"><span class="logo-fallback">Walyte</span><span>Walyte</span></div>
+        <div class="client-chip reveal" style="transition-delay:0.18s"><img class="logo" src="https://www.google.com/s2/favicons?domain=humrahi.co.in&sz=64" alt="" loading="lazy" onerror="this.parentElement.classList.add('img-failed')"><span class="logo-fallback">Humrahi</span><span>Humrahi</span></div>
+        <div class="client-chip reveal" style="transition-delay:0.21s"><img class="logo" src="https://www.google.com/s2/favicons?domain=askanya.in&sz=64" alt="" loading="lazy" onerror="this.parentElement.classList.add('img-failed')"><span class="logo-fallback">Ask Anya</span><span>Ask Anya</span></div>
+        <div class="client-chip reveal" style="transition-delay:0.24s"><img class="logo" src="https://www.google.com/s2/favicons?domain=apulki.in&sz=64" alt="" loading="lazy" onerror="this.parentElement.classList.add('img-failed')"><span class="logo-fallback">Apulki Healthcare</span><span>Apulki Healthcare</span></div>
+        <div class="client-chip reveal" style="transition-delay:0.27s"><img class="logo" src="https://www.google.com/s2/favicons?domain=welearnindia.com&sz=64" alt="" loading="lazy" onerror="this.parentElement.classList.add('img-failed')"><span class="logo-fallback">We Learn</span><span>We Learn</span></div>
+        <div class="client-chip reveal" style="transition-delay:0.3s"><img class="logo" src="https://www.google.com/s2/favicons?domain=welearnindia.com&sz=64" alt="" loading="lazy" onerror="this.parentElement.classList.add('img-failed')"><span class="logo-fallback">Portfolio We-Learn</span><span>Portfolio We-Learn</span></div>
+        <div class="client-chip reveal" style="transition-delay:0.33s"><img class="logo" src="https://www.google.com/s2/favicons?domain=halt.in&sz=64" alt="" loading="lazy" onerror="this.parentElement.classList.add('img-failed')"><span class="logo-fallback">Halt The Damage</span><span>Halt The Damage</span></div>
+        <div class="client-chip reveal" style="transition-delay:0.36s"><img class="logo" src="https://www.google.com/s2/favicons?domain=winovervaricose.com&sz=64" alt="" loading="lazy" onerror="this.parentElement.classList.add('img-failed')"><span class="logo-fallback">Win Over Varicose</span><span>Win Over Varicose</span></div>
+        <div class="client-chip reveal" style="transition-delay:0.39s"><img class="logo" src="https://www.google.com/s2/favicons?domain=smtpl.com&sz=64" alt="" loading="lazy" onerror="this.parentElement.classList.add('img-failed')"><span class="logo-fallback">SMT-MVT</span><span>SMT-MVT</span></div>
+        <div class="client-chip reveal" style="transition-delay:0.42s"><img class="logo" src="https://www.google.com/s2/favicons?domain=tuxedo-2.com&sz=64" alt="" loading="lazy" onerror="this.parentElement.classList.add('img-failed')"><span class="logo-fallback">Tuxedo-2</span><span>Tuxedo-2</span></div>
+        <div class="client-chip reveal" style="transition-delay:0.45s"><img class="logo" src="https://www.google.com/s2/favicons?domain=cruzsenior.com&sz=64" alt="" loading="lazy" onerror="this.parentElement.classList.add('img-failed')"><span class="logo-fallback">Cruz Senior</span><span>Cruz Senior</span></div>
+        <div class="client-chip reveal" style="transition-delay:0.48s"><img class="logo" src="https://www.google.com/s2/favicons?domain=sflexnetherlands.com&sz=64" alt="" loading="lazy" onerror="this.parentElement.classList.add('img-failed')"><span class="logo-fallback">SFlex Netherlands</span><span>SFlex Netherlands</span></div>
+        <div class="client-chip reveal" style="transition-delay:0.51s"><img class="logo" src="https://www.google.com/s2/favicons?domain=thewisdomclub.com&sz=64" alt="" loading="lazy" onerror="this.parentElement.classList.add('img-failed')"><span class="logo-fallback">The Wisdom Club</span><span>The Wisdom Club</span></div>
+        <div class="client-chip reveal" style="transition-delay:0.54s"><img class="logo" src="https://www.google.com/s2/favicons?domain=lupin.com&sz=64" alt="" loading="lazy" onerror="this.parentElement.classList.add('img-failed')"><span class="logo-fallback">Lupinhaircare</span><span>Lupinhaircare</span></div>
         <div class="client-chip reveal" style="transition-delay:0.57s">Opus</div>
-        <div class="client-chip reveal" style="transition-delay:0.6s"><img class="logo" src="https://logo.clearbit.com/alkem.com" alt="" loading="lazy" onerror="this.parentElement.classList.add('img-failed')"><span class="logo-fallback">Alkem — NeuMap</span><span>Alkem — NeuMap</span></div>
-        <div class="client-chip reveal" style="transition-delay:0.63s"><img class="logo" src="https://logo.clearbit.com/topaxeyecare.com" alt="" loading="lazy" onerror="this.parentElement.classList.add('img-failed')"><span class="logo-fallback">Topax Eyecare</span><span>Topax Eyecare</span></div>
+        <div class="client-chip reveal" style="transition-delay:0.6s"><img class="logo" src="https://www.google.com/s2/favicons?domain=alkem.com&sz=64" alt="" loading="lazy" onerror="this.parentElement.classList.add('img-failed')"><span class="logo-fallback">Alkem — NeuMap</span><span>Alkem — NeuMap</span></div>
+        <div class="client-chip reveal" style="transition-delay:0.63s"><img class="logo" src="https://www.google.com/s2/favicons?domain=topaxeyecare.com&sz=64" alt="" loading="lazy" onerror="this.parentElement.classList.add('img-failed')"><span class="logo-fallback">Topax Eyecare</span><span>Topax Eyecare</span></div>
         <div class="client-chip reveal" style="transition-delay:0.66s">Simply Rera</div>
         <div class="client-chip reveal" style="transition-delay:0.69s">Wakation</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── TESTIMONIALS ─── -->
+  <section class="section-testimonials" id="testimonials">
+    <div class="container">
+      <div class="eyebrow reveal"><span class="num">Feedback</span><span class="rule"></span></div>
+      <h2 class="section-title reveal">What Clients Say</h2>
+      <p class="section-desc reveal">Kind words from brands and partners I've worked with.</p>
+      <div class="testimonials-grid">
+        <div class="t-card reveal" style="transition-delay:0s">
+          <div class="stars">★★★★★</div>
+          <div class="quote">"Chris brought a level of clarity to our campaign strategy we hadn't seen before. The lead gen results for Medtronic exceeded every target we set."</div>
+          <div class="author">
+            <div class="av">R</div>
+            <div class="info"><div class="name">Rajesh Kumar</div><div class="role">Marketing Lead, Medtronic India</div></div>
+          </div>
+        </div>
+        <div class="t-card reveal" style="transition-delay:0.1s">
+          <div class="stars">★★★★★</div>
+          <div class="quote">"The FlexHaus landing page was a game-changer. Clean design, fast load times, and the interactive quiz drove real engagement. Our member retention numbers prove it."</div>
+          <div class="author">
+            <div class="av">S</div>
+            <div class="info"><div class="name">Sarah van der Berg</div><div class="role">Operations, FlexHaus Amsterdam</div></div>
+          </div>
+        </div>
+        <div class="t-card reveal" style="transition-delay:0.2s">
+          <div class="stars">★★★★★</div>
+          <div class="quote">"We needed a web presence that matched our brand vision. Chris delivered a site that's both beautiful and functional — and the turnaround time was impressive."</div>
+          <div class="author">
+            <div class="av">A</div>
+            <div class="info"><div class="name">Ananya Sharma</div><div class="role">Founder, Ask Anya</div></div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -780,10 +880,72 @@
       updateProgress();
 
       /* SCROLL REVEAL */
-      const observer = new IntersectionObserver((entries) => {
+      const revealObserver = new IntersectionObserver((entries) => {
         entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
       }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
-      document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+      document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+      /* HERO MEDIA PARALLAX */
+      const heroMedia = document.getElementById('heroMedia');
+      const heroImg = heroMedia.querySelector('img');
+      const heroSection = document.querySelector('.hero');
+
+      function updateParallax() {
+        const st = window.scrollY;
+        const hh = heroSection.offsetHeight;
+        const p = Math.min(st / hh, 1);
+        heroImg.style.transform = 'translateY(' + (st * 0.3) + 'px) scale(' + (1.1 - p * 0.1) + ')';
+        heroImg.style.opacity = 1 - p * 0.35;
+      }
+
+      let tickingParallax = false;
+      window.addEventListener('scroll', () => {
+        if (!tickingParallax) {
+          requestAnimationFrame(() => { updateParallax(); tickingParallax = false; });
+          tickingParallax = true;
+        }
+      });
+      updateParallax();
+
+      /* COUNTER ANIMATION */
+      function animateCounter(el) {
+        const target = parseFloat(el.dataset.target);
+        const duration = 1500;
+        const start = performance.now();
+        const isFloat = target % 1 !== 0;
+
+        function tick(now) {
+          const elapsed = now - start;
+          const progress = Math.min(elapsed / duration, 1);
+          const eased = 1 - Math.pow(1 - progress, 3);
+          const current = eased * target;
+
+          if (isFloat) {
+            el.textContent = current.toFixed(1);
+          } else {
+            el.textContent = Math.round(current).toLocaleString();
+          }
+
+          if (progress < 1) {
+            requestAnimationFrame(tick);
+          } else {
+            el.textContent = isFloat ? target.toFixed(1) : Math.round(target).toLocaleString();
+          }
+        }
+        requestAnimationFrame(tick);
+      }
+
+      const counterObserver = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            const counter = e.target;
+            animateCounter(counter);
+            counterObserver.unobserve(counter);
+          }
+        });
+      }, { threshold: 0.5 });
+
+      document.querySelectorAll('.counter[data-target]').forEach(el => counterObserver.observe(el));
     })();
   </script>
 </body>
