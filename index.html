@@ -187,20 +187,171 @@
     }
     nav .nav-mark:hover { background: var(--accent-hover); }
 
-    /* ── HERO (reference banner layout) ── */
+    /* ── HERO (Juan Mora inspired) ── */
     .hero {
       position: relative; z-index: 1;
       height: 100vh; min-height: 700px;
       overflow: hidden;
       background: var(--warm-dark);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
+    }
+    /* Photo layer — left 55% */
+    .hero-photo {
+      position: absolute;
+      top: 0; left: 0;
+      width: 58%;
+      height: 100%;
+      z-index: 1;
+      overflow: hidden;
+    }
+    .hero-photo img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      object-position: 30% 50%;
+      filter: saturate(1.05) contrast(1.05);
+    }
+    .hero-photo .photo-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg,
+        rgba(26,21,18,0.55) 0%,
+        rgba(26,21,18,0.15) 40%,
+        rgba(26,21,18,0.05) 60%,
+        rgba(26,21,18,0.7) 100%);
+      z-index: 1;
+    }
+    .hero-photo .warm-glow {
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 35% 50%, rgba(212,167,106,0.12) 0%, transparent 65%);
+      z-index: 1;
     }
 
-    /* Floating orbs behind everything */
+    /* Edge blend — smooth transition from photo to content */
+    .hero-blend {
+      position: absolute;
+      left: 54%;
+      top: 0;
+      width: 8%;
+      height: 100%;
+      z-index: 2;
+      background: linear-gradient(90deg, transparent, var(--warm-dark));
+    }
+
+    /* Right content panel */
+    .hero-content {
+      position: absolute;
+      top: 0; right: 0;
+      width: 46%;
+      height: 100%;
+      z-index: 3;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 8rem 5rem 10rem 3.5rem;
+      background: var(--warm-dark);
+    }
+    .hero-content .hero-eyebrow {
+      font-family: var(--font-sans);
+      font-size: 0.65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--warm-beige);
+      opacity: 0.7;
+      margin-bottom: 0.75rem;
+    }
+    .hero-content .hero-description {
+      font-family: var(--font-display);
+      font-size: clamp(1.1rem, 1.8vw, 1.6rem);
+      color: var(--warm-cream);
+      line-height: 1.4;
+      max-width: 340px;
+      opacity: 0.85;
+    }
+    .hero-content .hero-stats-row {
+      display: flex;
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+    .hero-content .hero-stats-row span {
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--warm-beige);
+      opacity: 0.6;
+    }
+    .hero-content .hero-stats-row strong {
+      display: block;
+      font-size: 1.2rem;
+      color: var(--warm-beige);
+      opacity: 1;
+      margin-top: 0.15rem;
+    }
+
+    .btn {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.85rem 2rem;
+      background: var(--warm-beige);
+      color: var(--warm-dark);
+      border: none; border-radius: 100px;
+      font-size: 0.85rem; font-weight: 700; font-family: inherit;
+      text-decoration: none; cursor: pointer;
+      transition: all 0.3s cubic-bezier(.16,1,.3,1);
+      box-shadow: 0 4px 20px rgba(212,167,106,0.2);
+    }
+    .btn:hover { background: #c49658; transform: translateY(-2px); box-shadow: 0 8px 30px rgba(212,167,106,0.3); }
+    .btn-o {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.85rem 2rem;
+      background: transparent;
+      color: var(--warm-cream);
+      border: 1.5px solid rgba(245,240,232,0.15);
+      border-radius: 100px;
+      font-size: 0.85rem; font-weight: 600; font-family: inherit;
+      text-decoration: none; cursor: pointer;
+      transition: all 0.3s;
+    }
+    .btn-o:hover { border-color: var(--warm-beige); color: var(--warm-beige); }
+
+    /* Huge name split — "Chris" left, "Gomes" right */
+    .hero-name-left, .hero-name-right {
+      position: absolute;
+      z-index: 4;
+      pointer-events: none;
+    }
+    .hero-name-left {
+      left: 2%;
+      bottom: -1.5rem;
+    }
+    .hero-name-right {
+      right: 2%;
+      bottom: -1.5rem;
+    }
+    .hero-name-left h1, .hero-name-right h1 {
+      font-family: var(--font-display);
+      font-size: clamp(5rem, 22vw, 18rem);
+      font-weight: 900;
+      color: var(--warm-beige);
+      margin: 0;
+      line-height: 0.78;
+      letter-spacing: -0.04em;
+      white-space: nowrap;
+      text-shadow: 0 4px 40px rgba(212,167,106,0.08);
+      opacity: 0.92;
+    }
+    .hero-name-left h1 { text-align: left; }
+    .hero-name-right h1 { text-align: right; }
+    .hero-name-left .name-char,
+    .hero-name-right .name-char {
+      display: inline-block;
+      transition: transform 0.3s cubic-bezier(.16,1,.3,1), color 0.3s;
+    }
+    .hero-name-left .name-char:hover,
+    .hero-name-right .name-char:hover {
+      color: var(--warm-cream);
+      transform: translateY(-8px);
+    }
+
+    /* ── AMBIENT FLOATING ORBS ── */
     .hero-orbs {
       position: absolute; inset: 0; z-index: 0;
       overflow: hidden;
@@ -238,147 +389,19 @@
       100% { transform: translate(30px, -40px) scale(1.15); }
     }
 
-    /* Top bar: "Chris • Gomes" | "Email LinkedIn" */
-    .hero-top {
-      position: absolute;
-      top: 1.5rem;
-      left: 2rem;
-      right: 2rem;
-      z-index: 5;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      pointer-events: none;
-    }
-    .hero-top-left {
-      font-family: var(--font-display);
-      font-size: clamp(0.85rem, 1.2vw, 1.1rem);
-      color: var(--warm-cream);
-      opacity: 0.8;
-      letter-spacing: 0.03em;
-    }
-    .hero-top-left em { font-style: normal; color: var(--warm-beige); }
-    .hero-top-right {
-      display: flex;
-      gap: 1.25rem;
-      font-size: clamp(0.65rem, 0.9vw, 0.8rem);
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-    }
-    .hero-top-right a {
-      color: var(--warm-cream);
-      text-decoration: none;
-      opacity: 0.6;
-      pointer-events: auto;
-      transition: opacity 0.2s;
-    }
-    .hero-top-right a:hover { opacity: 1; }
-
-    /* Centered headline */
-    .hero-headline {
-      font-family: var(--font-sans);
-      font-size: clamp(1.8rem, 4.5vw, 4rem);
-      font-weight: 800;
-      color: var(--warm-cream);
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      line-height: 1.15;
-      margin-bottom: 1.5rem;
-    }
-
-    /* Mid section: first name | portrait | last name */
-    .hero-mid {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: clamp(1.5rem, 4vw, 4rem);
-      width: 100%;
-    }
-    .hero-first, .hero-last {
-      font-family: var(--font-display);
-      font-size: clamp(3rem, 12vw, 9rem);
-      font-weight: 900;
-      color: var(--warm-beige);
-      line-height: 0.9;
-      letter-spacing: -0.04em;
-      white-space: nowrap;
-      text-shadow: 0 4px 40px rgba(212,167,106,0.08);
-    }
-    .hero-first .name-char,
-    .hero-last .name-char {
-      display: inline-block;
-      transition: transform 0.3s cubic-bezier(.16,1,.3,1), color 0.3s;
-    }
-    .hero-first .name-char:hover,
-    .hero-last .name-char:hover {
-      color: var(--warm-cream);
-      transform: translateY(-8px);
-    }
-    .hero-first { text-align: right; }
-    .hero-last { text-align: left; }
-
-    /* Portrait */
-    .hero-portrait {
-      width: clamp(120px, 22vw, 320px);
-      height: clamp(120px, 22vw, 320px);
-      border-radius: 50%;
-      overflow: hidden;
-      border: 3px solid rgba(212,167,106,0.3);
-      box-shadow: 0 8px 40px rgba(212,167,106,0.15);
-      flex-shrink: 0;
-    }
-    .hero-portrait img {
-      width: 100%; height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-
-    /* Stats pill */
-    .hero-stats {
-      display: inline-flex;
-      align-items: center;
-      gap: 1.5rem;
-      margin-top: 1.5rem;
-      padding: 0.6rem 1.5rem;
-      border: 1px solid rgba(212,167,106,0.2);
-      border-radius: 100px;
-      font-size: clamp(0.6rem, 0.8vw, 0.75rem);
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--warm-cream);
-    }
-    .hero-stats span { opacity: 0.6; }
-    .hero-stats strong {
-      color: var(--warm-beige);
-      font-weight: 800;
-    }
-    .hero-stats .sep { opacity: 0.2; }
-
-    /* Tagline + location */
-    .hero-tagline {
-      margin-top: 1rem;
-      font-size: clamp(0.75rem, 1vw, 0.9rem);
-      color: var(--warm-cream);
-      opacity: 0.55;
-      line-height: 1.5;
-    }
-    .hero-tagline .loc {
-      font-size: 0.75em;
-      opacity: 0.75;
-    }
-
-    /* Entrance */
+    /* ── ENTRANCE ── */
     .fade-item { opacity: 0; transform: translateY(15px); }
-    .hero.fade-in .fade-item {
+    .hero-content.loaded .fade-item,
+    .hero-photo.loaded {
       animation: fadeUp 0.7s cubic-bezier(.16,1,.3,1) forwards;
     }
-    .hero.fade-in .fd1 { animation-delay: 0.1s; }
-    .hero.fade-in .fd2 { animation-delay: 0.2s; }
-    .hero.fade-in .fd3 { animation-delay: 0.3s; }
-    .hero.fade-in .fd4 { animation-delay: 0.4s; }
-    .hero.fade-in .fd5 { animation-delay: 0.5s; }
+    .hero-content.loaded .fd1,
+    .hero-photo.loaded.fd1 { animation-delay: 0.1s; }
+    .hero-content.loaded .fd2,
+    .hero-photo.loaded.fd2 { animation-delay: 0.2s; }
+    .hero-content.loaded .fd3,
+    .hero-photo.loaded.fd3 { animation-delay: 0.3s; }
+    .hero-content.loaded .fd4 { animation-delay: 0.4s; }
     @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
 
     /* ── SECTIONS ── */
@@ -821,12 +844,19 @@
     ::-webkit-scrollbar-thumb:hover { background: var(--ink-500); }
 
     @media (max-width: 900px) {
-      .hero-top { top: 1rem; left: 1.25rem; right: 1.25rem; }
-      .hero-headline { font-size: clamp(1.4rem, 4vw, 2rem); margin-bottom: 1rem; }
-      .hero-mid { gap: 1rem; }
-      .hero-first, .hero-last { font-size: clamp(2.2rem, 10vw, 4.5rem); }
-      .hero-portrait { width: clamp(90px, 20vw, 180px); height: clamp(90px, 20vw, 180px); }
-      .hero-stats { gap: 0.75rem; padding: 0.4rem 1rem; font-size: clamp(0.5rem, 0.8vw, 0.65rem); }
+      .hero-photo { width: 100%; }
+      .hero-photo img { object-position: 40% 50%; filter: saturate(1.1) contrast(1.1) brightness(0.7); }
+      .hero-blend { display: none; }
+      .hero-content {
+        width: 100%;
+        justify-content: flex-end;
+        padding: 6rem 2rem 8rem;
+        background: linear-gradient(180deg, transparent 0%, var(--warm-dark) 40%);
+      }
+      .hero-content .hero-description { max-width: 100%; }
+      .hero-name-left h1, .hero-name-right h1 { font-size: clamp(4rem, 18vw, 11rem); }
+      .hero-name-left { bottom: -1rem; }
+      .hero-name-right { bottom: -1rem; }
       .social-bar a { padding: 0.35rem 0.45rem; }
       .services-grid { grid-template-columns: 1fr 1fr; }
       .about-split { grid-template-columns: 1fr; gap: 2rem; }
@@ -836,18 +866,6 @@
       .contact-card p { margin: 0 auto; max-width: 100%; }
     }
     @media (max-width: 600px) {
-      .hero { min-height: 600px; }
-      .hero-top { top: 0.75rem; left: 1rem; right: 1rem; }
-      .hero-top-left { font-size: 0.75rem; }
-      .hero-top-right { gap: 0.75rem; font-size: 0.6rem; }
-      .hero-headline { font-size: clamp(1.1rem, 5vw, 1.5rem); letter-spacing: 0.08em; margin-bottom: 0.75rem; }
-      .hero-mid { flex-direction: column; gap: 0.75rem; }
-      .hero-first, .hero-last { font-size: clamp(1.8rem, 12vw, 3rem); }
-      .hero-first { text-align: center; }
-      .hero-last { text-align: center; }
-      .hero-portrait { width: clamp(80px, 30vw, 140px); height: clamp(80px, 30vw, 140px); }
-      .hero-stats { flex-wrap: wrap; justify-content: center; gap: 0.5rem; padding: 0.35rem 0.75rem; font-size: 0.5rem; border-radius: 12px; }
-      .hero-tagline { font-size: 0.65rem; }
       .social-bar a .sl { display: none; }
       .social-bar { gap: 0; top: 0.9rem; }
       .social-bar a { padding: 0.3rem 0.4rem; }
@@ -855,6 +873,17 @@
       nav a { font-size: 0.7rem; }
       nav .nav-mark { width: 28px; height: 28px; font-size: 0.8rem; }
       .theme-toggle { top: 0.8rem; left: 0.8rem; width: 38px; height: 38px; }
+      .hero { min-height: 500px; }
+      .hero-photo img { object-position: 45% 50%; }
+      .hero-content { padding: 4rem 1.5rem 6rem; }
+      .hero-content .hero-eyebrow { font-size: 0.55rem; }
+      .hero-content .hero-description { font-size: clamp(0.9rem, 4vw, 1.1rem); }
+      .hero-content .hero-stats-row { gap: 1rem; }
+      .hero-content .hero-stats-row span { font-size: 0.6rem; }
+      .hero-content .hero-stats-row strong { font-size: 1rem; }
+      .hero-name-left h1, .hero-name-right h1 { font-size: clamp(2.5rem, 14vw, 4.5rem); }
+      .hero-name-left { bottom: -0.5rem; }
+      .hero-name-right { bottom: -0.5rem; }
       section, .marquee-band { padding: 3rem 0; }
       .services-grid { grid-template-columns: 1fr; }
       .s-card { padding: 1.5rem; }
@@ -1044,39 +1073,32 @@
     <a href="#services" class="nav-link">Work</a>
   </nav>
 
-  <!-- ─── HERO (reference banner layout) ─── -->
-  <section class="hero" id="heroSection">
+  <!-- ─── HERO (Juan Mora inspired) ─── -->
+  <section class="hero">
     <div class="hero-orbs"><div class="orb"></div><div class="orb"></div><div class="orb"></div></div>
-
-    <div class="hero-top fade-item fd1">
-      <span class="hero-top-left">Chris <em>•</em> Gomes</span>
-      <span class="hero-top-right">
-        <a href="mailto:chrisgomesonwork@gmail.com">Email</a>
-        <a href="#" target="_blank">LinkedIn</a>
-      </span>
+    <div class="hero-photo fade-item fd1" id="heroPhoto">
+      <img src="Chris%20Gomes%20Banner%20Image.png" alt="Chris Gomes" loading="eager">
+      <div class="photo-overlay"></div>
+      <div class="warm-glow"></div>
     </div>
 
-    <h2 class="hero-headline fade-item fd2">Digital Marketing<br>Specialist</h2>
+    <div class="hero-blend"></div>
 
-    <div class="hero-mid">
-      <div class="hero-first"><span class="name-char">C</span><span class="name-char">h</span><span class="name-char">r</span><span class="name-char">i</span><span class="name-char">s</span></div>
-      <div class="hero-portrait">
-        <img src="Chris%20Gomes%20Banner%20Image.png" alt="Chris Gomes" loading="eager">
+    <div class="hero-content" id="heroContent">
+      <p class="hero-eyebrow fade-item fd1">Digital Marketer &amp; Web Builder</p>
+      <p class="hero-description fade-item fd2">Websites &middot; Campaigns &middot; Brand Strategy — 25+ brands from healthcare to hospitality.</p>
+      <div class="hero-stats-row fade-item fd3">
+        <span><strong>25+</strong> Brands</span>
+        <span><strong>1,200+</strong> Leads</span>
+        <span><strong>3.2x</strong> ROAS</span>
       </div>
-      <div class="hero-last"><span class="name-char">G</span><span class="name-char">o</span><span class="name-char">m</span><span class="name-char">e</span><span class="name-char">s</span></div>
     </div>
 
-    <div class="hero-stats fade-item fd4">
-      <span>Meta Ads <strong>3.2x</strong> ROAS</span>
-      <span class="sep">|</span>
-      <span><strong>1,200+</strong> Leads</span>
-      <span class="sep">|</span>
-      <span><strong>25+</strong> Brands</span>
+    <div class="hero-name-left">
+      <h1><span class="name-char">C</span><span class="name-char">h</span><span class="name-char">r</span><span class="name-char">i</span><span class="name-char">s</span></h1>
     </div>
-
-    <div class="hero-tagline fade-item fd5">
-      <div>Performance Marketing Strategist</div>
-      <div class="loc">Dublin, Ireland</div>
+    <div class="hero-name-right">
+      <h1><span class="name-char">G</span><span class="name-char">o</span><span class="name-char">m</span><span class="name-char">e</span><span class="name-char">s</span></h1>
     </div>
   </section>
 
@@ -1569,30 +1591,32 @@
       }
 
       /* ── ENTRANCE ── */
-      const heroSection = document.getElementById('heroSection');
+      const heroContent = document.getElementById('heroContent');
+      const heroPhoto = document.getElementById('heroPhoto');
       requestAnimationFrame(() => {
-        heroSection.classList.add('fade-in');
+        heroContent.classList.add('loaded');
+        if (heroPhoto) heroPhoto.classList.add('loaded');
       });
 
       /* ── HERO NAME GSAP ENTRANCE ── */
       if (typeof gsap !== 'undefined') {
-        const firstChars = document.querySelectorAll('.hero-first .name-char');
-        const lastChars = document.querySelectorAll('.hero-last .name-char');
-        gsap.from(firstChars, {
+        const leftChars = document.querySelectorAll('.hero-name-left .name-char');
+        const rightChars = document.querySelectorAll('.hero-name-right .name-char');
+        gsap.from(leftChars, {
           x: -60,
           opacity: 0,
           duration: 0.8,
           stagger: 0.06,
           ease: 'back.out(1.7)',
-          delay: 0.3,
+          delay: 0.4,
         });
-        gsap.from(lastChars, {
+        gsap.from(rightChars, {
           x: 60,
           opacity: 0,
           duration: 0.8,
           stagger: 0.06,
           ease: 'back.out(1.7)',
-          delay: 0.3,
+          delay: 0.4,
         });
       }
 
