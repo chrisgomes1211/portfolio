@@ -293,22 +293,24 @@
     /* Name at bottom */
     .hero-name-bottom {
       position: absolute;
-      bottom: 1.5rem;
+      bottom: 0;
       left: 0;
       right: 0;
       z-index: 4;
       pointer-events: none;
       text-align: center;
+      padding: 1.5rem 0 1rem;
+      background: linear-gradient(0deg, rgba(26,21,18,0.7) 0%, transparent 100%);
     }
     .hero-name-bottom h1 {
       font-family: var(--font-display);
-      font-size: clamp(3rem, 10vw, 6rem);
+      font-size: clamp(2.5rem, 8vw, 5rem);
       font-weight: 900;
-      color: #fff;
+      color: var(--warm-beige);
       margin: 0;
       line-height: 1;
       letter-spacing: -0.03em;
-      text-shadow: 0 2px 20px rgba(0,0,0,0.5), 0 4px 40px rgba(0,0,0,0.3);
+      text-shadow: 0 2px 8px rgba(0,0,0,0.5);
       opacity: 1;
     }
     .hero-name-bottom .name-char {
@@ -814,7 +816,6 @@
 
     @media (max-width: 900px) {
       .hero-content { padding: 5rem 1.5rem 8rem; }
-      .hero-name-bottom { bottom: 0.5rem; }
       .social-bar a { padding: 0.35rem 0.45rem; }
       .services-grid { grid-template-columns: 1fr 1fr; }
       .about-split { grid-template-columns: 1fr; gap: 2rem; }
@@ -838,7 +839,6 @@
       .hero-content .hero-stats-row { gap: 1rem; }
       .hero-content .hero-stats-row span { font-size: 0.6rem; }
       .hero-content .hero-stats-row strong { font-size: 1rem; }
-      .hero-name-bottom { bottom: 0; }
       section, .marquee-band { padding: 3rem 0; }
       .services-grid { grid-template-columns: 1fr; }
       .s-card { padding: 1.5rem; }
