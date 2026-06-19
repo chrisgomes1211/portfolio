@@ -193,23 +193,31 @@
       position: absolute; inset: 0;
       display: flex;
       flex-direction: column;
-      align-items: center;
       z-index: 2;
-      padding: 6rem 2rem 5rem;
+      padding: 6rem 0 5rem;
       box-sizing: border-box;
     }
-    .hero-content > .hero-name {
+    .hero-split {
       flex: 1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      gap: 3rem;
+      max-width: 1100px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+    .hero-left {
       display: flex;
       flex-direction: column;
       justify-content: center;
-      align-items: center;
-      width: 100%;
-      min-height: 0;
+      align-items: flex-start;
     }
-    .hero-content > .hero-bline {
-      flex-shrink: 0;
-      padding-bottom: 1rem;
+    .hero-right {
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
     .hero-media {
       position: absolute; inset: 0; z-index: -1;
@@ -281,10 +289,9 @@
     }
     .btn-o:hover { border-color: var(--accent); color: var(--accent); }
 
-    /* Name — flex centered */
+    /* Name — left aligned in split */
     .hero .hero-name {
-      text-align: center;
-      padding: 0 1.5rem;
+      text-align: left;
     }
     .hero .hero-name h1 {
       font-family: var(--font-display);
@@ -314,6 +321,22 @@
       letter-spacing: 0.1em;
       text-transform: uppercase;
       text-shadow: var(--hero-text-shadow);
+      margin-top: 1rem;
+    }
+
+    /* ── CHARACTER ── */
+    .character-wrap {
+      width: 200px;
+      height: 260px;
+      position: relative;
+    }
+    .character-wrap svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+    .character-wrap .pupil {
+      transition: cx 0.08s linear, cy 0.08s linear;
     }
 
     /* ── ENTRANCE ── */
@@ -748,6 +771,10 @@
 
     @media (max-width: 900px) {
       .hero .hero-name h1 { font-size: clamp(2.5rem, 9vw, 5rem); }
+      .hero-split { grid-template-columns: 1fr; gap: 1rem; }
+      .hero-left { align-items: center; text-align: center; }
+      .hero .hero-name { text-align: center; }
+      .character-wrap { width: 150px; height: 195px; }
       .social-bar a { padding: 0.35rem 0.45rem; }
       .services-grid { grid-template-columns: 1fr 1fr; }
       .about-split { grid-template-columns: 1fr; gap: 2rem; }
@@ -767,7 +794,11 @@
       .hero .tagline { display: none; }
       .hero .hero-name h1 { font-size: clamp(1.8rem, 12vw, 3rem); }
       .hero { min-height: 600px; }
-      .hero-content { padding: 3rem 1.5rem 2rem; }
+      .hero-content { padding: 4rem 0 2rem; }
+      .hero-split { grid-template-columns: 1fr; gap: 0.5rem; }
+      .hero-left { align-items: center; text-align: center; }
+      .hero .hero-name { text-align: center; }
+      .character-wrap { width: 130px; height: 169px; }
       section, .marquee-band { padding: 3rem 0; }
       .services-grid { grid-template-columns: 1fr; }
       .s-card { padding: 1.5rem; }
@@ -969,10 +1000,42 @@
     </div>
     <div class="hero-content" id="heroContent">
       <div class="tagline fade-item fd1">Brand &amp; Web Design Specialist</div>
-      <div class="hero-name fade-item fd2">
-        <h1 id="heroName"><span>Chris</span><br><span class="accent">Gomes</span></h1>
+      <div class="hero-split fade-item fd2">
+        <div class="hero-left">
+          <div class="hero-name">
+            <h1 id="heroName"><span>Chris</span><br><span class="accent">Gomes</span></h1>
+          </div>
+          <p class="hero-bline">Websites &middot; Campaigns &middot; Brand Strategy</p>
+        </div>
+        <div class="hero-right">
+          <div class="character-wrap" id="characterWrap">
+            <svg viewBox="0 0 200 260" fill="none">
+              <path d="M55 195 L145 195 L160 260 L40 260 Z" fill="var(--cream-100)" stroke="var(--border-hover)" stroke-width="1.5"/>
+              <path d="M85 195 L100 215 L115 195" fill="var(--bg)" stroke="var(--border)" stroke-width="1.5"/>
+              <rect x="88" y="175" width="24" height="22" rx="4" fill="var(--cream-50)" stroke="var(--border)" stroke-width="1"/>
+              <ellipse cx="100" cy="130" rx="48" ry="52" fill="var(--cream-50)" stroke="var(--border-hover)" stroke-width="1.5"/>
+              <path d="M52 120 Q52 75 100 70 Q148 75 148 120 Q148 105 140 100 Q130 92 120 95 Q100 85 80 95 Q70 100 60 108 Q55 114 52 120" fill="var(--ink-900)" opacity="0.9"/>
+              <path d="M70 112 Q76 108 82 111" stroke="var(--ink-300)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+              <path d="M118 111 Q124 108 130 112" stroke="var(--ink-300)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+              <circle cx="82" cy="128" r="9" fill="var(--cream-100)" stroke="var(--border)" stroke-width="1"/>
+              <circle cx="118" cy="128" r="9" fill="var(--cream-100)" stroke="var(--border)" stroke-width="1"/>
+              <circle class="pupil" data-base-x="82" data-base-y="128" cx="82" cy="128" r="4.5" fill="var(--text)"/>
+              <circle class="pupil" data-base-x="118" data-base-y="128" cx="118" cy="128" r="4.5" fill="var(--text)"/>
+              <circle cx="80" cy="126" r="1.5" fill="var(--cream-50)" opacity="0.8"/>
+              <circle cx="116" cy="126" r="1.5" fill="var(--cream-50)" opacity="0.8"/>
+              <circle cx="82" cy="128" r="14" fill="none" stroke="var(--accent)" stroke-width="1.5" opacity="0.5"/>
+              <circle cx="118" cy="128" r="14" fill="none" stroke="var(--accent)" stroke-width="1.5" opacity="0.5"/>
+              <line x1="96" y1="128" x2="104" y2="128" stroke="var(--accent)" stroke-width="1.5" opacity="0.5"/>
+              <line x1="68" y1="124" x2="56" y2="120" stroke="var(--accent)" stroke-width="1.5"/>
+              <line x1="132" y1="124" x2="144" y2="120" stroke="var(--accent)" stroke-width="1.5"/>
+              <path d="M100 135 L98 142 Q100 144 102 142 Z" fill="var(--cream-50)" stroke="var(--border)" stroke-width="1"/>
+              <path d="M88 150 Q100 160 112 150" stroke="var(--ink-300)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+              <ellipse cx="66" cy="145" rx="6" ry="3.5" fill="var(--accent)" opacity="0.08"/>
+              <ellipse cx="134" cy="145" rx="6" ry="3.5" fill="var(--accent)" opacity="0.08"/>
+            </svg>
+          </div>
+        </div>
       </div>
-      <p class="hero-bline fade-item fd3">Websites &middot; Campaigns &middot; Brand Strategy</p>
     </div>
   </section>
 
@@ -1541,6 +1604,38 @@
           heroMedia.dataset.mx = ((e.clientX / window.innerWidth - 0.5) * 8).toFixed(1);
           heroMedia.dataset.my = ((e.clientY / window.innerHeight - 0.5) * 5).toFixed(1);
           updateParallax();
+        });
+      }
+
+      /* ── EYE TRACKING ── */
+      const charWrap = document.getElementById('characterWrap');
+      const pupils = charWrap ? charWrap.querySelectorAll('.pupil') : [];
+      if (pupils.length > 0) {
+        let rafId = null;
+        let mx = 0, my = 0;
+        document.addEventListener('mousemove', (e) => {
+          mx = e.clientX;
+          my = e.clientY;
+          if (!rafId) {
+            rafId = requestAnimationFrame(() => {
+              const rect = charWrap.getBoundingClientRect();
+              const cx = rect.left + rect.width / 2;
+              const cy = rect.top + rect.height / 2;
+              const dx = mx - cx;
+              const dy = my - cy;
+              const angle = Math.atan2(dy, dx);
+              const dist = Math.min(Math.sqrt(dx * dx + dy * dy) / 30, 3.5);
+              const ox = Math.cos(angle) * dist;
+              const oy = Math.sin(angle) * dist;
+              pupils.forEach(p => {
+                const bx = parseFloat(p.getAttribute('data-base-x'));
+                const by = parseFloat(p.getAttribute('data-base-y'));
+                p.setAttribute('cx', bx + ox);
+                p.setAttribute('cy', by + oy);
+              });
+              rafId = null;
+            });
+          }
         });
       }
 
