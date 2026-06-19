@@ -231,8 +231,8 @@
     [data-theme="dark"] .hero-media .overlay {
       background: linear-gradient(135deg,
         rgba(15,23,42,0.94) 0%,
-        rgba(15,23,42,0.3) 35%,
-        rgba(15,23,42,0.3) 65%,
+        rgba(15,23,42,0.55) 35%,
+        rgba(15,23,42,0.55) 65%,
         rgba(15,23,42,0.94) 100%);
     }
     /* Edge blur — cinematic */
@@ -494,11 +494,71 @@
       border-bottom: 1px solid var(--border);
       transition: background 0.3s, border-color 0.3s;
     }
-    .testimonials-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1.5rem;
+    .testimonials-carousel {
+      position: relative;
+      overflow: hidden;
     }
+    .testimonials-track {
+      display: flex;
+      transition: transform 0.5s cubic-bezier(.16,1,.3,1);
+      will-change: transform;
+    }
+    .testimonials-track .t-card {
+      min-width: 100%;
+      flex-shrink: 0;
+    }
+    @media (min-width: 768px) {
+      .testimonials-track .t-card { min-width: 50%; }
+    }
+    @media (min-width: 1024px) {
+      .testimonials-track .t-card { min-width: 33.333%; }
+    }
+    .carousel-controls {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+    .carousel-dots {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .carousel-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: var(--text-muted);
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      transition: all 0.3s;
+    }
+    .carousel-dot.active {
+      background: var(--accent);
+      transform: scale(1.35);
+      box-shadow: 0 0 8px rgba(79,70,229,0.3);
+    }
+    .carousel-arrow {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      color: var(--text);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.25s;
+      box-shadow: var(--shadow);
+      flex-shrink: 0;
+    }
+    .carousel-arrow:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      transform: scale(1.05);
+    }
+    .carousel-arrow svg { width: 18px; height: 18px; }
     .t-card {
       background: var(--bg);
       border-radius: 16px;
@@ -702,7 +762,6 @@
       .about-split { grid-template-columns: 1fr; gap: 2rem; }
       .about-visual { max-width: 400px; margin: 0 auto; }
       .projects-grid { grid-template-columns: 1fr; }
-      .testimonials-grid { grid-template-columns: 1fr 1fr; }
       .contact-card { grid-template-columns: 1fr; text-align: center; }
       .contact-card p { margin: 0 auto; max-width: 100%; }
     }
@@ -727,7 +786,6 @@
       .client-grid { grid-template-columns: repeat(2, 1fr); }
       .contact-card { padding: 1.5rem; }
       .c-card { flex-direction: column; }
-      .testimonials-grid { grid-template-columns: 1fr; }
       .footer-grid { grid-template-columns: 1fr; gap: 1.5rem; }
       .footer-name-row { gap: 1rem; margin: 1.5rem 0; }
     }
@@ -792,7 +850,15 @@
       transition: background 0.3s;
     }
     [data-theme="dark"] .footer-video .overlay {
-      background: linear-gradient(135deg, rgba(15,23,42,0.94) 0%, rgba(15,23,42,0.5) 40%, rgba(15,23,42,0.88) 100%);
+      background: linear-gradient(135deg, rgba(15,23,42,0.94) 0%, rgba(15,23,42,0.55) 40%, rgba(15,23,42,0.9) 100%);
+    }
+    [data-theme="dark"] .footer-section {
+      --text: var(--ink-900);
+      --text-soft: var(--ink-700);
+      --text-muted: var(--ink-500);
+    }
+    [data-theme="dark"] .footer-section .footer-meta a {
+      color: var(--accent-400);
     }
     .footer-grid {
       display: grid;
@@ -1087,30 +1153,89 @@
       <div class="eyebrow reveal"><span class="num">Feedback</span><span class="rule"></span></div>
       <h2 class="section-title reveal">What Clients Say</h2>
       <p class="section-desc reveal">Kind words from brands and partners I've worked with.</p>
-      <div class="testimonials-grid">
-        <div class="t-card reveal" style="transition-delay:0s">
-          <div class="stars">★★★★★</div>
-          <div class="quote">"Chris brought a level of clarity to our campaign strategy we hadn't seen before. The lead gen results for Medtronic exceeded every target we set."</div>
-          <div class="author">
-            <div class="av">R</div>
-            <div class="info"><div class="name">Rajesh Kumar</div><div class="role">Marketing Lead, Medtronic India</div></div>
+      <div class="testimonials-carousel reveal">
+        <div class="testimonials-track" id="testimonialsTrack">
+          <div class="t-card">
+            <div class="stars">★★★★★</div>
+            <div class="quote">"Chris brought a level of clarity to our campaign strategy we hadn't seen before. The lead gen results for Medtronic exceeded every target we set."</div>
+            <div class="author">
+              <div class="av">R</div>
+              <div class="info"><div class="name">Rajesh Kumar</div><div class="role">Marketing Lead, Medtronic India</div></div>
+            </div>
+          </div>
+          <div class="t-card">
+            <div class="stars">★★★★★</div>
+            <div class="quote">"The FlexHaus landing page was a game-changer. Clean design, fast load times, and the interactive quiz drove real engagement. Our member retention numbers prove it."</div>
+            <div class="author">
+              <div class="av">S</div>
+              <div class="info"><div class="name">Sarah van der Berg</div><div class="role">Operations, FlexHaus Amsterdam</div></div>
+            </div>
+          </div>
+          <div class="t-card">
+            <div class="stars">★★★★★</div>
+            <div class="quote">"We needed a web presence that matched our brand vision. Chris delivered a site that's both beautiful and functional — and the turnaround time was impressive."</div>
+            <div class="author">
+              <div class="av">A</div>
+              <div class="info"><div class="name">Ananya Sharma</div><div class="role">Founder, Ask Anya</div></div>
+            </div>
+          </div>
+          <div class="t-card">
+            <div class="stars">★★★★★</div>
+            <div class="quote">"Working with Chris on our brand refresh was seamless. He understood our healthcare audience and translated complex messaging into compelling creative."</div>
+            <div class="author">
+              <div class="av">P</div>
+              <div class="info"><div class="name">Dr. Priya Mehta</div><div class="role">Brand Manager, JB Pharma</div></div>
+            </div>
+          </div>
+          <div class="t-card">
+            <div class="stars">★★★★★</div>
+            <div class="quote">"Chris has a rare ability to blend creativity with data. Every campaign we ran together was meticulously tested, measured, and optimised for maximum impact."</div>
+            <div class="author">
+              <div class="av">A</div>
+              <div class="info"><div class="name">Arjun Nair</div><div class="role">Content Strategist, Synapse Advertising</div></div>
+            </div>
+          </div>
+          <div class="t-card">
+            <div class="stars">★★★★★</div>
+            <div class="quote">"The website Chris built for us perfectly captures our brand identity. Clean, fast, and intuitive — our customers constantly compliment it."</div>
+            <div class="author">
+              <div class="av">M</div>
+              <div class="info"><div class="name">Maria Torres</div><div class="role">Creative Director, Walyte</div></div>
+            </div>
+          </div>
+          <div class="t-card">
+            <div class="stars">★★★★★</div>
+            <div class="quote">"Chris delivered a complete digital marketing strategy that transformed our online presence. The results speak for themselves — doubled our lead volume in three months."</div>
+            <div class="author">
+              <div class="av">V</div>
+              <div class="info"><div class="name">Vikram Patel</div><div class="role">CEO, Apulki Healthcare</div></div>
+            </div>
+          </div>
+          <div class="t-card">
+            <div class="stars">★★★★★</div>
+            <div class="quote">"Professional, responsive, and incredibly talented. Chris helped us rethink our entire brand approach and delivered a website that we're truly proud of."</div>
+            <div class="author">
+              <div class="av">E</div>
+              <div class="info"><div class="name">Elena Vos</div><div class="role">Marketing Director, SMT-MVT</div></div>
+            </div>
+          </div>
+          <div class="t-card">
+            <div class="stars">★★★★★</div>
+            <div class="quote">"Chris's understanding of user experience and conversion optimisation is outstanding. Our landing page redesign resulted in a 40% increase in conversion rate within weeks."</div>
+            <div class="author">
+              <div class="av">D</div>
+              <div class="info"><div class="name">David Chen</div><div class="role">Product Lead, Tuxedo-2</div></div>
+            </div>
           </div>
         </div>
-        <div class="t-card reveal" style="transition-delay:0.1s">
-          <div class="stars">★★★★★</div>
-          <div class="quote">"The FlexHaus landing page was a game-changer. Clean design, fast load times, and the interactive quiz drove real engagement. Our member retention numbers prove it."</div>
-          <div class="author">
-            <div class="av">S</div>
-            <div class="info"><div class="name">Sarah van der Berg</div><div class="role">Operations, FlexHaus Amsterdam</div></div>
-          </div>
-        </div>
-        <div class="t-card reveal" style="transition-delay:0.2s">
-          <div class="stars">★★★★★</div>
-          <div class="quote">"We needed a web presence that matched our brand vision. Chris delivered a site that's both beautiful and functional — and the turnaround time was impressive."</div>
-          <div class="author">
-            <div class="av">A</div>
-            <div class="info"><div class="name">Ananya Sharma</div><div class="role">Founder, Ask Anya</div></div>
-          </div>
+        <div class="carousel-controls">
+          <button class="carousel-arrow" id="carouselPrev" aria-label="Previous">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+          <div class="carousel-dots" id="carouselDots"></div>
+          <button class="carousel-arrow" id="carouselNext" aria-label="Next">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
         </div>
       </div>
     </div>
@@ -1139,6 +1264,7 @@
   </section>
 
   <!-- ─── CONTACT ─── -->
+  <section id="contact">
     <div class="container">
       <div style="max-width:800px; margin:0 auto;">
         <div class="contact-card reveal">
@@ -1450,6 +1576,91 @@
             });
           });
         }
+      }
+
+      /* ── TESTIMONIAL CAROUSEL ── */
+      const track = document.getElementById('testimonialsTrack');
+      const dotsContainer = document.getElementById('carouselDots');
+      const prevBtn = document.getElementById('carouselPrev');
+      const nextBtn = document.getElementById('carouselNext');
+      if (track && dotsContainer) {
+        const cards = Array.from(track.querySelectorAll('.t-card'));
+        let currentSlide = 0;
+        let autoplayTimer;
+
+        function getPerView() {
+          if (window.innerWidth >= 1024) return 3;
+          if (window.innerWidth >= 768) return 2;
+          return 1;
+        }
+
+        function getMaxSlide() {
+          return Math.max(0, cards.length - getPerView());
+        }
+
+        function updateCarousel() {
+          const perView = getPerView();
+          const maxSlide = getMaxSlide();
+          if (currentSlide > maxSlide) currentSlide = maxSlide;
+          const offset = currentSlide * (100 / perView);
+          track.style.transform = 'translateX(-' + offset + '%)';
+          updateDots();
+        }
+
+        function updateDots() {
+          const perView = getPerView();
+          const totalSlides = cards.length - perView + 1;
+          dotsContainer.querySelectorAll('.carousel-dot').forEach((dot, i) => {
+            dot.classList.toggle('active', i === currentSlide);
+          });
+        }
+
+        function buildDots() {
+          const perView = getPerView();
+          const totalSlides = cards.length - perView + 1;
+          dotsContainer.innerHTML = '';
+          for (let i = 0; i < totalSlides; i++) {
+            const dot = document.createElement('button');
+            dot.className = 'carousel-dot' + (i === currentSlide ? ' active' : '');
+            dot.setAttribute('aria-label', 'Go to slide ' + (i + 1));
+            dot.addEventListener('click', function() {
+              currentSlide = i;
+              updateCarousel();
+              resetAutoplay();
+            });
+            dotsContainer.appendChild(dot);
+          }
+        }
+
+        function goNext() {
+          const maxSlide = getMaxSlide();
+          if (currentSlide < maxSlide) currentSlide++;
+          else currentSlide = 0;
+          updateCarousel();
+        }
+
+        function goPrev() {
+          if (currentSlide > 0) currentSlide--;
+          else currentSlide = getMaxSlide();
+          updateCarousel();
+        }
+
+        function resetAutoplay() {
+          clearInterval(autoplayTimer);
+          autoplayTimer = setInterval(goNext, 4500);
+        }
+
+        if (prevBtn) prevBtn.addEventListener('click', function() { goPrev(); resetAutoplay(); });
+        if (nextBtn) nextBtn.addEventListener('click', function() { goNext(); resetAutoplay(); });
+
+        buildDots();
+        updateCarousel();
+        autoplayTimer = setInterval(goNext, 4500);
+
+        window.addEventListener('resize', function() {
+          buildDots();
+          updateCarousel();
+        });
       }
 
       /* ── COUNTER ANIMATION ── */
