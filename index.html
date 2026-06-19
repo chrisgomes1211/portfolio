@@ -183,161 +183,188 @@
     }
     nav .nav-mark:hover { background: var(--accent-hover); }
 
-    /* ── HERO ── */
+    /* ── HERO (Juan Mora inspired) ── */
+    :root {
+      --warm-beige: #D4A76A;
+      --warm-cream: #f5f0e8;
+      --warm-dark: #1a1512;
+      --warm-glow: rgba(212,167,106,0.12);
+    }
     .hero {
       position: relative; z-index: 1;
-      height: 100vh; min-height: 680px;
+      height: 100vh; min-height: 700px;
+      overflow: hidden;
+      background: var(--warm-dark);
+    }
+    /* Photo layer — left 55% */
+    .hero-photo {
+      position: absolute;
+      top: 0; left: 0;
+      width: 58%;
+      height: 100%;
+      z-index: 1;
       overflow: hidden;
     }
-    .hero-content {
-      position: absolute; inset: 0;
-      display: flex;
-      flex-direction: column;
-      z-index: 2;
-      padding: 6rem 0 5rem;
-      box-sizing: border-box;
-    }
-    .hero-split {
-      flex: 1;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      align-items: center;
-      gap: 3rem;
-      max-width: 1100px;
-      width: 100%;
-      margin: 0 auto;
-      padding: 0 1.5rem;
-    }
-    .hero-left {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: flex-start;
-    }
-    .hero-right {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-    .hero-media {
-      position: absolute; inset: 0; z-index: -1;
-      overflow: hidden;
-    }
-    .hero-media img, .hero-media video {
+    .hero-photo img {
       width: 100%; height: 100%;
       object-fit: cover;
-      will-change: transform;
+      object-position: 30% 50%;
+      filter: saturate(1.05) contrast(1.05);
     }
-    .hero-media .overlay {
+    .hero-photo .photo-overlay {
       position: absolute; inset: 0;
       background: linear-gradient(135deg,
-        rgba(248,250,252,0.92) 0%,
-        rgba(248,250,252,0.25) 35%,
-        rgba(248,250,252,0.25) 65%,
-        rgba(248,250,252,0.92) 100%);
-      transition: background 0.3s;
+        rgba(26,21,18,0.55) 0%,
+        rgba(26,21,18,0.15) 40%,
+        rgba(26,21,18,0.05) 60%,
+        rgba(26,21,18,0.7) 100%);
+      z-index: 1;
     }
-    [data-theme="dark"] .hero-media .overlay {
-      background: linear-gradient(135deg,
-        rgba(15,23,42,0.94) 0%,
-        rgba(15,23,42,0.55) 35%,
-        rgba(15,23,42,0.55) 65%,
-        rgba(15,23,42,0.94) 100%);
+    .hero-photo .warm-glow {
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 35% 50%, rgba(212,167,106,0.12) 0%, transparent 65%);
+      z-index: 1;
     }
-    /* Edge blur — cinematic */
-    .hero-media .edge-blur {
-      position: absolute; inset: -60px; z-index: 1;
-      box-shadow: inset 0 0 100px 50px var(--bg);
-      pointer-events: none; transition: box-shadow 0.3s;
+
+    /* Edge blend — smooth transition from photo to content */
+    .hero-blend {
+      position: absolute;
+      left: 54%;
+      top: 0;
+      width: 8%;
+      height: 100%;
+      z-index: 2;
+      background: linear-gradient(90deg, transparent, var(--warm-dark));
     }
-    /* Tagline — left, vertical */
-    .hero .tagline {
-      position: absolute; left: 2rem;
-      top: 50%; transform: translateY(-50%) rotate(-90deg);
-      transform-origin: center center;
-      font-size: 0.6rem; font-weight: 700; text-transform: uppercase;
-      letter-spacing: 0.12em; color: var(--text-muted);
-      white-space: nowrap;
+
+    /* Right content panel */
+    .hero-content {
+      position: absolute;
+      top: 0; right: 0;
+      width: 46%;
+      height: 100%;
+      z-index: 3;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 8rem 5rem 10rem 3.5rem;
+      background: var(--warm-dark);
     }
-    .hero .tagline::after {
-      content: ''; display: inline-block;
-      width: 28px; height: 1px;
-      background: var(--accent); opacity: 0.5;
-      margin-left: 0.75rem; vertical-align: middle;
+    .hero-content .hero-eyebrow {
+      font-family: var(--font-sans);
+      font-size: 0.65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--warm-beige);
+      opacity: 0.7;
+      margin-bottom: 0.75rem;
     }
+    .hero-content .hero-description {
+      font-family: var(--font-display);
+      font-size: clamp(1.1rem, 1.8vw, 1.6rem);
+      color: var(--warm-cream);
+      line-height: 1.4;
+      max-width: 340px;
+      opacity: 0.85;
+    }
+    .hero-content .hero-stats-row {
+      display: flex;
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+    .hero-content .hero-stats-row span {
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--warm-beige);
+      opacity: 0.6;
+    }
+    .hero-content .hero-stats-row strong {
+      display: block;
+      font-size: 1.2rem;
+      color: var(--warm-beige);
+      opacity: 1;
+      margin-top: 0.15rem;
+    }
+
     .btn {
       display: inline-flex; align-items: center; gap: 0.5rem;
       padding: 0.85rem 2rem;
-      background: var(--accent);
-      color: #fff; border: none; border-radius: 100px;
+      background: var(--warm-beige);
+      color: var(--warm-dark);
+      border: none; border-radius: 100px;
       font-size: 0.85rem; font-weight: 700; font-family: inherit;
       text-decoration: none; cursor: pointer;
       transition: all 0.3s cubic-bezier(.16,1,.3,1);
-      box-shadow: 0 4px 20px rgba(79,70,229,0.2);
+      box-shadow: 0 4px 20px rgba(212,167,106,0.2);
     }
-    .btn:hover { background: var(--accent-hover); transform: translateY(-2px); box-shadow: 0 8px 30px rgba(79,70,229,0.3); }
+    .btn:hover { background: #c49658; transform: translateY(-2px); box-shadow: 0 8px 30px rgba(212,167,106,0.3); }
     .btn-o {
       display: inline-flex; align-items: center; gap: 0.5rem;
       padding: 0.85rem 2rem;
       background: transparent;
-      color: var(--text-soft);
-      border: 1.5px solid var(--border-hover);
+      color: var(--warm-cream);
+      border: 1.5px solid rgba(245,240,232,0.15);
       border-radius: 100px;
       font-size: 0.85rem; font-weight: 600; font-family: inherit;
       text-decoration: none; cursor: pointer;
       transition: all 0.3s;
     }
-    .btn-o:hover { border-color: var(--accent); color: var(--accent); }
+    .btn-o:hover { border-color: var(--warm-beige); color: var(--warm-beige); }
 
-    /* Name — left aligned in split */
-    .hero .hero-name {
-      text-align: left;
+    /* Huge name at bottom — extends beyond edges */
+    .hero-name-bottom {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 4;
+      overflow: hidden;
+      line-height: 0.8;
+      pointer-events: none;
     }
-    .hero .hero-name h1 {
+    .hero-name-bottom h1 {
       font-family: var(--font-display);
-      font-size: clamp(2.8rem, 10vw, 8rem);
-      line-height: 0.9;
-      color: var(--text);
+      font-size: clamp(4.5rem, 20vw, 16rem);
+      font-weight: 900;
+      color: var(--warm-beige);
       margin: 0;
-      text-shadow: var(--hero-text-shadow);
+      line-height: 0.78;
+      letter-spacing: -0.04em;
+      transform: translateX(-3%);
+      white-space: nowrap;
+      text-shadow: 0 4px 40px rgba(212,167,106,0.08);
+      opacity: 0.92;
     }
-    .hero .hero-name .name-char {
+    .hero-name-bottom .name-char {
       display: inline-block;
       transition: transform 0.3s cubic-bezier(.16,1,.3,1), color 0.3s;
     }
-    .hero .hero-name .name-char:hover {
-      color: var(--accent);
-      transform: translateY(-6px);
+    .hero-name-bottom .name-char:hover {
+      color: var(--warm-cream);
+      transform: translateY(-8px);
     }
-    .hero .hero-name .accent {
-      color: var(--accent);
-      font-style: italic;
-    }
-    .hero .hero-bline {
-      font-family: var(--font-sans);
-      font-size: clamp(0.8rem, 1.5vw, 1.05rem);
-      color: var(--text-soft);
-      font-weight: 600;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      text-shadow: var(--hero-text-shadow);
-      margin-top: 1rem;
-    }
-
-    /* ── CHARACTER ── */
-    .character-wrap {
-      width: 200px;
-      height: 260px;
-      position: relative;
-    }
-    .character-wrap svg {
-      width: 100%;
-      height: 100%;
+    .hero-name-bottom .name-break {
       display: block;
     }
-    .character-wrap .pupil {
-      transition: cx 0.08s linear, cy 0.08s linear;
+
+    /* ── ENTRANCE ── */
+    .fade-item { opacity: 0; transform: translateY(18px); }
+    .hero-content.loaded .fade-item,
+    .hero-photo.loaded .fade-item {
+      animation: fadeUp 0.7s cubic-bezier(.16,1,.3,1) forwards;
     }
+    .hero-content.loaded .fd1,
+    .hero-photo.loaded .fd1 { animation-delay: 0.15s; }
+    .hero-content.loaded .fd2,
+    .hero-photo.loaded .fd2 { animation-delay: 0.3s; }
+    .hero-content.loaded .fd3,
+    .hero-photo.loaded .fd3 { animation-delay: 0.45s; }
+    @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+
+    /* ── NAME ENTRANCE via GSAP class — name gets its own later */
 
     /* ── ENTRANCE ── */
     .fade-item { opacity: 0; transform: translateY(15px); }
@@ -770,11 +797,17 @@
     ::-webkit-scrollbar-thumb:hover { background: var(--ink-500); }
 
     @media (max-width: 900px) {
-      .hero .hero-name h1 { font-size: clamp(2.5rem, 9vw, 5rem); }
-      .hero-split { grid-template-columns: 1fr; gap: 1rem; }
-      .hero-left { align-items: center; text-align: center; }
-      .hero .hero-name { text-align: center; }
-      .character-wrap { width: 150px; height: 195px; }
+      .hero-photo { width: 100%; }
+      .hero-photo img { object-position: 40% 50%; filter: saturate(1.1) contrast(1.1) brightness(0.7); }
+      .hero-blend { display: none; }
+      .hero-content {
+        width: 100%;
+        justify-content: flex-end;
+        padding: 6rem 2rem 8rem;
+        background: linear-gradient(180deg, transparent 0%, var(--warm-dark) 40%);
+      }
+      .hero-content .hero-description { max-width: 100%; }
+      .hero-name-bottom h1 { font-size: clamp(3.5rem, 16vw, 10rem); }
       .social-bar a { padding: 0.35rem 0.45rem; }
       .services-grid { grid-template-columns: 1fr 1fr; }
       .about-split { grid-template-columns: 1fr; gap: 2rem; }
@@ -791,14 +824,15 @@
       nav a { font-size: 0.7rem; }
       nav .nav-mark { width: 28px; height: 28px; font-size: 0.8rem; }
       .theme-toggle { top: 0.8rem; left: 0.8rem; width: 38px; height: 38px; }
-      .hero .tagline { display: none; }
-      .hero .hero-name h1 { font-size: clamp(1.8rem, 12vw, 3rem); }
-      .hero { min-height: 600px; }
-      .hero-content { padding: 4rem 0 2rem; }
-      .hero-split { grid-template-columns: 1fr; gap: 0.5rem; }
-      .hero-left { align-items: center; text-align: center; }
-      .hero .hero-name { text-align: center; }
-      .character-wrap { width: 130px; height: 169px; }
+      .hero { min-height: 500px; }
+      .hero-photo img { object-position: 45% 50%; }
+      .hero-content { padding: 4rem 1.5rem 6rem; }
+      .hero-content .hero-eyebrow { font-size: 0.55rem; }
+      .hero-content .hero-description { font-size: clamp(0.9rem, 4vw, 1.1rem); }
+      .hero-content .hero-stats-row { gap: 1rem; }
+      .hero-content .hero-stats-row span { font-size: 0.6rem; }
+      .hero-content .hero-stats-row strong { font-size: 1rem; }
+      .hero-name-bottom h1 { font-size: clamp(2.5rem, 14vw, 4rem); }
       section, .marquee-band { padding: 3rem 0; }
       .services-grid { grid-template-columns: 1fr; }
       .s-card { padding: 1.5rem; }
@@ -988,54 +1022,28 @@
     <a href="#services" class="nav-link">Work</a>
   </nav>
 
-  <!-- ─── HERO ─── -->
-  <section data-nav="peach" class="hero">
-    <div class="hero-media" id="heroMedia">
-      <video autoplay loop muted playsinline poster="https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=1800&h=1000&fit=crop">
-        <source src="https://cdn.coverr.co/videos/coverr-a-man-working-on-a-laptop-in-a-modern-office-5814/1080p.mp4" type="video/mp4">
-        <source src="https://cdn.coverr.co/videos/coverr-typing-on-a-laptop-at-a-wooden-desk-5585/1080p.mp4" type="video/mp4">
-      </video>
-      <div class="overlay"></div>
-      <div class="edge-blur"></div>
+  <!-- ─── HERO (Juan Mora inspired) ─── -->
+  <section class="hero">
+    <div class="hero-photo fade-item fd1" id="heroPhoto">
+      <img src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?q=80&w=1800&h=2200&fit=crop" alt="Creative workspace" loading="eager">
+      <div class="photo-overlay"></div>
+      <div class="warm-glow"></div>
     </div>
+
+    <div class="hero-blend"></div>
+
     <div class="hero-content" id="heroContent">
-      <div class="tagline fade-item fd1">Brand &amp; Web Design Specialist</div>
-      <div class="hero-split fade-item fd2">
-        <div class="hero-left">
-          <div class="hero-name">
-            <h1 id="heroName"><span>Chris</span><br><span class="accent">Gomes</span></h1>
-          </div>
-          <p class="hero-bline">Websites &middot; Campaigns &middot; Brand Strategy</p>
-        </div>
-        <div class="hero-right">
-          <div class="character-wrap" id="characterWrap">
-            <svg viewBox="0 0 200 260" fill="none">
-              <path d="M55 195 L145 195 L160 260 L40 260 Z" fill="var(--cream-100)" stroke="var(--border-hover)" stroke-width="1.5"/>
-              <path d="M85 195 L100 215 L115 195" fill="var(--bg)" stroke="var(--border)" stroke-width="1.5"/>
-              <rect x="88" y="175" width="24" height="22" rx="4" fill="var(--cream-50)" stroke="var(--border)" stroke-width="1"/>
-              <ellipse cx="100" cy="130" rx="48" ry="52" fill="var(--cream-50)" stroke="var(--border-hover)" stroke-width="1.5"/>
-              <path d="M52 120 Q52 75 100 70 Q148 75 148 120 Q148 105 140 100 Q130 92 120 95 Q100 85 80 95 Q70 100 60 108 Q55 114 52 120" fill="var(--ink-900)" opacity="0.9"/>
-              <path d="M70 112 Q76 108 82 111" stroke="var(--ink-300)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-              <path d="M118 111 Q124 108 130 112" stroke="var(--ink-300)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-              <circle cx="82" cy="128" r="9" fill="var(--cream-100)" stroke="var(--border)" stroke-width="1"/>
-              <circle cx="118" cy="128" r="9" fill="var(--cream-100)" stroke="var(--border)" stroke-width="1"/>
-              <circle class="pupil" data-base-x="82" data-base-y="128" cx="82" cy="128" r="4.5" fill="var(--text)"/>
-              <circle class="pupil" data-base-x="118" data-base-y="128" cx="118" cy="128" r="4.5" fill="var(--text)"/>
-              <circle cx="80" cy="126" r="1.5" fill="var(--cream-50)" opacity="0.8"/>
-              <circle cx="116" cy="126" r="1.5" fill="var(--cream-50)" opacity="0.8"/>
-              <circle cx="82" cy="128" r="14" fill="none" stroke="var(--accent)" stroke-width="1.5" opacity="0.5"/>
-              <circle cx="118" cy="128" r="14" fill="none" stroke="var(--accent)" stroke-width="1.5" opacity="0.5"/>
-              <line x1="96" y1="128" x2="104" y2="128" stroke="var(--accent)" stroke-width="1.5" opacity="0.5"/>
-              <line x1="68" y1="124" x2="56" y2="120" stroke="var(--accent)" stroke-width="1.5"/>
-              <line x1="132" y1="124" x2="144" y2="120" stroke="var(--accent)" stroke-width="1.5"/>
-              <path d="M100 135 L98 142 Q100 144 102 142 Z" fill="var(--cream-50)" stroke="var(--border)" stroke-width="1"/>
-              <path d="M88 150 Q100 160 112 150" stroke="var(--ink-300)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-              <ellipse cx="66" cy="145" rx="6" ry="3.5" fill="var(--accent)" opacity="0.08"/>
-              <ellipse cx="134" cy="145" rx="6" ry="3.5" fill="var(--accent)" opacity="0.08"/>
-            </svg>
-          </div>
-        </div>
+      <p class="hero-eyebrow fade-item fd1">Digital Marketer &amp; Web Builder</p>
+      <p class="hero-description fade-item fd2">Websites &middot; Campaigns &middot; Brand Strategy — 25+ brands from healthcare to hospitality.</p>
+      <div class="hero-stats-row fade-item fd3">
+        <span><strong>25+</strong> Brands</span>
+        <span><strong>1,200+</strong> Leads</span>
+        <span><strong>3.2x</strong> ROAS</span>
       </div>
+    </div>
+
+    <div class="hero-name-bottom">
+      <h1 id="heroName"><span class="name-break">Chris</span><span class="name-break">Gomes</span></h1>
     </div>
   </section>
 
@@ -1529,7 +1537,11 @@
 
       /* ── ENTRANCE ── */
       const heroContent = document.getElementById('heroContent');
-      requestAnimationFrame(() => heroContent.classList.add('loaded'));
+      const heroPhoto = document.getElementById('heroPhoto');
+      requestAnimationFrame(() => {
+        heroContent.classList.add('loaded');
+        if (heroPhoto) heroPhoto.classList.add('loaded');
+      });
 
       /* ── HERO NAME CHARACTER SPLIT + GSAP ── */
       const heroName = document.getElementById('heroName');
@@ -1546,14 +1558,13 @@
             word.appendChild(span);
           });
         });
-        gsap.from('.name-char', {
-          y: 60,
+        gsap.from('.hero-name-bottom .name-char', {
+          y: 80,
           opacity: 0,
-          rotateX: -40,
-          duration: 1,
-          stagger: 0.035,
+          duration: 0.9,
+          stagger: 0.04,
           ease: 'back.out(1.7)',
-          delay: 0.6,
+          delay: 0.5,
         });
       }
 
@@ -1573,71 +1584,6 @@
         entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
       }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
       document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
-
-      /* ── HERO MEDIA PARALLAX ── */
-      const heroMedia = document.getElementById('heroMedia');
-      let heroImg = heroMedia.querySelector('img');
-      if (!heroImg) heroImg = heroMedia.querySelector('video');
-      const heroSection = document.querySelector('.hero');
-
-      function updateParallax() {
-        const st = window.scrollY;
-        const hh = heroSection.offsetHeight;
-        const p = Math.min(st / hh, 1);
-        const mx = parseFloat(heroMedia.dataset.mx) || 0;
-        const my = parseFloat(heroMedia.dataset.my) || 0;
-        heroImg.style.transform = 'translateY(' + (st * 0.25 + my) + 'px) translateX(' + mx + 'px) scale(' + (1.05 - p * 0.05) + ')';
-      }
-
-      let tickingParallax = false;
-      window.addEventListener('scroll', () => {
-        if (!tickingParallax) {
-          requestAnimationFrame(() => { updateParallax(); tickingParallax = false; });
-          tickingParallax = true;
-        }
-      });
-      updateParallax();
-
-      /* ── HERO MOUSE PARALLAX ── */
-      if (!isTouch) {
-        document.addEventListener('mousemove', (e) => {
-          heroMedia.dataset.mx = ((e.clientX / window.innerWidth - 0.5) * 8).toFixed(1);
-          heroMedia.dataset.my = ((e.clientY / window.innerHeight - 0.5) * 5).toFixed(1);
-          updateParallax();
-        });
-      }
-
-      /* ── EYE TRACKING ── */
-      const charWrap = document.getElementById('characterWrap');
-      const pupils = charWrap ? charWrap.querySelectorAll('.pupil') : [];
-      if (pupils.length > 0) {
-        let rafId = null;
-        let mx = 0, my = 0;
-        document.addEventListener('mousemove', (e) => {
-          mx = e.clientX;
-          my = e.clientY;
-          if (!rafId) {
-            rafId = requestAnimationFrame(() => {
-              const rect = charWrap.getBoundingClientRect();
-              const cx = rect.left + rect.width / 2;
-              const cy = rect.top + rect.height / 2;
-              const dx = mx - cx;
-              const dy = my - cy;
-              const angle = Math.atan2(dy, dx);
-              const dist = Math.min(Math.sqrt(dx * dx + dy * dy) / 30, 3.5);
-              const ox = Math.cos(angle) * dist;
-              const oy = Math.sin(angle) * dist;
-              pupils.forEach(p => {
-                const bx = parseFloat(p.getAttribute('data-base-x'));
-                const by = parseFloat(p.getAttribute('data-base-y'));
-                p.setAttribute('cx', bx + ox);
-                p.setAttribute('cy', by + oy);
-              });
-              rafId = null;
-            });
-          }
-        });
-      }
 
       /* ── NAV THEME INVERSION ── */
       const navLinks = document.querySelectorAll('.nav-link');
