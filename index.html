@@ -293,7 +293,7 @@
     /* Name at bottom */
     .hero-name-bottom {
       position: absolute;
-      bottom: 1rem;
+      bottom: 1.5rem;
       left: 0;
       right: 0;
       z-index: 4;
@@ -302,13 +302,13 @@
     }
     .hero-name-bottom h1 {
       font-family: var(--font-display);
-      font-size: clamp(2.5rem, 8vw, 5rem);
+      font-size: clamp(3rem, 10vw, 6rem);
       font-weight: 900;
-      color: var(--warm-beige);
+      color: #fff;
       margin: 0;
       line-height: 1;
       letter-spacing: -0.03em;
-      text-shadow: 0 2px 30px rgba(212,167,106,0.15);
+      text-shadow: 0 2px 20px rgba(0,0,0,0.5), 0 4px 40px rgba(0,0,0,0.3);
       opacity: 1;
     }
     .hero-name-bottom .name-char {
@@ -813,9 +813,8 @@
     ::-webkit-scrollbar-thumb:hover { background: var(--ink-500); }
 
     @media (max-width: 900px) {
-      .hero-content { padding: 6rem 1.5rem 10rem; }
-      .hero-name-bottom h1 { font-size: clamp(4rem, 18vw, 11rem); }
-      .hero-name-bottom { bottom: -1rem; }
+      .hero-content { padding: 5rem 1.5rem 8rem; }
+      .hero-name-bottom { bottom: 0.5rem; }
       .social-bar a { padding: 0.35rem 0.45rem; }
       .services-grid { grid-template-columns: 1fr 1fr; }
       .about-split { grid-template-columns: 1fr; gap: 2rem; }
@@ -839,8 +838,7 @@
       .hero-content .hero-stats-row { gap: 1rem; }
       .hero-content .hero-stats-row span { font-size: 0.6rem; }
       .hero-content .hero-stats-row strong { font-size: 1rem; }
-      .hero-name-bottom h1 { font-size: clamp(2.5rem, 14vw, 4.5rem); }
-      .hero-name-bottom { bottom: -0.5rem; }
+      .hero-name-bottom { bottom: 0; }
       section, .marquee-band { padding: 3rem 0; }
       .services-grid { grid-template-columns: 1fr; }
       .s-card { padding: 1.5rem; }
