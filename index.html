@@ -312,43 +312,34 @@
     }
     .btn-o:hover { border-color: var(--warm-beige); color: var(--warm-beige); }
 
-    /* Huge name split — "Chris" left, "Gomes" right */
-    .hero-name-left, .hero-name-right {
+    /* Huge name at bottom — full width */
+    .hero-name-bottom {
       position: absolute;
+      bottom: -2rem;
+      left: 0;
+      right: 0;
       z-index: 4;
       pointer-events: none;
     }
-    .hero-name-left {
-      left: 2%;
-      bottom: -1.5rem;
-    }
-    .hero-name-right {
-      right: 2%;
-      bottom: -1.5rem;
-    }
-    .hero-name-left h1, .hero-name-right h1 {
+    .hero-name-bottom h1 {
       font-family: var(--font-display);
-      font-size: clamp(5rem, 22vw, 18rem);
+      font-size: clamp(5rem, 25vw, 22rem);
       font-weight: 900;
       color: var(--warm-beige);
       margin: 0;
-      line-height: 0.78;
+      line-height: 0.75;
       letter-spacing: -0.04em;
       white-space: nowrap;
-      text-shadow: 0 4px 40px rgba(212,167,106,0.08);
-      opacity: 0.92;
+      text-shadow: 0 4px 60px rgba(212,167,106,0.12);
+      opacity: 0.9;
     }
-    .hero-name-left h1 { text-align: left; }
-    .hero-name-right h1 { text-align: right; }
-    .hero-name-left .name-char,
-    .hero-name-right .name-char {
+    .hero-name-bottom .name-char {
       display: inline-block;
       transition: transform 0.3s cubic-bezier(.16,1,.3,1), color 0.3s;
     }
-    .hero-name-left .name-char:hover,
-    .hero-name-right .name-char:hover {
+    .hero-name-bottom .name-char:hover {
       color: var(--warm-cream);
-      transform: translateY(-8px);
+      transform: translateY(-10px);
     }
 
     /* ── AMBIENT FLOATING ORBS ── */
@@ -854,9 +845,8 @@
         background: linear-gradient(180deg, transparent 0%, var(--warm-dark) 40%);
       }
       .hero-content .hero-description { max-width: 100%; }
-      .hero-name-left h1, .hero-name-right h1 { font-size: clamp(4rem, 18vw, 11rem); }
-      .hero-name-left { bottom: -1rem; }
-      .hero-name-right { bottom: -1rem; }
+      .hero-name-bottom h1 { font-size: clamp(4rem, 18vw, 11rem); }
+      .hero-name-bottom { bottom: -1rem; }
       .social-bar a { padding: 0.35rem 0.45rem; }
       .services-grid { grid-template-columns: 1fr 1fr; }
       .about-split { grid-template-columns: 1fr; gap: 2rem; }
@@ -881,9 +871,8 @@
       .hero-content .hero-stats-row { gap: 1rem; }
       .hero-content .hero-stats-row span { font-size: 0.6rem; }
       .hero-content .hero-stats-row strong { font-size: 1rem; }
-      .hero-name-left h1, .hero-name-right h1 { font-size: clamp(2.5rem, 14vw, 4.5rem); }
-      .hero-name-left { bottom: -0.5rem; }
-      .hero-name-right { bottom: -0.5rem; }
+      .hero-name-bottom h1 { font-size: clamp(2.5rem, 14vw, 4.5rem); }
+      .hero-name-bottom { bottom: -0.5rem; }
       section, .marquee-band { padding: 3rem 0; }
       .services-grid { grid-template-columns: 1fr; }
       .s-card { padding: 1.5rem; }
@@ -1094,11 +1083,8 @@
       </div>
     </div>
 
-    <div class="hero-name-left">
-      <h1><span class="name-char">C</span><span class="name-char">h</span><span class="name-char">r</span><span class="name-char">i</span><span class="name-char">s</span></h1>
-    </div>
-    <div class="hero-name-right">
-      <h1><span class="name-char">G</span><span class="name-char">o</span><span class="name-char">m</span><span class="name-char">e</span><span class="name-char">s</span></h1>
+    <div class="hero-name-bottom">
+      <h1 id="heroName"><span class="name-break">Chris</span> <span class="name-break">Gomes</span></h1>
     </div>
   </section>
 
@@ -1598,25 +1584,28 @@
         if (heroPhoto) heroPhoto.classList.add('loaded');
       });
 
-      /* ── HERO NAME GSAP ENTRANCE ── */
-      if (typeof gsap !== 'undefined') {
-        const leftChars = document.querySelectorAll('.hero-name-left .name-char');
-        const rightChars = document.querySelectorAll('.hero-name-right .name-char');
-        gsap.from(leftChars, {
-          x: -60,
-          opacity: 0,
-          duration: 0.8,
-          stagger: 0.06,
-          ease: 'back.out(1.7)',
-          delay: 0.4,
+      /* ── HERO NAME CHARACTER SPLIT + GSAP ── */
+      const heroName = document.getElementById('heroName');
+      if (typeof gsap !== 'undefined' && heroName) {
+        const words = heroName.querySelectorAll('span');
+        words.forEach(word => {
+          const text = word.textContent;
+          word.textContent = '';
+          [...text].forEach((c, i) => {
+            const span = document.createElement('span');
+            span.className = 'name-char';
+            span.textContent = c === ' ' ? '\u00A0' : c;
+            span.style.transitionDelay = (i * 0.04) + 's';
+            word.appendChild(span);
+          });
         });
-        gsap.from(rightChars, {
-          x: 60,
+        gsap.from('.hero-name-bottom .name-char', {
+          y: 80,
           opacity: 0,
-          duration: 0.8,
-          stagger: 0.06,
+          duration: 0.9,
+          stagger: 0.035,
           ease: 'back.out(1.7)',
-          delay: 0.4,
+          delay: 0.5,
         });
       }
 
