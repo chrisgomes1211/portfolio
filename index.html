@@ -588,11 +588,8 @@
       will-change: transform;
     }
     .testimonials-track .t-card {
-      min-width: 100%;
+      min-width: 50%;
       flex-shrink: 0;
-    }
-    @media (min-width: 768px) {
-      .testimonials-track .t-card { min-width: 50%; }
     }
     @media (min-width: 1024px) {
       .testimonials-track .t-card { min-width: 33.333%; }
@@ -1793,8 +1790,7 @@
 
         function getPerView() {
           if (window.innerWidth >= 1024) return 3;
-          if (window.innerWidth >= 768) return 2;
-          return 1;
+          return 2;
         }
 
         function getMaxSlide() {
