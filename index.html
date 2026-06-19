@@ -18,6 +18,10 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { font-size: 16px; scroll-behavior: smooth; }
     :root {
+      --warm-beige: #D4A76A;
+      --warm-cream: #f5f0e8;
+      --warm-dark: #1a1512;
+      --warm-glow: rgba(212,167,106,0.12);
       --cream-50: #ffffff;
       --cream-100: #f8fafc;
       --cream-200: #e2e8f0;
@@ -26,12 +30,12 @@
       --ink-500: #475569;
       --ink-700: #334155;
       --ink-900: #0f172a;
-      --accent-300: #a5b4fc;
-      --accent-400: #818cf8;
-      --accent-500: #6366f1;
-      --accent-600: #4f46e5;
-      --accent-700: #4338ca;
-      --accent-800: #3730a3;
+      --accent-300: #e0b87c;
+      --accent-400: #D4A76A;
+      --accent-500: #c49658;
+      --accent-600: #b8874a;
+      --accent-700: #a67a3e;
+      --accent-800: #8f682e;
       --font-display: 'DM Serif Display', Georgia, serif;
       --font-sans: 'Inter', -apple-system, sans-serif;
       --bg: var(--cream-100);
@@ -45,9 +49,9 @@
       --border-hover: rgba(15,23,42,0.12);
       --shadow: 0 4px 20px rgba(0,0,0,0.04);
       --shadow-hover: 0 12px 40px rgba(0,0,0,0.06);
-      --wash-bg: radial-gradient(ellipse at 50% 0%, rgba(79,70,229,0.05) 0%, transparent 60%);
+      --wash-bg: radial-gradient(ellipse at 50% 0%, rgba(212,167,106,0.06) 0%, transparent 60%);
       --nav-bg: rgba(248,250,252,0.85);
-      --hero-text-shadow: 0 2px 24px rgba(248,250,252,0.85), 0 4px 48px rgba(248,250,252,0.5);
+      --hero-text-shadow: 0 2px 24px rgba(245,240,232,0.2), 0 4px 48px rgba(245,240,232,0.1);
       --marquee-bg: var(--cream-200);
       --card-border: rgba(15,23,42,0.05);
     }
@@ -60,28 +64,28 @@
       --ink-500: #94a3b8;
       --ink-700: #cbd5e1;
       --ink-900: #f1f5f9;
-      --accent-300: #a5b4fc;
-      --accent-400: #818cf8;
-      --accent-500: #6366f1;
-      --accent-600: #4f46e5;
-      --accent-700: #4338ca;
-      --accent-800: #3730a3;
-      --bg: #0f172a;
-      --bg-card: #1e293b;
-      --text: #cbd5e1;
-      --text-soft: #94a3b8;
-      --text-muted: #64748b;
+      --accent-300: #e0b87c;
+      --accent-400: #D4A76A;
+      --accent-500: #c49658;
+      --accent-600: #b8874a;
+      --accent-700: #a67a3e;
+      --accent-800: #8f682e;
+      --bg: #1a1512;
+      --bg-card: #2a221c;
+      --text: #e0d6cc;
+      --text-soft: #b8a99a;
+      --text-muted: #8c7d6e;
       --accent: var(--accent-400);
       --accent-hover: var(--accent-300);
-      --border: rgba(248,250,252,0.06);
-      --border-hover: rgba(248,250,252,0.12);
-      --shadow: 0 4px 20px rgba(0,0,0,0.3);
-      --shadow-hover: 0 12px 40px rgba(0,0,0,0.4);
-      --wash-bg: radial-gradient(ellipse at 50% 0%, rgba(129,140,248,0.08) 0%, transparent 60%);
-      --nav-bg: rgba(15,23,42,0.88);
+      --border: rgba(245,240,232,0.06);
+      --border-hover: rgba(245,240,232,0.12);
+      --shadow: 0 4px 20px rgba(0,0,0,0.4);
+      --shadow-hover: 0 12px 40px rgba(0,0,0,0.5);
+      --wash-bg: radial-gradient(ellipse at 50% 0%, rgba(212,167,106,0.08) 0%, transparent 60%);
+      --nav-bg: rgba(26,21,18,0.88);
       --hero-text-shadow: 0 2px 12px rgba(0,0,0,0.5);
-      --marquee-bg: #1e293b;
-      --card-border: rgba(248,250,252,0.05);
+      --marquee-bg: #2a221c;
+      --card-border: rgba(245,240,232,0.05);
     }
     body {
       font-family: var(--font-sans);
@@ -142,7 +146,7 @@
       padding: 0.45rem 0.6rem;
       border-radius: 10px;
     }
-    .social-bar a:hover { color: var(--accent); background: rgba(79,70,229,0.06); }
+    .social-bar a:hover { color: var(--accent); background: rgba(212,167,106,0.1); }
     .social-bar a svg { width: 18px; height: 18px; }
     .social-bar a .sl {
       display: none;
@@ -184,12 +188,6 @@
     nav .nav-mark:hover { background: var(--accent-hover); }
 
     /* ── HERO (Juan Mora inspired) ── */
-    :root {
-      --warm-beige: #D4A76A;
-      --warm-cream: #f5f0e8;
-      --warm-dark: #1a1512;
-      --warm-glow: rgba(212,167,106,0.12);
-    }
     .hero {
       position: relative; z-index: 1;
       height: 100vh; min-height: 700px;
@@ -350,30 +348,56 @@
       display: block;
     }
 
+    /* ── AMBIENT FLOATING ORBS ── */
+    .hero-orbs {
+      position: absolute; inset: 0; z-index: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+    .hero-orbs .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(60px);
+      opacity: 0.15;
+      animation: orbFloat 8s ease-in-out infinite alternate;
+    }
+    .hero-orbs .orb:nth-child(1) {
+      width: 300px; height: 300px;
+      background: #D4A76A;
+      top: 10%; left: 5%;
+      animation-duration: 10s;
+    }
+    .hero-orbs .orb:nth-child(2) {
+      width: 200px; height: 200px;
+      background: #c49658;
+      bottom: 20%; right: 15%;
+      animation-duration: 7s;
+      animation-delay: -2s;
+    }
+    .hero-orbs .orb:nth-child(3) {
+      width: 150px; height: 150px;
+      background: #e0b87c;
+      top: 50%; left: 40%;
+      animation-duration: 12s;
+      animation-delay: -4s;
+    }
+    @keyframes orbFloat {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(30px, -40px) scale(1.15); }
+    }
+
     /* ── ENTRANCE ── */
-    .fade-item { opacity: 0; transform: translateY(18px); }
+    .fade-item { opacity: 0; transform: translateY(15px); }
     .hero-content.loaded .fade-item,
     .hero-photo.loaded .fade-item {
       animation: fadeUp 0.7s cubic-bezier(.16,1,.3,1) forwards;
     }
     .hero-content.loaded .fd1,
-    .hero-photo.loaded .fd1 { animation-delay: 0.15s; }
+    .hero-photo.loaded .fd1 { animation-delay: 0.1s; }
     .hero-content.loaded .fd2,
-    .hero-photo.loaded .fd2 { animation-delay: 0.3s; }
+    .hero-photo.loaded .fd2 { animation-delay: 0.2s; }
     .hero-content.loaded .fd3,
-    .hero-photo.loaded .fd3 { animation-delay: 0.45s; }
-    @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
-
-    /* ── NAME ENTRANCE via GSAP class — name gets its own later */
-
-    /* ── ENTRANCE ── */
-    .fade-item { opacity: 0; transform: translateY(15px); }
-    .hero-content.loaded .fade-item {
-      animation: fadeUp 0.6s cubic-bezier(.16,1,.3,1) forwards;
-    }
-    .hero-content.loaded .fd1 { animation-delay: 0.1s; }
-    .hero-content.loaded .fd2 { animation-delay: 0.2s; }
-    .hero-content.loaded .fd3 { animation-delay: 0.3s; }
+    .hero-photo.loaded .fd3 { animation-delay: 0.3s; }
     .hero-content.loaded .fd4 { animation-delay: 0.4s; }
     @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
 
@@ -454,7 +478,7 @@
       display: inline-block; font-size: 0.6rem; font-weight: 700;
       text-transform: uppercase; letter-spacing: 0.08em;
       padding: 0.2rem 0.7rem; border-radius: 100px;
-      background: rgba(79,70,229,0.1); color: var(--accent);
+      background: rgba(212,167,106,0.15); color: var(--accent);
       margin-bottom: 0.5rem;
     }
     .p-card h3 {
@@ -489,7 +513,7 @@
     }
     .c-card .icon {
       width: 52px; height: 52px; border-radius: 14px;
-      background: rgba(79,70,229,0.08);
+      background: rgba(212,167,106,0.12);
       display: flex; align-items: center; justify-content: center;
       flex-shrink: 0;
     }
@@ -521,7 +545,7 @@
       display: flex; align-items: center; justify-content: center; gap: 0.5rem;
       min-height: 52px;
     }
-    .client-chip:hover { border-color: rgba(79,70,229,0.15); color: var(--accent); }
+    .client-chip:hover { border-color: rgba(212,167,106,0.25); color: var(--accent); }
     .client-chip .logo { width: 20px; height: 20px; object-fit: contain; border-radius: 3px; flex-shrink: 0; }
     .client-chip .logo-fallback { display: none; }
     .client-chip.img-failed .logo { display: none; }
@@ -578,7 +602,7 @@
     .carousel-dot.active {
       background: var(--accent);
       transform: scale(1.35);
-      box-shadow: 0 0 8px rgba(79,70,229,0.3);
+      box-shadow: 0 0 8px rgba(212,167,106,0.3);
     }
     .carousel-arrow {
       width: 40px; height: 40px;
@@ -605,10 +629,18 @@
       border-radius: 16px;
       padding: 2rem;
       border: 1px solid var(--card-border);
-      transition: all 0.3s cubic-bezier(.16,1,.3,1);
+      transition: all 0.4s cubic-bezier(.16,1,.3,1);
+      cursor: pointer;
+      position: relative;
     }
     .t-card:hover { border-color: var(--border-hover); transform: translateY(-3px); box-shadow: var(--shadow-hover); }
-    .t-card .stars { color: var(--accent-400); font-size: 0.8rem; margin-bottom: 0.75rem; letter-spacing: 2px; }
+    .t-card.spotlight {
+      transform: scale(1.04);
+      border-color: var(--warm-beige);
+      box-shadow: 0 8px 40px rgba(212,167,106,0.15);
+      z-index: 2;
+    }
+    .t-card .stars { color: var(--warm-beige); font-size: 0.8rem; margin-bottom: 0.75rem; letter-spacing: 2px; }
     .t-card .quote {
       font-family: var(--font-display);
       font-size: 0.95rem; font-style: italic;
@@ -616,17 +648,29 @@
       margin-bottom: 1.25rem;
     }
     .t-card .author {
-      display: flex; align-items: center; gap: 0.75rem;
+      display: flex; align-items: center; gap: 0.85rem;
     }
     .t-card .author .av {
-      width: 36px; height: 36px; border-radius: 50%;
-      background: var(--accent); color: #fff;
-      display: flex; align-items: center; justify-content: center;
-      font-weight: 700; font-size: 0.8rem; font-family: var(--font-display);
+      width: 42px; height: 42px; border-radius: 50%;
+      overflow: hidden;
       flex-shrink: 0;
+      border: 2px solid var(--warm-beige);
+    }
+    .t-card .author .av img {
+      width: 100%; height: 100%;
+      object-fit: cover; display: block;
     }
     .t-card .author .info .name { font-size: 0.8rem; font-weight: 700; color: var(--text); }
     .t-card .author .info .role { font-size: 0.65rem; color: var(--text-muted); }
+    .t-card .author .info .company {
+      display: inline-block;
+      font-size: 0.6rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--warm-beige);
+      margin-top: 0.1rem;
+    }
 
     /* ── CONTACT ── */
     .contact-card {
@@ -651,11 +695,11 @@
       display: inline-flex; align-items: center; gap: 0.6rem;
       font-size: 0.95rem; font-weight: 700; color: var(--accent);
       text-decoration: none; padding: 0.75rem 1.5rem;
-      background: rgba(79,70,229,0.06);
+      background: rgba(212,167,106,0.1);
       border-radius: 100px;
       transition: all 0.2s;
     }
-    .contact-card .email:hover { background: rgba(79,70,229,0.12); }
+    .contact-card .email:hover { background: rgba(212,167,106,0.18); }
 
     /* ── SERVICES ── */
     .services-grid {
@@ -677,7 +721,7 @@
     }
     .s-card .s-icon {
       width: 44px; height: 44px; border-radius: 12px;
-      background: rgba(79,70,229,0.08);
+      background: rgba(212,167,106,0.12);
       display: flex; align-items: center; justify-content: center;
       margin-bottom: 1rem;
     }
@@ -712,7 +756,7 @@
       font-size: 0.65rem; font-weight: 700;
       text-transform: uppercase; letter-spacing: 0.06em;
       line-height: 1.3;
-      box-shadow: 0 4px 20px rgba(79,70,229,0.3);
+      box-shadow: 0 4px 20px rgba(212,167,106,0.3);
     }
     .about-text p {
       font-size: 0.9rem; color: var(--text-soft);
@@ -737,8 +781,8 @@
     .theme-prompt {
       position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%) translateY(20px);
       z-index: 300;
-      background: #f8fafc;
-      border: 1px solid rgba(79,70,229,0.15);
+      background: #f5f0e8;
+      border: 1px solid rgba(212,167,106,0.25);
       border-radius: 14px;
       box-shadow: 0 8px 40px rgba(0,0,0,0.25);
       padding: 0.7rem 1.25rem;
@@ -754,24 +798,24 @@
     }
     .theme-prompt .tp-icon { font-size: 1.1rem; }
     .theme-prompt .tp-text {
-      font-size: 0.8rem; font-weight: 600; color: #0f172a;
+      font-size: 0.8rem; font-weight: 600; color: #1a1512;
       white-space: nowrap;
     }
     .theme-prompt .tp-btn {
       padding: 0.35rem 1rem;
-      background: #4f46e5; color: #fff;
+      background: #b8874a; color: #fff;
       border: none; border-radius: 100px;
       font-size: 0.72rem; font-weight: 700; font-family: inherit;
       cursor: pointer; white-space: nowrap;
       transition: background 0.2s, transform 0.2s;
     }
-    .theme-prompt .tp-btn:hover { background: #4338ca; transform: scale(1.04); }
+    .theme-prompt .tp-btn:hover { background: #a67a3e; transform: scale(1.04); }
     .theme-prompt .tp-close {
-      background: none; border: none; color: #94a3b8;
+      background: none; border: none; color: #8c7d6e;
       font-size: 1.1rem; cursor: pointer; padding: 0.1rem; line-height: 1;
       transition: color 0.2s;
     }
-    .theme-prompt .tp-close:hover { color: #0f172a; }
+    .theme-prompt .tp-close:hover { color: #1a1512; }
 
     /* ── CASE STUDY ── */
     .case-grid {
@@ -882,7 +926,7 @@
       transition: width 0.3s, height 0.3s, background 0.3s, border-color 0.3s;
       display: flex; align-items: center; justify-content: center;
     }
-    .cursor-ring.hover { width: 48px; height: 48px; background: rgba(79,70,229,0.08); }
+    .cursor-ring.hover { width: 48px; height: 48px; background: rgba(212,167,106,0.12); }
     .cursor-ring.copy {
       width: 88px; height: 88px;
       background: var(--accent); border-color: var(--accent);
@@ -913,11 +957,11 @@
     }
     .footer-video .overlay {
       position: absolute; inset: 0;
-      background: linear-gradient(135deg, rgba(248,250,252,0.92) 0%, rgba(248,250,252,0.45) 40%, rgba(248,250,252,0.85) 100%);
+      background: linear-gradient(135deg, rgba(245,240,232,0.92) 0%, rgba(245,240,232,0.45) 40%, rgba(245,240,232,0.85) 100%);
       transition: background 0.3s;
     }
     [data-theme="dark"] .footer-video .overlay {
-      background: linear-gradient(135deg, rgba(15,23,42,0.94) 0%, rgba(15,23,42,0.55) 40%, rgba(15,23,42,0.9) 100%);
+      background: linear-gradient(135deg, rgba(26,21,18,0.94) 0%, rgba(26,21,18,0.55) 40%, rgba(26,21,18,0.9) 100%);
     }
     [data-theme="dark"] .footer-section {
       --text: var(--ink-900);
@@ -1024,6 +1068,7 @@
 
   <!-- ─── HERO (Juan Mora inspired) ─── -->
   <section class="hero">
+    <div class="hero-orbs"><div class="orb"></div><div class="orb"></div><div class="orb"></div></div>
     <div class="hero-photo fade-item fd1" id="heroPhoto">
       <img src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?q=80&w=1800&h=2200&fit=crop" alt="Creative workspace" loading="eager">
       <div class="photo-overlay"></div>
@@ -1227,76 +1272,76 @@
       <p class="section-desc reveal">Kind words from brands and partners I've worked with.</p>
       <div class="testimonials-carousel reveal">
         <div class="testimonials-track" id="testimonialsTrack">
-          <div class="t-card">
+          <div class="t-card" tabindex="0">
             <div class="stars">★★★★★</div>
             <div class="quote">"Chris brought a level of clarity to our campaign strategy we hadn't seen before. The lead gen results for Medtronic exceeded every target we set."</div>
             <div class="author">
-              <div class="av">R</div>
-              <div class="info"><div class="name">Rajesh Kumar</div><div class="role">Marketing Lead, Medtronic India</div></div>
+              <div class="av"><img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=120&h=120&fit=crop&crop=face" alt="" loading="lazy"></div>
+              <div class="info"><div class="name">Rajesh Kumar</div><div class="role">Marketing Lead</div><div class="company">Medtronic India</div></div>
             </div>
           </div>
-          <div class="t-card">
+          <div class="t-card" tabindex="0">
             <div class="stars">★★★★★</div>
             <div class="quote">"The FlexHaus landing page was a game-changer. Clean design, fast load times, and the interactive quiz drove real engagement. Our member retention numbers prove it."</div>
             <div class="author">
-              <div class="av">S</div>
-              <div class="info"><div class="name">Sarah van der Berg</div><div class="role">Operations, FlexHaus Amsterdam</div></div>
+              <div class="av"><img src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?q=80&w=120&h=120&fit=crop&crop=face" alt="" loading="lazy"></div>
+              <div class="info"><div class="name">Sarah van der Berg</div><div class="role">Operations</div><div class="company">FlexHaus Amsterdam</div></div>
             </div>
           </div>
-          <div class="t-card">
+          <div class="t-card" tabindex="0">
             <div class="stars">★★★★★</div>
             <div class="quote">"We needed a web presence that matched our brand vision. Chris delivered a site that's both beautiful and functional — and the turnaround time was impressive."</div>
             <div class="author">
-              <div class="av">A</div>
-              <div class="info"><div class="name">Ananya Sharma</div><div class="role">Founder, Ask Anya</div></div>
+              <div class="av"><img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=120&h=120&fit=crop&crop=face" alt="" loading="lazy"></div>
+              <div class="info"><div class="name">Ananya Sharma</div><div class="role">Founder</div><div class="company">Ask Anya</div></div>
             </div>
           </div>
-          <div class="t-card">
+          <div class="t-card" tabindex="0">
             <div class="stars">★★★★★</div>
             <div class="quote">"Working with Chris on our brand refresh was seamless. He understood our healthcare audience and translated complex messaging into compelling creative."</div>
             <div class="author">
-              <div class="av">P</div>
-              <div class="info"><div class="name">Dr. Priya Mehta</div><div class="role">Brand Manager, JB Pharma</div></div>
+              <div class="av"><img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=120&h=120&fit=crop&crop=face" alt="" loading="lazy"></div>
+              <div class="info"><div class="name">Dr. Priya Mehta</div><div class="role">Brand Manager</div><div class="company">JB Pharma</div></div>
             </div>
           </div>
-          <div class="t-card">
+          <div class="t-card" tabindex="0">
             <div class="stars">★★★★★</div>
             <div class="quote">"Chris has a rare ability to blend creativity with data. Every campaign we ran together was meticulously tested, measured, and optimised for maximum impact."</div>
             <div class="author">
-              <div class="av">A</div>
-              <div class="info"><div class="name">Arjun Nair</div><div class="role">Content Strategist, Synapse Advertising</div></div>
+              <div class="av"><img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=120&h=120&fit=crop&crop=face" alt="" loading="lazy"></div>
+              <div class="info"><div class="name">Arjun Nair</div><div class="role">Content Strategist</div><div class="company">Synapse Advertising</div></div>
             </div>
           </div>
-          <div class="t-card">
+          <div class="t-card" tabindex="0">
             <div class="stars">★★★★★</div>
             <div class="quote">"The website Chris built for us perfectly captures our brand identity. Clean, fast, and intuitive — our customers constantly compliment it."</div>
             <div class="author">
-              <div class="av">M</div>
-              <div class="info"><div class="name">Maria Torres</div><div class="role">Creative Director, Walyte</div></div>
+              <div class="av"><img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=120&h=120&fit=crop&crop=face" alt="" loading="lazy"></div>
+              <div class="info"><div class="name">Maria Torres</div><div class="role">Creative Director</div><div class="company">Walyte</div></div>
             </div>
           </div>
-          <div class="t-card">
+          <div class="t-card" tabindex="0">
             <div class="stars">★★★★★</div>
             <div class="quote">"Chris delivered a complete digital marketing strategy that transformed our online presence. The results speak for themselves — doubled our lead volume in three months."</div>
             <div class="author">
-              <div class="av">V</div>
-              <div class="info"><div class="name">Vikram Patel</div><div class="role">CEO, Apulki Healthcare</div></div>
+              <div class="av"><img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=120&h=120&fit=crop&crop=face" alt="" loading="lazy"></div>
+              <div class="info"><div class="name">Vikram Patel</div><div class="role">CEO</div><div class="company">Apulki Healthcare</div></div>
             </div>
           </div>
-          <div class="t-card">
+          <div class="t-card" tabindex="0">
             <div class="stars">★★★★★</div>
             <div class="quote">"Professional, responsive, and incredibly talented. Chris helped us rethink our entire brand approach and delivered a website that we're truly proud of."</div>
             <div class="author">
-              <div class="av">E</div>
-              <div class="info"><div class="name">Elena Vos</div><div class="role">Marketing Director, SMT-MVT</div></div>
+              <div class="av"><img src="https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?q=80&w=120&h=120&fit=crop&crop=face" alt="" loading="lazy"></div>
+              <div class="info"><div class="name">Elena Vos</div><div class="role">Marketing Director</div><div class="company">SMT-MVT</div></div>
             </div>
           </div>
-          <div class="t-card">
+          <div class="t-card" tabindex="0">
             <div class="stars">★★★★★</div>
             <div class="quote">"Chris's understanding of user experience and conversion optimisation is outstanding. Our landing page redesign resulted in a 40% increase in conversion rate within weeks."</div>
             <div class="author">
-              <div class="av">D</div>
-              <div class="info"><div class="name">David Chen</div><div class="role">Product Lead, Tuxedo-2</div></div>
+              <div class="av"><img src="https://images.unsplash.com/photo-1507101105822-7472b28e22ac?q=80&w=120&h=120&fit=crop&crop=face" alt="" loading="lazy"></div>
+              <div class="info"><div class="name">David Chen</div><div class="role">Product Lead</div><div class="company">Tuxedo-2</div></div>
             </div>
           </div>
         </div>
@@ -1649,6 +1694,68 @@
         const cards = Array.from(track.querySelectorAll('.t-card'));
         let currentSlide = 0;
         let autoplayTimer;
+        let dragState = null;
+
+        /* ── SPOTLIGHT ── */
+        function clearSpotlight() {
+          cards.forEach(c => c.classList.remove('spotlight'));
+        }
+        function setSpotlight(el) {
+          clearSpotlight();
+          if (el) el.classList.add('spotlight');
+        }
+        cards.forEach(c => {
+          c.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const isActive = this.classList.contains('spotlight');
+            clearSpotlight();
+            if (!isActive) setSpotlight(this);
+          });
+        });
+        document.addEventListener('click', clearSpotlight);
+
+        /* ── DRAG ── */
+        function initDrag() {
+          const perView = getPerView();
+          if (perView >= cards.length) return;
+          const cardEl = cards[0];
+          const gap = parseFloat(getComputedStyle(track).gap) || 12;
+          const cardW = cardEl.offsetWidth + gap;
+          const maxSlide = getMaxSlide();
+          let startX, startScroll, isDragging = false;
+
+          function onStart(x) {
+            dragState = { startX: x, startScroll: currentSlide, isDragging: false };
+          }
+          function onMove(x) {
+            if (!dragState) return;
+            const dx = x - dragState.startX;
+            if (!dragState.isDragging && Math.abs(dx) > 10) {
+              dragState.isDragging = true;
+              clearInterval(autoplayTimer);
+            }
+            if (dragState.isDragging) {
+              const slideDelta = -dx / cardW;
+              let newSlide = Math.round(dragState.startScroll + slideDelta);
+              newSlide = Math.max(0, Math.min(maxSlide, newSlide));
+              if (newSlide !== currentSlide) {
+                currentSlide = newSlide;
+                updateCarousel();
+              }
+            }
+          }
+          function onEnd() {
+            if (dragState && dragState.isDragging) resetAutoplay();
+            dragState = null;
+          }
+
+          track.addEventListener('mousedown', e => onStart(e.clientX));
+          document.addEventListener('mousemove', e => onMove(e.clientX));
+          document.addEventListener('mouseup', onEnd);
+          track.addEventListener('touchstart', e => onStart(e.touches[0].clientX), { passive: true });
+          document.addEventListener('touchmove', e => onMove(e.touches[0].clientX), { passive: true });
+          document.addEventListener('touchend', onEnd);
+        }
 
         function getPerView() {
           if (window.innerWidth >= 1024) return 3;
@@ -1689,6 +1796,7 @@
               currentSlide = i;
               updateCarousel();
               resetAutoplay();
+              clearSpotlight();
             });
             dotsContainer.appendChild(dot);
           }
@@ -1699,12 +1807,14 @@
           if (currentSlide < maxSlide) currentSlide++;
           else currentSlide = 0;
           updateCarousel();
+          clearSpotlight();
         }
 
         function goPrev() {
           if (currentSlide > 0) currentSlide--;
           else currentSlide = getMaxSlide();
           updateCarousel();
+          clearSpotlight();
         }
 
         function resetAutoplay() {
@@ -1717,6 +1827,7 @@
 
         buildDots();
         updateCarousel();
+        initDrag();
         autoplayTimer = setInterval(goNext, 4500);
 
         window.addEventListener('resize', function() {
