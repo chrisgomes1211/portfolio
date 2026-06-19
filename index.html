@@ -389,15 +389,15 @@
     /* ── ENTRANCE ── */
     .fade-item { opacity: 0; transform: translateY(15px); }
     .hero-content.loaded .fade-item,
-    .hero-photo.loaded .fade-item {
+    .hero-photo.loaded {
       animation: fadeUp 0.7s cubic-bezier(.16,1,.3,1) forwards;
     }
     .hero-content.loaded .fd1,
-    .hero-photo.loaded .fd1 { animation-delay: 0.1s; }
+    .hero-photo.loaded.fd1 { animation-delay: 0.1s; }
     .hero-content.loaded .fd2,
-    .hero-photo.loaded .fd2 { animation-delay: 0.2s; }
+    .hero-photo.loaded.fd2 { animation-delay: 0.2s; }
     .hero-content.loaded .fd3,
-    .hero-photo.loaded .fd3 { animation-delay: 0.3s; }
+    .hero-photo.loaded.fd3 { animation-delay: 0.3s; }
     .hero-content.loaded .fd4 { animation-delay: 0.4s; }
     @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
 
