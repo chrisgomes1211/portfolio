@@ -187,70 +187,47 @@
     }
     nav .nav-mark:hover { background: var(--accent-hover); }
 
-    /* ── HERO (Juan Mora inspired) ── */
+    /* ── HERO (full-bleed background) ── */
     .hero {
       position: relative; z-index: 1;
       height: 100vh; min-height: 700px;
       overflow: hidden;
-      background: var(--warm-dark);
     }
-    /* Photo layer — left 55% */
-    .hero-photo {
+    .hero-bg {
       position: absolute;
-      top: 0; left: 0;
-      width: 58%;
-      height: 100%;
-      z-index: 1;
-      overflow: hidden;
+      inset: 0;
+      z-index: 0;
     }
-    .hero-photo img {
+    .hero-bg img {
       width: 100%; height: 100%;
       object-fit: cover;
-      object-position: 30% 50%;
-      filter: saturate(1.05) contrast(1.05);
+      display: block;
     }
-    .hero-photo .photo-overlay {
+    .hero-bg .overlay {
       position: absolute; inset: 0;
-      background: linear-gradient(135deg,
-        rgba(26,21,18,0.55) 0%,
+      background: linear-gradient(180deg,
+        rgba(26,21,18,0.3) 0%,
         rgba(26,21,18,0.15) 40%,
-        rgba(26,21,18,0.05) 60%,
-        rgba(26,21,18,0.7) 100%);
-      z-index: 1;
-    }
-    .hero-photo .warm-glow {
-      position: absolute; inset: 0;
-      background: radial-gradient(ellipse at 35% 50%, rgba(212,167,106,0.12) 0%, transparent 65%);
+        rgba(26,21,18,0.55) 70%,
+        rgba(26,21,18,0.85) 100%);
       z-index: 1;
     }
 
-    /* Edge blend — smooth transition from photo to content */
-    .hero-blend {
-      position: absolute;
-      left: 54%;
-      top: 0;
-      width: 8%;
-      height: 100%;
-      z-index: 2;
-      background: linear-gradient(90deg, transparent, var(--warm-dark));
-    }
-
-    /* Right content panel */
+    /* Content overlaid */
     .hero-content {
       position: absolute;
-      top: 0; right: 0;
-      width: 46%;
-      height: 100%;
-      z-index: 3;
+      inset: 0;
+      z-index: 2;
       display: flex;
       flex-direction: column;
       justify-content: center;
-      padding: 8rem 5rem 10rem 3.5rem;
-      background: var(--warm-dark);
+      align-items: center;
+      text-align: center;
+      padding: 8rem 2rem 12rem;
     }
     .hero-content .hero-eyebrow {
       font-family: var(--font-sans);
-      font-size: 0.65rem;
+      font-size: clamp(0.6rem, 0.9vw, 0.8rem);
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.15em;
@@ -260,19 +237,19 @@
     }
     .hero-content .hero-description {
       font-family: var(--font-display);
-      font-size: clamp(1.1rem, 1.8vw, 1.6rem);
+      font-size: clamp(1.1rem, 2vw, 1.8rem);
       color: var(--warm-cream);
       line-height: 1.4;
-      max-width: 340px;
+      max-width: 480px;
       opacity: 0.85;
     }
     .hero-content .hero-stats-row {
       display: flex;
       gap: 2rem;
-      margin-top: 2rem;
+      margin-top: 1.5rem;
     }
     .hero-content .hero-stats-row span {
-      font-size: 0.7rem;
+      font-size: clamp(0.6rem, 0.8vw, 0.75rem);
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.06em;
@@ -281,7 +258,7 @@
     }
     .hero-content .hero-stats-row strong {
       display: block;
-      font-size: 1.2rem;
+      font-size: clamp(1rem, 1.5vw, 1.3rem);
       color: var(--warm-beige);
       opacity: 1;
       margin-top: 0.15rem;
@@ -383,15 +360,15 @@
     /* ── ENTRANCE ── */
     .fade-item { opacity: 0; transform: translateY(15px); }
     .hero-content.loaded .fade-item,
-    .hero-photo.loaded {
+    .hero-bg.loaded {
       animation: fadeUp 0.7s cubic-bezier(.16,1,.3,1) forwards;
     }
     .hero-content.loaded .fd1,
-    .hero-photo.loaded.fd1 { animation-delay: 0.1s; }
+    .hero-bg.loaded.fd1 { animation-delay: 0.1s; }
     .hero-content.loaded .fd2,
-    .hero-photo.loaded.fd2 { animation-delay: 0.2s; }
+    .hero-bg.loaded.fd2 { animation-delay: 0.2s; }
     .hero-content.loaded .fd3,
-    .hero-photo.loaded.fd3 { animation-delay: 0.3s; }
+    .hero-bg.loaded.fd3 { animation-delay: 0.3s; }
     .hero-content.loaded .fd4 { animation-delay: 0.4s; }
     @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
 
@@ -835,16 +812,7 @@
     ::-webkit-scrollbar-thumb:hover { background: var(--ink-500); }
 
     @media (max-width: 900px) {
-      .hero-photo { width: 100%; }
-      .hero-photo img { object-position: 40% 50%; filter: saturate(1.1) contrast(1.1) brightness(0.7); }
-      .hero-blend { display: none; }
-      .hero-content {
-        width: 100%;
-        justify-content: flex-end;
-        padding: 6rem 2rem 8rem;
-        background: linear-gradient(180deg, transparent 0%, var(--warm-dark) 40%);
-      }
-      .hero-content .hero-description { max-width: 100%; }
+      .hero-content { padding: 6rem 1.5rem 10rem; }
       .hero-name-bottom h1 { font-size: clamp(4rem, 18vw, 11rem); }
       .hero-name-bottom { bottom: -1rem; }
       .social-bar a { padding: 0.35rem 0.45rem; }
@@ -864,7 +832,6 @@
       nav .nav-mark { width: 28px; height: 28px; font-size: 0.8rem; }
       .theme-toggle { top: 0.8rem; left: 0.8rem; width: 38px; height: 38px; }
       .hero { min-height: 500px; }
-      .hero-photo img { object-position: 45% 50%; }
       .hero-content { padding: 4rem 1.5rem 6rem; }
       .hero-content .hero-eyebrow { font-size: 0.55rem; }
       .hero-content .hero-description { font-size: clamp(0.9rem, 4vw, 1.1rem); }
@@ -1062,16 +1029,13 @@
     <a href="#services" class="nav-link">Work</a>
   </nav>
 
-  <!-- ─── HERO (Juan Mora inspired) ─── -->
+  <!-- ─── HERO (full-bleed background) ─── -->
   <section class="hero">
     <div class="hero-orbs"><div class="orb"></div><div class="orb"></div><div class="orb"></div></div>
-    <div class="hero-photo fade-item fd1" id="heroPhoto">
+    <div class="hero-bg fade-item fd1" id="heroBg">
       <img src="Chris%20Gomes%20Banner%20Image.png" alt="Chris Gomes" loading="eager">
-      <div class="photo-overlay"></div>
-      <div class="warm-glow"></div>
+      <div class="overlay"></div>
     </div>
-
-    <div class="hero-blend"></div>
 
     <div class="hero-content" id="heroContent">
       <p class="hero-eyebrow fade-item fd1">Digital Marketer &amp; Web Builder</p>
@@ -1578,10 +1542,10 @@
 
       /* ── ENTRANCE ── */
       const heroContent = document.getElementById('heroContent');
-      const heroPhoto = document.getElementById('heroPhoto');
+      const heroBg = document.getElementById('heroBg');
       requestAnimationFrame(() => {
         heroContent.classList.add('loaded');
-        if (heroPhoto) heroPhoto.classList.add('loaded');
+        if (heroBg) heroBg.classList.add('loaded');
       });
 
       /* ── HERO NAME CHARACTER SPLIT + GSAP ── */
