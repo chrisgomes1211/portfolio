@@ -213,7 +213,7 @@
       z-index: 1;
     }
 
-    /* Content overlaid */
+    /* Content overlaid — left aligned */
     .hero-content {
       position: absolute;
       inset: 0;
@@ -221,9 +221,10 @@
       display: flex;
       flex-direction: column;
       justify-content: center;
-      align-items: center;
-      text-align: center;
-      padding: 8rem 2rem 12rem;
+      align-items: flex-start;
+      text-align: left;
+      padding: 8rem 2rem 8rem 4rem;
+      max-width: 600px;
     }
     .hero-content .hero-eyebrow {
       font-family: var(--font-sans);
@@ -232,36 +233,36 @@
       text-transform: uppercase;
       letter-spacing: 0.15em;
       color: var(--warm-beige);
-      opacity: 0.7;
-      margin-bottom: 0.75rem;
+      opacity: 0.85;
+      margin-bottom: 0.5rem;
     }
     .hero-content .hero-description {
       font-family: var(--font-display);
-      font-size: clamp(1.1rem, 2vw, 1.8rem);
+      font-size: clamp(0.95rem, 1.5vw, 1.3rem);
       color: var(--warm-cream);
-      line-height: 1.4;
-      max-width: 480px;
-      opacity: 0.85;
+      line-height: 1.5;
+      max-width: 420px;
+      opacity: 0.9;
     }
     .hero-content .hero-stats-row {
       display: flex;
-      gap: 2rem;
-      margin-top: 1.5rem;
+      gap: 1.5rem;
+      margin-top: 1.25rem;
     }
     .hero-content .hero-stats-row span {
-      font-size: clamp(0.6rem, 0.8vw, 0.75rem);
+      font-size: clamp(0.55rem, 0.7vw, 0.7rem);
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.06em;
       color: var(--warm-beige);
-      opacity: 0.6;
+      opacity: 0.7;
     }
     .hero-content .hero-stats-row strong {
       display: block;
-      font-size: clamp(1rem, 1.5vw, 1.3rem);
+      font-size: clamp(0.9rem, 1.2vw, 1.1rem);
       color: var(--warm-beige);
       opacity: 1;
-      margin-top: 0.15rem;
+      margin-top: 0.1rem;
     }
 
     .btn {
@@ -289,26 +290,26 @@
     }
     .btn-o:hover { border-color: var(--warm-beige); color: var(--warm-beige); }
 
-    /* Huge name at bottom — full width */
+    /* Name at bottom */
     .hero-name-bottom {
       position: absolute;
-      bottom: -2rem;
+      bottom: 1rem;
       left: 0;
       right: 0;
       z-index: 4;
       pointer-events: none;
+      text-align: center;
     }
     .hero-name-bottom h1 {
       font-family: var(--font-display);
-      font-size: clamp(5rem, 25vw, 22rem);
+      font-size: clamp(2.5rem, 8vw, 5rem);
       font-weight: 900;
       color: var(--warm-beige);
       margin: 0;
-      line-height: 0.75;
-      letter-spacing: -0.04em;
-      white-space: nowrap;
-      text-shadow: 0 4px 60px rgba(212,167,106,0.12);
-      opacity: 0.9;
+      line-height: 1;
+      letter-spacing: -0.03em;
+      text-shadow: 0 2px 30px rgba(212,167,106,0.15);
+      opacity: 1;
     }
     .hero-name-bottom .name-char {
       display: inline-block;
