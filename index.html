@@ -207,8 +207,9 @@
       width: 100%;
       min-height: 0;
     }
-    .hero-content > .hero-sub {
+    .hero-content > .hero-bline {
       flex-shrink: 0;
+      padding-bottom: 1rem;
     }
     .hero-media {
       position: absolute; inset: 0; z-index: -1;
@@ -309,20 +310,10 @@
       font-family: var(--font-sans);
       font-size: clamp(0.8rem, 1.5vw, 1.05rem);
       color: var(--text-soft);
-      margin-top: 0.75rem;
-      font-weight: 500;
-      letter-spacing: 0.08em;
+      font-weight: 600;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
       text-shadow: var(--hero-text-shadow);
-    }
-    /* Subtitle — bottom-center (flex child pushed to bottom) */
-    .hero .hero-sub {
-      font-size: 0.7rem; font-weight: 600;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      text-align: center;
-      white-space: nowrap;
     }
 
     /* ── ENTRANCE ── */
@@ -775,7 +766,6 @@
       .theme-toggle { top: 0.8rem; left: 0.8rem; width: 38px; height: 38px; }
       .hero .tagline { display: none; }
       .hero .hero-name h1 { font-size: clamp(1.8rem, 12vw, 3rem); }
-      .hero .hero-sub { font-size: 0.55rem; }
       .hero { min-height: 600px; }
       .hero-content { padding: 3rem 1.5rem 2rem; }
       section, .marquee-band { padding: 3rem 0; }
@@ -795,6 +785,18 @@
     /* ── LENIS ── */
     html.lenis, html.lenis body { height: auto; }
     .lenis.lenis-smooth { scroll-behavior: auto; }
+
+    /* ── THEME TRANSITION OVERLAY ── */
+    .theme-overlay {
+      position: fixed; inset: 0; z-index: 99998;
+      pointer-events: none;
+      opacity: 0;
+      background: var(--bg);
+      transition: opacity 0.35s ease;
+    }
+    .theme-overlay.active {
+      opacity: 1;
+    }
 
     /* ── CUSTOM CURSOR ── */
     @media (hover: hover) {
@@ -969,9 +971,8 @@
       <div class="tagline fade-item fd1">Brand &amp; Web Design Specialist</div>
       <div class="hero-name fade-item fd2">
         <h1 id="heroName"><span>Chris</span><br><span class="accent">Gomes</span></h1>
-        <p class="hero-bline">Websites &middot; Campaigns &middot; Brand Strategy</p>
       </div>
-      <div class="hero-sub fade-item fd4">Digital Marketer</div>
+      <p class="hero-bline fade-item fd3">Websites &middot; Campaigns &middot; Brand Strategy</p>
     </div>
   </section>
 
@@ -1346,9 +1347,19 @@
         setTimeout(() => { if (prompt) prompt.classList.add('visible'); }, 1800);
         if (tpSwitch) {
           tpSwitch.addEventListener('click', () => {
-            html.dataset.theme = 'light';
-            localStorage.setItem('portfolio-theme', 'light');
-            prompt.classList.remove('visible');
+            const overlay = document.createElement('div');
+            overlay.className = 'theme-overlay';
+            document.body.appendChild(overlay);
+            requestAnimationFrame(() => {
+              overlay.classList.add('active');
+              setTimeout(() => {
+                html.dataset.theme = 'light';
+                localStorage.setItem('portfolio-theme', 'light');
+                prompt.classList.remove('visible');
+                overlay.classList.remove('active');
+                setTimeout(() => overlay.remove(), 400);
+              }, 200);
+            });
           });
         }
         if (tpClose) {
@@ -1361,8 +1372,18 @@
 
       toggle.addEventListener('click', () => {
         const next = html.dataset.theme === 'dark' ? 'light' : 'dark';
-        html.dataset.theme = next;
-        localStorage.setItem('portfolio-theme', next);
+        const overlay = document.createElement('div');
+        overlay.className = 'theme-overlay';
+        document.body.appendChild(overlay);
+        requestAnimationFrame(() => {
+          overlay.classList.add('active');
+          setTimeout(() => {
+            html.dataset.theme = next;
+            localStorage.setItem('portfolio-theme', next);
+            overlay.classList.remove('active');
+            setTimeout(() => overlay.remove(), 400);
+          }, 200);
+        });
       });
 
       /* ── LENIS SMOOTH SCROLL ── */
