@@ -287,6 +287,51 @@ body { background: linear-gradient(135deg, #e8f0fe 0%, #d4e8f5 100%); display: f
 @keyframes rippleAnim { to { transform: scale(4); opacity: 0; } }
 .send-btn { position: relative; overflow: hidden; }
 .qr-btn { position: relative; overflow: hidden; }
+
+/* ── Flight Tracker ── */
+.flight-detail { background: #FFFFFF; border-radius: 14px; padding: 14px; border: 1px solid #E8EDF2; margin-top: 6px; width: 100%; }
+.fd-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.fd-flight { font-size: 20px; font-weight: 700; color: #1A2A3A; }
+.fd-status { font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 12px; letter-spacing: 0.2px; }
+.fd-status.ot { background: #E8F5E9; color: #2ECC71; }
+.fd-status.dl { background: #FFF3E0; color: #FF7A2F; }
+.fd-status.bo { background: #E3F2FD; color: #4AB8EB; animation: pulseStatus 1s ease-in-out infinite; }
+.fd-status.dp { background: #F3E5F5; color: #9C27B0; }
+.fd-status.ar { background: #E8F5E9; color: #2ECC71; }
+@keyframes pulseStatus { 0%,100% { opacity: 1; } 50% { opacity: 0.6; } }
+.fd-route { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-top: 1px solid #F0F4F8; border-bottom: 1px solid #F0F4F8; margin-bottom: 10px; }
+.fd-city { flex: 1; }
+.fd-iata { font-size: 22px; font-weight: 700; color: #1A2A3A; }
+.fd-name { font-size: 11px; color: #78909C; margin-top: 1px; }
+.fd-time { font-size: 13px; font-weight: 600; color: #1A2A3A; margin-top: 4px; }
+.fd-arrow { font-size: 24px; color: #B0BEC5; margin: 0 4px; }
+.fd-delay { color: #FF7A2F; font-weight: 700; font-size: 11px; }
+.fd-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; font-size: 12px; }
+.fd-item { display: flex; justify-content: space-between; padding: 4px 0; color: #78909C; }
+.fd-item .fd-val { color: #1A2A3A; font-weight: 600; }
+.fd-foot { font-size: 10px; color: #B0BEC5; margin-top: 10px; padding-top: 8px; border-top: 1px solid #F0F4F8; display: flex; justify-content: space-between; }
+
+/* ── Departure Board ── */
+.dep-board { background: #FFFFFF; border-radius: 14px; padding: 12px; border: 1px solid #E8EDF2; margin-top: 6px; width: 100%; }
+.db-header { font-size: 14px; font-weight: 700; color: #1A2A3A; padding-bottom: 8px; border-bottom: 2px solid #FF7A2F; margin-bottom: 4px; display: flex; justify-content: space-between; }
+.db-row { display: grid; grid-template-columns: 50px 1fr 60px 44px 50px; align-items: center; gap: 6px; padding: 7px 4px; border-bottom: 1px solid #F5F7F9; font-size: 12px; }
+.db-row:last-child { border-bottom: none; }
+.db-flight { font-weight: 700; color: #1A2A3A; }
+.db-route { color: #546E7A; font-size: 11px; }
+.db-time { font-weight: 600; color: #1A2A3A; text-align: center; }
+.db-gate { color: #78909C; text-align: center; font-size: 11px; }
+.db-status { text-align: right; font-size: 11px; font-weight: 700; }
+.db-status.ot { color: #2ECC71; }
+.db-status.dl { color: #FF7A2F; }
+.db-status.bo { color: #4AB8EB; }
+.db-status.dp { color: #9C27B0; }
+.db-header-row { color: #90A4AE; font-size: 10px; font-weight: 600; text-transform: uppercase; padding: 6px 4px; border-bottom: 1px solid #E8EDF2; }
+
+/* ── Scanning Indicator ── */
+.scan-line { display: flex; align-items: center; gap: 8px; padding: 8px 0; font-size: 12px; color: #78909C; }
+.scan-dot { width: 8px; height: 8px; border-radius: 50%; background: #4AB8EB; animation: scanPulse 0.8s ease-in-out infinite; }
+@keyframes scanPulse { 0%,100% { box-shadow: 0 0 0 0 rgba(74,184,235,0.4); } 50% { box-shadow: 0 0 0 8px rgba(74,184,235,0); } }
+.scan-line .tick { color: #2ECC71; font-weight: 700; }
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
@@ -655,6 +700,210 @@ body { background: linear-gradient(135deg, #e8f0fe 0%, #d4e8f5 100%); display: f
     setQR(backQR());
   }
 
+  // ── Flight Tracker ──
+  const FlightTracker = {
+    data: null,
+    flights: null,
+    refreshCount: 0,
+
+    _rand(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; },
+
+    _addMins(t, m) {
+      const [h, mn] = t.split(':').map(Number);
+      const d = new Date(2026,5,30, h, mn + m);
+      return String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0');
+    },
+
+    _statusLabel(s, d) {
+      const map = { 'ot':'🟢 On Time','dl':`🟡 Delayed ${d}min`,'bo':'🔵 Boarding','dp':'🟣 Departed','ar':'🟢 Arrived' };
+      return map[s] || s;
+    },
+
+    generate() {
+      const now = new Date();
+      const depTime = new Date(2026,5,30, 14, 30);
+      const minsSinceDep = (now - depTime) / 60000;
+      let delay, status;
+      if (minsSinceDep < -120) { delay = 0; status = 'ot'; }
+      else if (minsSinceDep < -60) { delay = this._rand(0,8); status = delay > 3 ? 'dl' : 'ot'; }
+      else if (minsSinceDep < -15) { delay = this._rand(2,15); status = 'dl'; }
+      else if (minsSinceDep < 0) { delay = this._rand(0,5); status = 'bo'; }
+      else if (minsSinceDep < 45) { delay = this._rand(0,8); status = 'dp'; }
+      else { delay = this._rand(0,15); status = 'ar'; }
+
+      const gates = ['B12','B7','C3','A9','B4','C8'];
+      const positions = ['Gulf of Thailand','South China Sea','Approach SIN','Taxiing','Gate B12'];
+      const weather = [
+        { temp: 32, cond:'Partly cloudy', icon:'⛅' },
+        { temp: 30, cond:'Light rain', icon:'🌦️' },
+        { temp: 33, cond:'Sunny', icon:'☀️' },
+        { temp: 31, cond:'Thunderstorms', icon:'⛈️' },
+      ];
+
+      this.data = {
+        flight: 'SK456',
+        from: 'Bangkok', fromIata: 'BKK',
+        to: 'Singapore', toIata: 'SIN',
+        scheduledDep: '14:30', scheduledArr: '17:45',
+        actualDep: this._addMins('14:30', delay),
+        actualArr: this._addMins('17:45', delay),
+        delay, status,
+        gate: gates[minsSinceDep > 0 ? Math.floor(minsSinceDep / 30) % gates.length : 0],
+        altitude: status === 'dp' || status === 'ar' ? this._rand(0, 38000) : 0,
+        position: status === 'dp' ? positions[this._rand(0,2)] : status === 'ar' ? positions[3] : positions[0],
+        weather: weather[this._rand(0, weather.length-1)],
+        lastUpdated: Date.now()
+      };
+      return this.data;
+    },
+
+    generateFlights() {
+      const bases = [
+        { f:'SK456', ff:'BKK', tt:'SIN', t:'14:30' },
+        { f:'SK201', ff:'BKK', tt:'HKG', t:'15:00' },
+        { f:'SK789', ff:'BKK', tt:'NRT', t:'15:30' },
+        { f:'SK302', ff:'BKK', tt:'ICN', t:'16:00' },
+        { f:'SK555', ff:'BKK', tt:'SYD', t:'16:30' },
+        { f:'SK108', ff:'BKK', tt:'DEL', t:'17:00' },
+      ];
+      this.flights = bases.map(b => {
+        const delay = Math.random() < 0.3 ? this._rand(5, 25) : 0;
+        const ss = delay > 0 ? 'dl' : Math.random() < 0.2 ? 'bo' : 'ot';
+        return {
+          flight: b.f, from: b.ff, to: b.tt,
+          time: this._addMins(b.t, delay),
+          scheduled: b.t, delay,
+          gate: ['B12','C3','A8','D5','E2','C7'][bases.indexOf(b)],
+          status: ss
+        };
+      });
+      return this.flights;
+    },
+
+    refresh() {
+      this.refreshCount++;
+      if (this.data) {
+        this.data.delay = Math.max(0, this.data.delay + this._rand(-2, 3));
+        this.data.actualDep = this._addMins('14:30', this.data.delay);
+        this.data.actualArr = this._addMins('17:45', this.data.delay);
+        if (this.data.status === 'ot' && this.data.delay > 3) this.data.status = 'dl';
+        else if (this.data.status === 'dl' && this.data.delay <= 2) this.data.status = 'ot';
+        this.data.altitude = this._rand(0, 40000);
+        this.data.lastUpdated = Date.now();
+      }
+      if (this.flights) {
+        this.flights.forEach(f => {
+          if (Math.random() < 0.2) f.gate = ['B12','C3','A8','D5','E2','C7'][this._rand(0,5)];
+        });
+      }
+    },
+
+    formatStatus(s, d) {
+      return this._statusLabel(s, d);
+    }
+  };
+
+  function flightCardHTML(d) {
+    const statusClass = d.status;
+    const statusLabel = FlightTracker.formatStatus(d.status, d.delay);
+    const depTime = d.delay > 0 ? `${d.scheduledDep} <span class="fd-delay">+${d.delay}min</span>` : d.scheduledDep;
+    const alt = d.altitude > 0 ? `${(d.altitude/1000).toFixed(0)},000 ft` : '—';
+    const ago = Math.floor((Date.now() - d.lastUpdated) / 1000);
+    return `<div class="flight-detail">
+      <div class="fd-row">
+        <span class="fd-flight">✈️ ${d.flight}</span>
+        <span class="fd-status ${statusClass}">${statusLabel}</span>
+      </div>
+      <div class="fd-route">
+        <div class="fd-city">
+          <div class="fd-iata">${d.fromIata}</div>
+          <div class="fd-name">${d.from}</div>
+          <div class="fd-time">${depTime}</div>
+        </div>
+        <div class="fd-arrow">→</div>
+        <div class="fd-city" style="text-align:right">
+          <div class="fd-iata">${d.toIata}</div>
+          <div class="fd-name">${d.to}</div>
+          <div class="fd-time">${d.actualArr}</div>
+        </div>
+      </div>
+      <div class="fd-grid">
+        <div class="fd-item"><span>🚪 Gate</span><span class="fd-val">${d.gate}</span></div>
+        <div class="fd-item"><span>📍 Altitude</span><span class="fd-val">${alt}</span></div>
+        <div class="fd-item"><span>🌡️ ${d.to}</span><span class="fd-val">${d.weather.icon} ${d.weather.temp}°C</span></div>
+        <div class="fd-item"><span>📡 Position</span><span class="fd-val">${d.position}</span></div>
+      </div>
+      <div class="fd-foot">
+        <span>⏱️ ${ago}s ago</span>
+        <span>🔄 refreshed ${FlightTracker.refreshCount}x</span>
+      </div>
+    </div>`;
+  }
+
+  function departBoardHTML(flights) {
+    let rows = '';
+    flights.forEach(f => {
+      const st = f.status;
+      const timeHTML = f.delay > 0 ? `${f.scheduled} <span class="fd-delay" style="font-size:10px">+${f.delay}</span>` : f.scheduled;
+      rows += `<div class="db-row">
+        <span class="db-flight">${f.flight}</span>
+        <span class="db-route">${f.from} → ${f.to}</span>
+        <span class="db-time">${f.time}</span>
+        <span class="db-gate">${f.gate}</span>
+        <span class="db-status ${st}">${FlightTracker.formatStatus(st, f.delay)}</span>
+      </div>`;
+    });
+    return `<div class="dep-board">
+      <div class="db-header">
+        <span>🛫 Departures</span>
+        <span style="font-size:11px;color:#78909C;font-weight:400">${new Date().toLocaleDateString()}</span>
+      </div>
+      <div class="db-row db-header-row">
+        <span>Flight</span><span>Route</span><span style="text-align:center">Time</span><span style="text-align:center">Gate</span><span style="text-align:right">Status</span>
+      </div>
+      ${rows}
+    </div>`;
+  }
+
+  async function startStatus() {
+    await typing(800);
+    botMsg(`<div class="scan-line"><span class="scan-dot"></span> Scanning live flight data...</div>`);
+    await slp(1200);
+    const d = FlightTracker.generate();
+    botMsg(flightCardHTML(d));
+    setQR([
+      { lbl: '🔄 Refresh', a: 'refresh' },
+      { lbl: '🔔 Notify', a: 'notif' },
+      { lbl: '🗺️ Terminal map', a: 'tmap' },
+      { lbl: '📋 Departures', a: 'deps' },
+      { lbl: '⬅️ Back', a: 'back' }
+    ]);
+  }
+
+  async function doRefresh() {
+    await typing(600);
+    FlightTracker.refresh();
+    const d = FlightTracker.data || FlightTracker.generate();
+    botMsg(flightCardHTML(d));
+    setQR([
+      { lbl: '🔄 Refresh', a: 'refresh' },
+      { lbl: '🔔 Notify', a: 'notif' },
+      { lbl: '🗺️ Terminal map', a: 'tmap' },
+      { lbl: '📋 Departures', a: 'deps' },
+      { lbl: '⬅️ Back', a: 'back' }
+    ]);
+  }
+
+  async function doDepartures() {
+    await typing(600);
+    const flights = FlightTracker.flights || FlightTracker.generateFlights();
+    botMsg(departBoardHTML(flights));
+    setQR([
+      { lbl: '🔄 Refresh', a: 'refresh' },
+      { lbl: '⬅️ Back', a: 'back' }
+    ]);
+  }
+
   function usrMsg(text) {
     const el = document.createElement('div');
     el.className = 'message user';
@@ -721,6 +970,8 @@ body { background: linear-gradient(135deg, #e8f0fe 0%, #d4e8f5 100%); display: f
       else if (b.a === 'remind') { usrMsg(b.lbl); await doRemind(); }
       else if (b.a === 'cknow') { usrMsg(b.lbl); await doCkNow(); }
       else if (b.a === 'bp') { usrMsg(b.lbl); await doBP(); }
+      else if (b.a === 'refresh') { usrMsg(b.lbl); await doRefresh(); }
+      else if (b.a === 'deps') { usrMsg(b.lbl); await doDepartures(); }
       else if (b.val) { await processInput(b.val); }
     } finally {
       busy = false;
@@ -951,27 +1202,6 @@ body { background: linear-gradient(135deg, #e8f0fe 0%, #d4e8f5 100%); display: f
     botMsg(`Done! <strong>${kg}kg</strong> extra baggage added to your booking for <strong>$${price}</strong>. 🛄<br><span class="c-badge">✅ Added to booking</span>`, { tw: true });
     confetti();
     setQR([{ lbl: '🧳 Add more', a: 'baggage' }, { lbl: '⬅️ Back', a: 'back' }]);
-  }
-
-  // ── Flight Status ──
-  async function startStatus() {
-    await typing(1000);
-    const html = `<div class="flight-card">
-      <div class="fr">✈️ SK456 Bangkok → Singapore</div>
-      <div class="fd">📅 30 Jun 2026</div>
-      <div class="fs-row">
-        <span class="fs-badge ot">🟢 ON TIME</span>
-        <span>Depart <strong>14:30</strong></span>
-        <span>Arrive <strong>17:45</strong></span>
-        <span class="fg">Gate B12</span>
-      </div>
-    </div>`;
-    botMsg(html);
-    setQR([
-      { lbl: '🔔 Notify changes', a: 'notif' },
-      { lbl: '🗺️ Terminal map', a: 'tmap' },
-      { lbl: '⬅️ Back', a: 'back' }
-    ]);
   }
 
   async function doNotif() {
