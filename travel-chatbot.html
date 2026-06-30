@@ -332,6 +332,63 @@ body { background: linear-gradient(135deg, #e8f0fe 0%, #d4e8f5 100%); display: f
 .scan-dot { width: 8px; height: 8px; border-radius: 50%; background: #4AB8EB; animation: scanPulse 0.8s ease-in-out infinite; }
 @keyframes scanPulse { 0%,100% { box-shadow: 0 0 0 0 rgba(74,184,235,0.4); } 50% { box-shadow: 0 0 0 8px rgba(74,184,235,0); } }
 .scan-line .tick { color: #2ECC71; font-weight: 700; }
+
+/* ── Countdown ── */
+.header-cd { font-size: 10px; color: rgba(255,255,255,0.85); font-weight: 500; letter-spacing: 0.2px; }
+
+/* ── Trip Card ── */
+.trip-card { background: #FFFFFF; border-radius: 14px; padding: 14px; border: 1px solid #E8EDF2; margin-top: 6px; width: 100%; }
+.tc-header { font-size: 16px; font-weight: 700; color: #1A2A3A; margin-bottom: 2px; }
+.tc-sub { font-size: 12px; color: #78909C; margin-bottom: 10px; }
+.tc-section { padding: 8px 0; border-top: 1px solid #F0F4F8; }
+.tc-section:first-of-type { border-top: none; }
+.tc-sh { font-size: 13px; font-weight: 700; color: #1A2A3A; margin-bottom: 4px; display: flex; align-items: center; gap: 6px; }
+.tc-item { font-size: 12px; color: #546E7A; padding: 2px 0 2px 22px; line-height: 1.5; }
+.tc-item strong { color: #1A2A3A; }
+.tc-badge { display: inline-block; background: #E3F2FD; color: #4AB8EB; font-size: 10px; font-weight: 600; padding: 1px 8px; border-radius: 10px; margin-left: 6px; }
+
+/* ── Guide Card ── */
+.guide-card { background: #FFFFFF; border-radius: 14px; padding: 14px; border: 1px solid #E8EDF2; margin-top: 6px; width: 100%; }
+.gc-header { font-size: 16px; font-weight: 700; color: #1A2A3A; margin-bottom: 2px; }
+.gc-sub { font-size: 11px; color: #78909C; margin-bottom: 8px; }
+.gc-section { padding: 6px 0; }
+.gc-sh { font-size: 13px; font-weight: 700; color: #1A2A3A; margin-bottom: 4px; }
+.gc-row { display: flex; gap: 8px; padding: 3px 0; font-size: 12px; color: #546E7A; align-items: flex-start; }
+.gc-icon { flex-shrink: 0; width: 18px; text-align: center; }
+.gc-label { color: #78909C; min-width: 60px; flex-shrink: 0; }
+.gc-tip { padding: 3px 0 3px 18px; font-size: 12px; color: #546E7A; line-height: 1.5; }
+
+/* ── Lounge Card ── */
+.lounge-card { background: linear-gradient(135deg, #1A2A3A 0%, #2C3E50 100%); border-radius: 16px; padding: 16px; margin-top: 6px; width: 100%; color: #FFFFFF; }
+.lc-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.lc-title { font-size: 18px; font-weight: 700; letter-spacing: -0.3px; }
+.lc-badge { background: #FF7A2F; font-size: 9px; font-weight: 700; padding: 2px 8px; border-radius: 8px; letter-spacing: 0.5px; }
+.lc-flight { font-size: 12px; color: rgba(255,255,255,0.65); margin-bottom: 10px; }
+.lc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 10px; }
+.lc-item { font-size: 11px; }
+.lc-item .lc-lbl { color: rgba(255,255,255,0.5); }
+.lc-item .lc-val { color: #FFFFFF; font-weight: 600; margin-top: 1px; }
+.lc-bar { height: 4px; background: rgba(255,255,255,0.15); border-radius: 2px; margin-top: 10px; overflow: hidden; }
+.lc-fill { height: 100%; width: 100%; background: linear-gradient(90deg, #FF7A2F, #4AB8EB); border-radius: 2px; }
+
+/* ── Ride Card ── */
+.ride-card { background: #FFFFFF; border-radius: 14px; padding: 14px; border: 1px solid #E8EDF2; margin-top: 6px; width: 100%; }
+.rc-header { font-size: 16px; font-weight: 700; color: #1A2A3A; margin-bottom: 8px; display: flex; justify-content: space-between; }
+.rc-route { display: flex; gap: 8px; align-items: center; font-size: 12px; color: #78909C; margin-bottom: 10px; padding: 6px 0; border-top: 1px solid #F0F4F8; border-bottom: 1px solid #F0F4F8; }
+.rc-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.rc-dot.from { background: #4AB8EB; }
+.rc-dot.to { background: #FF7A2F; }
+.rc-line { width: 2px; height: 20px; background: #DEE2E6; flex-shrink: 0; margin-left: 3px; }
+.rc-opt { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #F5F7F9; }
+.rc-opt:last-child { border-bottom: none; }
+.rc-info { display: flex; flex-direction: column; }
+.rc-name { font-size: 14px; font-weight: 600; color: #1A2A3A; }
+.rc-desc { font-size: 11px; color: #78909C; }
+.rc-price { font-size: 15px; font-weight: 700; color: #FF7A2F; }
+.rc-book { background: #4AB8EB; color: #FFFFFF; border: none; padding: 4px 14px; border-radius: 14px; font-size: 11px; font-weight: 600; cursor: pointer; transition: 0.15s; }
+.rc-book:active { transform: scale(0.95); }
+.rc-book:disabled { opacity: 0.4; cursor: default; }
+.rc-foot { font-size: 11px; color: #90A4AE; margin-top: 8px; padding-top: 6px; border-top: 1px solid #F0F4F8; }
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
@@ -349,6 +406,7 @@ body { background: linear-gradient(135deg, #e8f0fe 0%, #d4e8f5 100%); display: f
     <div class="header-text">
       <div class="header-title">SkyWing Chat</div>
       <div class="header-sub">Your friendly travel assistant</div>
+      <div class="header-cd" id="headerCountdown"></div>
     </div>
     <div class="header-badge">● ONLINE</div>
   </div>
@@ -936,13 +994,103 @@ body { background: linear-gradient(135deg, #e8f0fe 0%, #d4e8f5 100%); display: f
     });
   }
 
+  // ── Countdown ──
+  function startCountdown() {
+    const el = document.getElementById('headerCountdown');
+    if (!el) return;
+    const dep = new Date(2026, 5, 30, 14, 30).getTime();
+    function tick() {
+      const diff = dep - Date.now();
+      if (diff <= 0) { el.textContent = '🛫 Departed'; return; }
+      const h = Math.floor(diff / 3600000);
+      const m = Math.floor((diff % 3600000) / 60000);
+      const s = Math.floor((diff % 60000) / 1000);
+      el.textContent = `🛫 ${h}h ${m}m ${s}s`;
+    }
+    tick();
+    setInterval(tick, 1000);
+  }
+
+  // ── Card HTML ──
+  function tripCardHTML() {
+    return `<div class="trip-card"><div class="tc-header">🧳 Your Trip to Bangkok</div><div class="tc-sub">Jun 30 – Jul 5, 2026 · 6 days</div>
+    <div class="tc-section"><div class="tc-sh">✈️ Flight</div><div class="tc-item"><strong>SK456</strong> BKK → SIN · Jun 30, 14:30</div><div class="tc-item">Gate B12 · Seat 12A</div></div>
+    <div class="tc-section"><div class="tc-sh">🏨 Hotel</div><div class="tc-item"><strong>Grande Centre Point</strong> Sukhumvit Soi 15</div><div class="tc-item">Check-in Jul 1 · 2 nights · Deluxe Room</div></div>
+    <div class="tc-section"><div class="tc-sh">🎯 Top Activities</div><div class="tc-item">🏛️ Grand Palace & Wat Phra Kaew</div><div class="tc-item">🛶 Damnoen Saduak Floating Market</div><div class="tc-item">🍜 Street Food Tour (Chinatown)</div><div class="tc-item">🛍️ Chatuchak Weekend Market</div><div class="tc-item" style="margin-top:4px"><span class="tc-badge">⭐ Recommended</span></div></div></div>`;
+  }
+
+  function guideCardHTML() {
+    return `<div class="guide-card"><div class="gc-header">📖 Bangkok Travel Guide</div><div class="gc-sub">Everything you need to know</div>
+    <div class="gc-section"><div class="gc-sh">🌤️ Essentials</div><div class="gc-row"><span class="gc-icon">🌡️</span><span class="gc-label">Weather</span><span>32°C, Rainy season (Jun)</span></div><div class="gc-row"><span class="gc-icon">💱</span><span class="gc-label">Currency</span><span>THB (฿) · 1 USD ≈ 35 ฿</span></div><div class="gc-row"><span class="gc-icon">🔌</span><span class="gc-label">Plugs</span><span>Type A/B/C · 220V</span></div></div>
+    <div class="gc-section"><div class="gc-sh">🍜 Must-Eat</div><div class="gc-tip">• <strong>Pad Thai</strong> @ Thipsamai (Old Town)</div><div class="gc-tip">• <strong>Tom Yum Kung</strong> @ Baan Khanitha</div><div class="gc-tip">• <strong>Mango Sticky Rice</strong> @ Mae Varee</div><div class="gc-tip">• <strong>Khao Soi</strong> @ Ongtong Khao Soi</div></div>
+    <div class="gc-section"><div class="gc-sh">🏛️ Attractions</div><div class="gc-tip">• 🏛️ Grand Palace & Wat Phra Kaew (Entry 500฿)</div><div class="gc-tip">• 🛶 Damnoen Saduak Floating Market</div><div class="gc-tip">• 🛍️ Chatuchak Weekend Market (Sat-Sun)</div><div class="gc-tip">• 🌃 Khao San Road (backpacker vibe)</div><div class="gc-tip">• 🛕 Wat Arun (Temple of Dawn)</div></div>
+    <div class="gc-section"><div class="gc-sh">📦 Packing Tips</div><div class="gc-tip">• 👕 Light breathable clothes (32°C+)</div><div class="gc-tip">• 🧥 Rain jacket / umbrella (monsoon season)</div><div class="gc-tip">• 👖 Modest attire covering shoulders/knees for temples</div><div class="gc-tip">• 🧴 Sunscreen SPF50+ & insect repellent</div><div class="gc-tip">• 🔌 Universal power adapter</div></div></div>`;
+  }
+
+  function loungeCardHTML() {
+    return `<div class="lounge-card"><div class="lc-header"><span class="lc-title">🛋️ SkyWing Lounge</span><span class="lc-badge">PREMIUM</span></div>
+    <div class="lc-flight">✈️ SK456 · Jun 30 · Bangkok → Singapore</div>
+    <div class="lc-grid"><div class="lc-item"><div class="lc-lbl">Location</div><div class="lc-val">Terminal 1, 3F</div></div><div class="lc-item"><div class="lc-lbl">Near Gate</div><div class="lc-val">B12 (5 min)</div></div><div class="lc-item"><div class="lc-lbl">Hours</div><div class="lc-val">05:00 – 23:00</div></div><div class="lc-item"><div class="lc-lbl">Capacity</div><div class="lc-val">120 guests</div></div></div>
+    <div style="font-size:12px;color:rgba(255,255,255,0.7);margin-bottom:6px">🍽️ Snacks & drinks · 📶 Free Wi-Fi · 🔌 Charging · 🚿 Showers</div>
+    <div class="lc-bar"><div class="lc-fill"></div></div><div style="font-size:10px;color:rgba(255,255,255,0.4);margin-top:4px">✓ Pass active</div></div>`;
+  }
+
+  function rideCardHTML() {
+    return `<div class="ride-card"><div class="rc-header"><span>🚗 Ride to Airport</span><span style="font-size:12px;color:#78909C;font-weight:400">BKK</span></div>
+    <div class="rc-route"><div style="display:flex;flex-direction:column;align-items:center;gap:2px"><div class="rc-dot from"></div><div class="rc-line"></div><div class="rc-dot to"></div></div>
+    <div><div><strong>Grande Centre Point</strong> · Sukhumvit Soi 15</div><div style="color:#B0BEC5;font-size:11px">↓ 24 km · ~35 min</div><div><strong>Suvarnabhumi Airport</strong> · Terminal 1</div></div></div>
+    <div class="rc-opt"><div class="rc-info"><span class="rc-name">🚗 GrabCar</span><span class="rc-desc">4 seats · AC</span></div><div style="display:flex;align-items:center;gap:8px"><span class="rc-price">฿450</span><button class="rc-book" data-ride="grab">Book</button></div></div>
+    <div class="rc-opt"><div class="rc-info"><span class="rc-name">🚕 Taxi</span><span class="rc-desc">Metered · airport surcharge</span></div><div style="display:flex;align-items:center;gap:8px"><span class="rc-price">฿350</span><button class="rc-book" data-ride="taxi">Book</button></div></div>
+    <div class="rc-opt"><div class="rc-info"><span class="rc-name">🚐 GrabXL</span><span class="rc-desc">6 seats · extra luggage</span></div><div style="display:flex;align-items:center;gap:8px"><span class="rc-price">฿550</span><button class="rc-book" data-ride="grabxl">Book</button></div></div>
+    <div class="rc-opt"><div class="rc-info"><span class="rc-name">🚌 Airport Bus</span><span class="rc-desc">S1 line · every 20min</span></div><div style="display:flex;align-items:center;gap:8px"><span class="rc-price">฿60</span><button class="rc-book" data-ride="bus">Book</button></div></div>
+    <div class="rc-foot">⏱️ Est. 35 min · 🛣️ Via expressway</div></div>`;
+  }
+
+  async function startTrip() {
+    await typing(800);
+    botMsg(tripCardHTML());
+    setQR([
+      { lbl: '🛋️ Lounge Access', a: 'lounge' },
+      { lbl: '🚗 Ride to Airport', a: 'ride' },
+      { lbl: '📖 Destination Guide', a: 'guide' },
+      { lbl: '⬅️ Back', a: 'back' }
+    ]);
+  }
+
+  async function doLounge() {
+    await typing(600);
+    botMsg(loungeCardHTML());
+    setQR(backQR());
+  }
+
+  async function doRide() {
+    await typing(600);
+    botMsg(rideCardHTML());
+    setQR(backQR());
+  }
+
+  async function doGuide() {
+    await typing(600);
+    botMsg(guideCardHTML());
+    setQR([{ lbl: '🧳 Back to Trip', a: 'trip' }, { lbl: '⬅️ Back', a: 'back' }]);
+  }
+
+  async function doRideBook(type) {
+    await typing(1200);
+    const names = { grab:'GrabCar', taxi:'Taxi', grabxl:'GrabXL', bus:'Airport Bus' };
+    const arrives = { grab:'4 min', taxi:'7 min', grabxl:'6 min', bus:'12 min' };
+    const name = names[type] || 'Ride';
+    botMsg(`🚗 <strong>${name}</strong> is on the way! 🎉<br><br>📍 Pickup: Grande Centre Point, Sukhumvit Soi 15<br>📍 Drop: Suvarnabhumi Airport (BKK)<br>⏱️ Arrives in <strong>${arrives[type] || '5 min'}</strong><br>💳 Paid via card · ฿${type === 'bus' ? '60' : type === 'taxi' ? '350' : type === 'grabxl' ? '550' : '450'}<br><br><span class="c-badge">✅ Ride booked</span>`);
+    setQR(backQR());
+  }
+
   function mainQR() {
     return [
       { lbl: '✈️ Flight Status', a: 'status' },
       { lbl: '💺 Change Seat', a: 'seat' },
       { lbl: '🧳 Baggage', a: 'baggage' },
       { lbl: '✅ Check-in', a: 'checkin' },
-      { lbl: '🔍 My Booking', a: 'booking' }
+      { lbl: '🧳 Trip Overview', a: 'trip' }
     ];
   }
 
@@ -972,6 +1120,11 @@ body { background: linear-gradient(135deg, #e8f0fe 0%, #d4e8f5 100%); display: f
       else if (b.a === 'bp') { usrMsg(b.lbl); await doBP(); }
       else if (b.a === 'refresh') { usrMsg(b.lbl); await doRefresh(); }
       else if (b.a === 'deps') { usrMsg(b.lbl); await doDepartures(); }
+      else if (b.a === 'trip') { usrMsg(b.lbl); await startTrip(); }
+      else if (b.a === 'lounge') { usrMsg(b.lbl); await doLounge(); }
+      else if (b.a === 'ride') { usrMsg(b.lbl); await doRide(); }
+      else if (b.a === 'guide') { usrMsg(b.lbl); await doGuide(); }
+      else if (b.a === 'ride_book') { usrMsg(b.lbl); await doRideBook(b.val); }
       else if (b.val) { await processInput(b.val); }
     } finally {
       busy = false;
@@ -1290,19 +1443,26 @@ body { background: linear-gradient(135deg, #e8f0fe 0%, #d4e8f5 100%); display: f
   // ── Init ──
   async function init() {
     initSpeech();
+    startCountdown();
     if (synth) synth.getVoices(); // prime voice list
     await slp(400);
-    botMsg('Hi! I\'m your <strong>SkyWing assistant</strong> 🛩️<br><br>I can help with:<br>🔍 Finding your booking<br>💺 Changing your seat<br>🧳 Baggage info<br>✈️ Flight status<br>✅ Check-in<br><br><em>What can I help you with?</em>', { tw: true });
+    botMsg('Hi! I\'m your <strong>SkyWing assistant</strong> 🛩️<br><br>I can help with:<br>🧳 Trip overview<br>✈️ Flight status<br>💺 Change seat<br>🧳 Baggage info<br>✅ Check-in<br><br><em>What can I help you with?</em>', { tw: true });
     welcome();
     scrollB();
   }
 
-  // Baggage add button delegation
+  // Delegated clicks: baggage add + ride booking
   mEl.addEventListener('click', function(ev) {
-    const btn = ev.target.closest('.add-bag-btn');
-    if (!btn) return;
-    const kg = +btn.dataset.kg;
-    onQR({ lbl: `🧳 Add ${kg}kg`, a: kg === 20 ? 'add20' : 'add32' });
+    const bag = ev.target.closest('.add-bag-btn');
+    if (bag) { const kg = +bag.dataset.kg; onQR({ lbl: `🧳 Add ${kg}kg`, a: kg === 20 ? 'add20' : 'add32' }); return; }
+    const ride = ev.target.closest('.rc-book');
+    if (ride && !ride.disabled) {
+      ride.disabled = true;
+      ride.textContent = '✅';
+      const names = { grab:'🚗 GrabCar', taxi:'🚕 Taxi', grabxl:'🚐 GrabXL', bus:'🚌 Airport Bus' };
+      const rideName = names[ride.dataset.ride] || 'Ride';
+      onQR({ lbl: rideName, a: 'ride_book', val: ride.dataset.ride });
+    }
   });
 
   micBtn.addEventListener('click', () => {
