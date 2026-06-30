@@ -288,6 +288,8 @@ body { background: linear-gradient(135deg, #e8f0fe 0%, #d4e8f5 100%); display: f
 .send-btn { position: relative; overflow: hidden; }
 .qr-btn { position: relative; overflow: hidden; }
 </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
 </head>
 <body>
 
@@ -553,6 +555,106 @@ body { background: linear-gradient(135deg, #e8f0fe 0%, #d4e8f5 100%); display: f
     iEl.placeholder = 'Type a message...';
   }
 
+  // ── Boarding Pass ──
+  function generateBoardingPass(info) {
+    try {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: [200, 100] });
+      const dark = '#1A2A3A', white = '#FFFFFF', blue = '#4AB8EB', gray = '#ECEFF1';
+
+      doc.setFillColor(74, 184, 235);
+      doc.rect(0, 0, 200, 100, 'F');
+      doc.setFillColor(255, 255, 255);
+      doc.roundedRect(8, 8, 184, 84, 6, 6, 'F');
+
+      doc.setFillColor(26, 42, 58);
+      doc.roundedRect(8, 8, 184, 20, { tl: 6, tr: 6, bl: 0, br: 0 }, 'F');
+      doc.setTextColor(255, 255, 255);
+      doc.setFontSize(14);
+      doc.text('✈  SKYWING', 18, 22);
+      doc.setFontSize(8);
+      doc.text('BOARDING PASS', 172, 22, { align: 'right' });
+
+      doc.setDrawColor(200, 200, 200);
+      doc.setLineDashPattern([2, 2]);
+      doc.line(8, 52, 192, 52);
+
+      doc.setTextColor(26, 42, 58);
+      doc.setFontSize(36);
+      doc.text(info.flight, 18, 44);
+
+      doc.setFontSize(10);
+      doc.setTextColor(100, 100, 100);
+      doc.text(info.from, 18, 52);
+      doc.setFontSize(14);
+      doc.text('→', 58, 52);
+      doc.setFontSize(10);
+      doc.text(info.to, 72, 52);
+
+      doc.setFontSize(8);
+      doc.text(`Date: ${info.date}`, 120, 38);
+      doc.text(`Time: ${info.time}`, 120, 46);
+      doc.text(`Gate: ${info.gate}`, 120, 54);
+
+      doc.setFontSize(18);
+      doc.setTextColor(26, 42, 58);
+      doc.text(info.name, 18, 74);
+
+      doc.setFontSize(9);
+      doc.setTextColor(140, 140, 140);
+      doc.text(`Booking: ${info.ref}`, 18, 82);
+      doc.text(`Seat: ${info.seat}`, 18, 90);
+
+      // QR Code
+      const qrData = `${info.flight}/${info.ref}/${info.seat}`;
+      const qr = qrcode(0, 'M');
+      qr.addData(qrData);
+      qr.make();
+      const cs = 3, mg = 2, mc = qr.getModuleCount(), sz = mc * cs + mg * 2;
+      const cv = document.createElement('canvas');
+      cv.width = cv.height = sz;
+      const c2 = cv.getContext('2d');
+      c2.fillStyle = white;
+      c2.fillRect(0, 0, sz, sz);
+      c2.fillStyle = dark;
+      for (let r = 0; r < mc; r++)
+        for (let c = 0; c < mc; c++)
+          if (qr.isDark(r, c)) c2.fillRect(c * cs + mg, r * cs + mg, cs, cs);
+      doc.addImage(cv.toDataURL('image/png'), 'PNG', 148, 60, 32, 32);
+
+      doc.setTextColor(180, 180, 180);
+      doc.setFontSize(7);
+      doc.text(`Boarding 13:45  •  Gate closes 14:15  •  Seat ${info.seat}`, 100, 96, { align: 'center' });
+
+      doc.save(`boarding-pass-${info.flight}.pdf`);
+      return true;
+    } catch(e) {
+      console.warn('PDF error:', e);
+      return false;
+    }
+  }
+
+  async function doBP() {
+    await typing(800);
+    const ok = generateBoardingPass({
+      name: 'Chris Gomes',
+      ref: ctx.bk || 'ABC123',
+      flight: 'SK456',
+      from: 'Bangkok',
+      to: 'Singapore',
+      date: '30 Jun 2026',
+      time: '14:30',
+      gate: 'B12',
+      seat: ctx.selSeat || '12A'
+    });
+    if (ok) {
+      botMsg('📄 Your boarding pass has been downloaded!<br><span class="c-badge">✅ PDF Saved</span>');
+    } else {
+      botMsg('❌ Couldn\'t generate the PDF. Try again?');
+    }
+    setQR(backQR());
+  }
+
   function usrMsg(text) {
     const el = document.createElement('div');
     el.className = 'message user';
@@ -618,6 +720,7 @@ body { background: linear-gradient(135deg, #e8f0fe 0%, #d4e8f5 100%); display: f
       else if (b.a === 'tmap') { usrMsg(b.lbl); await doTMap(); }
       else if (b.a === 'remind') { usrMsg(b.lbl); await doRemind(); }
       else if (b.a === 'cknow') { usrMsg(b.lbl); await doCkNow(); }
+      else if (b.a === 'bp') { usrMsg(b.lbl); await doBP(); }
       else if (b.val) { await processInput(b.val); }
     } finally {
       busy = false;
@@ -917,7 +1020,10 @@ body { background: linear-gradient(135deg, #e8f0fe 0%, #d4e8f5 100%); display: f
     await typing(1500);
     botMsg('✅ You\'re checked in! 🎉<br><br>🪪 <strong>Seat:</strong> 12A (window)<br>📱 <strong>Boarding pass:</strong> Sent to your phone<br>🛄 <strong>Bag drop:</strong> Counter B4<br><br><span class="c-badge">✅ Checked in</span>', { tw: true });
     confetti();
-    setQR(backQR());
+    setQR([
+      { lbl: '📄 Boarding Pass (PDF)', a: 'bp' },
+      { lbl: '⬅️ Back', a: 'back' }
+    ]);
   }
 
   // ── Fallback ──
