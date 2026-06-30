@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>SkyWing Chat ✈️</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; overflow: hidden; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, sans-serif; }
+body { background: linear-gradient(135deg, #e8f0fe 0%, #d4e8f5 100%); display: flex; align-items: center; justify-content: center; min-height: 100vh; }
+
+/* ── Background Paper Planes ── */
+.paper-plane { position: fixed; z-index: 0; opacity: 0.10; pointer-events: none; }
+.paper-plane svg { width: 100%; height: 100%; fill: #1A2A3A; }
+.pp1 { top: 8%; left: -60px; width: 80px; animation: fly1 24s linear infinite; }
+.pp2 { top: 28%; left: -40px; width: 50px; animation: fly2 30s linear infinite 4s; }
+.pp3 { top: 52%; left: -70px; width: 65px; animation: fly3 26s linear infinite 8s; }
+.pp4 { bottom: 12%; left: -50px; width: 45px; animation: fly2 32s linear infinite 14s; }
+@keyframes fly1 { 0% { transform: translateX(-60px) translateY(0) rotate(0deg) scale(0.8); } 25% { transform: translateX(25vw) translateY(-40px) rotate(5deg) scale(1); } 50% { transform: translateX(50vw) translateY(20px) rotate(-3deg) scale(0.9); } 75% { transform: translateX(75vw) translateY(-30px) rotate(4deg) scale(1); } 100% { transform: translateX(calc(100vw + 100px)) translateY(10px) rotate(0deg) scale(0.8); } }
+@keyframes fly2 { 0% { transform: translateX(-40px) translateY(0) rotate(-5deg) scale(0.7); } 33% { transform: translateX(30vw) translateY(50px) rotate(0deg) scale(0.9); } 66% { transform: translateX(65vw) translateY(-20px) rotate(3deg) scale(1); } 100% { transform: translateX(calc(100vw + 100px)) translateY(30px) rotate(-2deg) scale(0.7); } }
+@keyframes fly3 { 0% { transform: translateX(-70px) translateY(0) rotate(3deg) scale(0.6); } 30% { transform: translateX(35vw) translateY(-60px) rotate(-2deg) scale(0.9); } 60% { transform: translateX(60vw) translateY(30px) rotate(5deg) scale(1); } 100% { transform: translateX(calc(100vw + 100px)) translateY(-50px) rotate(-3deg) scale(0.7); } }
+
+/* ── Chat Container ── */
+.chat-container { position: relative; z-index: 1; width: 100%; height: 100%; max-width: 420px; max-height: 780px; background: #FFFFFF; border-radius: 24px; box-shadow: 0 20px 60px rgba(26,42,58,0.15), 0 8px 24px rgba(26,42,58,0.08); display: flex; flex-direction: column; overflow: hidden; margin: 16px; }
+
+/* ── Header ── */
+.header { background: linear-gradient(135deg, #4AB8EB 0%, #2E95D3 100%); padding: 18px 20px; display: flex; align-items: center; gap: 12px; flex-shrink: 0; position: relative; overflow: hidden; }
+.header::after { content: ''; position: absolute; top: -50%; right: -20%; width: 120px; height: 120px; background: rgba(255,255,255,0.06); border-radius: 50%; }
+.header-icon { font-size: 26px; line-height: 1; animation: rock 3s ease-in-out infinite; }
+@keyframes rock { 0%,100% { transform: rotate(0deg); } 25% { transform: rotate(-8deg); } 75% { transform: rotate(8deg); } }
+.header-text { flex: 1; }
+.header-title { font-size: 17px; font-weight: 700; color: #FFFFFF; letter-spacing: -0.3px; }
+.header-sub { font-size: 12px; color: rgba(255,255,255,0.75); font-weight: 400; }
+.header-badge { background: rgba(255,255,255,0.2); padding: 4px 10px; border-radius: 12px; font-size: 10px; font-weight: 600; color: #FFFFFF; letter-spacing: 0.3px; }
+
+/* ── Chat Messages ── */
+.chat-messages { flex: 1; overflow-y: auto; padding: 16px 14px; display: flex; flex-direction: column; gap: 10px; scroll-behavior: smooth; background: #FAFCFE; }
+.chat-messages::-webkit-scrollbar { width: 4px; }
+.chat-messages::-webkit-scrollbar-track { background: transparent; }
+.chat-messages::-webkit-scrollbar-thumb { background: #D0D8E0; border-radius: 4px; }
+
+.message { max-width: 80%; animation: msgIn 0.4s cubic-bezier(0.34,1.56,0.64,1) both; line-height: 1.45; font-size: 14.5px; position: relative; }
+@keyframes msgIn { from { opacity: 0; transform: scale(0.85) translateY(12px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+.message.bot { align-self: flex-start; background: #F0F6FA; color: #1A2A3A; border-radius: 18px 18px 18px 4px; padding: 12px 16px; border-bottom-left-radius: 4px; }
+.message.user { align-self: flex-end; background: linear-gradient(135deg,#4AB8EB,#2E95D3); color: #FFFFFF; border-radius: 18px 18px 4px 18px; padding: 12px 16px; box-shadow: 0 2px 8px rgba(46,149,211,0.3); animation: msgInUser 0.4s cubic-bezier(0.34,1.56,0.64,1) both; }
+@keyframes msgInUser { from { opacity: 0; transform: scale(0.85) translateY(12px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+.message.system { align-self: center; background: transparent; color: #90A4AE; font-size: 12px; padding: 4px 8px; max-width: 90%; text-align: center; }
+
+/* ── Typing Indicator ── */
+.typing-indicator { display: none; align-self: flex-start; background: #F0F6FA; border-radius: 18px 18px 18px 4px; padding: 10px 16px; width: 64px; height: 36px; align-items: center; justify-content: center; gap: 4px; }
+.typing-indicator.show { display: flex; }
+.typing-dot { width: 8px; height: 8px; background: #B0BEC5; border-radius: 50%; animation: bounce 1.2s ease-in-out infinite; }
+.typing-dot:nth-child(1) { animation-delay: 0ms; }
+.typing-dot:nth-child(2) { animation-delay: 200ms; }
+.typing-dot:nth-child(3) { animation-delay: 400ms; }
+@keyframes bounce { 0%,60%,100% { transform: translateY(0); } 30% { transform: translateY(-6px); } }
+
+/* ── Quick Reply Tray ── */
+.quick-reply-tray { display: none; flex-shrink: 0; padding: 8px 14px; background: #FAFCFE; border-top: 1px solid #ECF0F2; gap: 6px; flex-wrap: wrap; }
+.quick-reply-tray.show { display: flex; }
+.qr-btn { flex-shrink: 0; height: 44px; padding: 0 20px; border-radius: 22px; border: 1px solid #DEE2E6; background: #FFFFFF; color: #1A2A3A; font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.2s cubic-bezier(0.34,1.56,0.64,1); white-space: nowrap; display: flex; align-items: center; gap: 6px; outline: none; -webkit-tap-highlight-color: transparent; user-select: none; }
+.qr-btn:active { transform: scale(0.95); }
+.qr-btn:hover { border-color: #FF7A2F; color: #FF7A2F; }
+.qr-btn.active { background: #FF7A2F; border-color: #FF7A2F; color: #FFFFFF; }
+.qr-btn-main { background: #F0F6FA; border-color: transparent; font-size: 13px; }
+.qr-btn-main:hover { background: #E3ECF3; border-color: transparent; color: #1A2A3A; }
+
+/* ── Input Bar ── */
+.input-bar { display: flex; align-items: center; gap: 8px; padding: 10px 14px 14px; background: #FFFFFF; border-top: 1px solid #ECF0F2; flex-shrink: 0; }
+.input-bar input { flex: 1; height: 44px; border-radius: 22px; border: 1.5px solid #DEE2E6; padding: 0 18px; font-size: 14.5px; outline: none; transition: border-color 0.2s; background: #F8FAFB; }
+.input-bar input:focus { border-color: #4AB8EB; background: #FFFFFF; }
+.input-bar input::placeholder { color: #B0BEC5; }
+.send-btn { width: 44px; height: 44px; border-radius: 50%; border: none; background: linear-gradient(135deg,#FF7A2F,#E06620); color: #FFFFFF; font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; flex-shrink: 0; box-shadow: 0 2px 8px rgba(255,122,47,0.3); }
+.send-btn:active { transform: scale(0.92); }
+.send-btn:disabled { opacity: 0.4; transform: none; box-shadow: none; }
+
+/* ── Seat Map ── */
+.seat-map { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; margin-top: 8px; width: 100%; }
+.seat { display: flex; align-items: center; justify-content: center; height: 32px; border-radius: 6px; font-size: 10px; font-weight: 600; cursor: pointer; transition: all 0.15s; border: 1px solid transparent; user-select: none; }
+.seat.available { background: #E8F5E9; color: #2ECC71; border-color: #C8E6C9; }
+.seat.available:hover { background: #2ECC71; color: #FFFFFF; transform: scale(1.08); }
+.seat.available.selected { background: #FF7A2F; color: #FFFFFF; border-color: #FF7A2F; transform: scale(1.04); box-shadow: 0 2px 8px rgba(255,122,47,0.25); }
+.seat.taken { background: #ECEFF1; color: #B0BEC5; cursor: not-allowed; }
+.seat.yours { background: #4AB8EB; color: #FFFFFF; cursor: default; }
+.seat.aisle { background: transparent; cursor: default; border: none; }
+.seat-label { display: none; }
+.seat-legend { display: flex; gap: 14px; margin-top: 8px; font-size: 11px; color: #78909C; flex-wrap: wrap; }
+.seat-legend span { display: flex; align-items: center; gap: 4px; }
+.seat-legend .swatch { width: 12px; height: 12px; border-radius: 3px; display: inline-block; }
+
+/* ── Baggage Card ── */
+.baggage-card { background: #FFFFFF; border-radius: 14px; padding: 14px; border: 1px solid #E8EDF2; margin-top: 6px; width: 100%; }
+.baggage-card .br { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #F0F4F8; }
+.baggage-card .br:last-child { border-bottom: none; }
+.baggage-card .bl { font-size: 13px; color: #78909C; }
+.baggage-card .bv { font-size: 13px; font-weight: 600; color: #1A2A3A; }
+.baggage-card .price { color: #FF7A2F; font-weight: 700; }
+.baggage-card .add-bag-btn { background: #F0F6FA; border: none; padding: 4px 12px; border-radius: 14px; font-size: 11px; font-weight: 600; color: #1A2A3A; cursor: pointer; transition: 0.15s; }
+.baggage-card .add-bag-btn:active { transform: scale(0.95); }
+
+/* ── Flight Status Card ── */
+.flight-card { background: #FFFFFF; border-radius: 14px; padding: 14px; border: 1px solid #E8EDF2; margin-top: 6px; width: 100%; }
+.flight-card .fr { font-size: 16px; font-weight: 700; color: #1A2A3A; margin-bottom: 4px; }
+.flight-card .fd { font-size: 12px; color: #78909C; margin-bottom: 10px; }
+.flight-card .fs-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; font-size: 13px; color: #1A2A3A; }
+.flight-card .fs-badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; border-radius: 12px; font-weight: 600; font-size: 12px; }
+.flight-card .fs-badge.ot { background: #E8F5E9; color: #2ECC71; }
+.flight-card .fg { background: #F0F6FA; padding: 3px 10px; border-radius: 12px; }
+
+/* ── Confirm Badge ── */
+.c-badge { display: inline-flex; align-items: center; gap: 4px; background: #E8F5E9; color: #2ECC71; padding: 2px 10px; border-radius: 12px; font-size: 12px; font-weight: 600; margin-top: 6px; }
+
+/* ── Check-in Card ── */
+.checkin-card { background: #FFFFFF; border-radius: 14px; padding: 14px; border: 1px solid #E8EDF2; margin-top: 6px; width: 100%; text-align: center; }
+.checkin-card .ci { font-size: 32px; margin-bottom: 6px; }
+.checkin-card .ct { font-size: 16px; font-weight: 700; color: #1A2A3A; }
+.checkin-card .cs { font-size: 13px; color: #78909C; margin-top: 4px; }
+
+/* ── Responsive ── */
+@media (max-width: 460px) {
+  .chat-container { margin: 0; border-radius: 0; max-height: 100%; max-width: 100%; height: 100%; }
+  .header { padding: 14px 16px; }
+  .chat-messages { padding: 12px; }
+  .input-bar { padding: 8px 12px 12px; }
+}
+@media (min-width: 768px) {
+  .chat-container { height: 90vh; }
+}
+</style>
+</head>
+<body>
+
+<div class="paper-plane pp1"><svg viewBox="0 0 24 24"><path d="M21 4.5l-19 7 7 3 3 7 9-17zM10 14l-2-5 7-4-5 9z"/></svg></div>
+<div class="paper-plane pp2"><svg viewBox="0 0 24 24"><path d="M21 4.5l-19 7 7 3 3 7 9-17zM10 14l-2-5 7-4-5 9z"/></svg></div>
+<div class="paper-plane pp3"><svg viewBox="0 0 24 24"><path d="M21 4.5l-19 7 7 3 3 7 9-17zM10 14l-2-5 7-4-5 9z"/></svg></div>
+<div class="paper-plane pp4"><svg viewBox="0 0 24 24"><path d="M21 4.5l-19 7 7 3 3 7 9-17zM10 14l-2-5 7-4-5 9z"/></svg></div>
+
+<div class="chat-container" id="app">
+  <div class="header">
+    <div class="header-icon">✈️</div>
+    <div class="header-text">
+      <div class="header-title">SkyWing Chat</div>
+      <div class="header-sub">Your friendly travel assistant</div>
+    </div>
+    <div class="header-badge">● ONLINE</div>
+  </div>
+
+  <div class="chat-messages" id="chatMessages"></div>
+
+  <div class="typing-indicator" id="typingIndicator">
+    <div class="typing-dot"></div>
+    <div class="typing-dot"></div>
+    <div class="typing-dot"></div>
+  </div>
+
+  <div class="quick-reply-tray" id="qrTray"></div>
+
+  <div class="input-bar">
+    <input type="text" id="chatInput" placeholder="Type a message..." autocomplete="off">
+    <button class="send-btn" id="sendBtn">➤</button>
+  </div>
+</div>
+
+<script>
+(function() {
+  'use strict';
+
+  // ── DOM ──
+  const mEl = document.getElementById('chatMessages');
+  const iEl = document.getElementById('chatInput');
+  const sBtn = document.getElementById('sendBtn');
+  const tEl = document.getElementById('typingIndicator');
+  const qEl = document.getElementById('qrTray');
+
+  // ── State ──
+  const S = { IDLE:0, AWAIT_REF:1, AWAIT_SEAT_BK:2, AWAIT_SEAT_SEL:3 };
+  let state = S.IDLE;
+  let ctx = {};
+  let busy = false;
+
+  function scrollB() { requestAnimationFrame(() => { mEl.scrollTop = mEl.scrollHeight; }); }
+  function slp(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+  // ── Messages ──
+  function addMsg(content, type) {
+    const el = document.createElement('div');
+    el.className = 'message ' + type;
+    if (typeof content === 'string') el.innerHTML = content;
+    else el.appendChild(content);
+    mEl.appendChild(el);
+    scrollB();
+  }
+
+  function botMsg(html, noAnim) {
+    const el = document.createElement('div');
+    el.className = 'message bot';
+    if (noAnim) el.style.animation = 'none';
+    el.innerHTML = html;
+    mEl.appendChild(el);
+    scrollB();
+    return el;
+  }
+
+  function usrMsg(text) {
+    const el = document.createElement('div');
+    el.className = 'message user';
+    el.textContent = text;
+    mEl.appendChild(el);
+    scrollB();
+  }
+
+  // ── Typing ──
+  async function typing(ms) {
+    tEl.classList.add('show');
+    scrollB();
+    await slp(ms);
+    tEl.classList.remove('show');
+  }
+
+  // ── Quick Replies ──
+  function setQR(btns) {
+    qEl.innerHTML = '';
+    if (!btns || !btns.length) { qEl.classList.remove('show'); return; }
+    qEl.classList.add('show');
+    btns.forEach((b, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'qr-btn' + (b.main ? ' qr-btn-main' : '');
+      btn.innerHTML = b.lbl;
+      btn.style.animation = `msgIn 0.4s cubic-bezier(0.34,1.56,0.64,1) both`;
+      btn.style.animationDelay = (i * 50) + 'ms';
+      btn.addEventListener('click', () => onQR(b));
+      qEl.appendChild(btn);
+    });
+  }
+
+  function mainQR() {
+    return [
+      { lbl: '✈️ Flight Status', a: 'status' },
+      { lbl: '💺 Change Seat', a: 'seat' },
+      { lbl: '🧳 Baggage', a: 'baggage' },
+      { lbl: '✅ Check-in', a: 'checkin' },
+      { lbl: '🔍 My Booking', a: 'booking' }
+    ];
+  }
+
+  function backQR() { return [{ lbl: '⬅️ Back', a: 'back' }]; }
+
+  // ── QR Handler ──
+  async function onQR(b) {
+    if (busy) return;
+    busy = true;
+    try {
+      if (b.a === 'back') { reset(); busy = false; return; }
+      if (b.a === 'status') { usrMsg(b.lbl); await startStatus(); }
+      else if (b.a === 'seat') { usrMsg(b.lbl); await startSeat(); }
+      else if (b.a === 'baggage') { usrMsg(b.lbl); await startBag(); }
+      else if (b.a === 'checkin') { usrMsg(b.lbl); await startCheckin(); }
+      else if (b.a === 'booking') { usrMsg(b.lbl); await startBook(); }
+      else if (b.a === 'resend') { usrMsg(b.lbl); await doResend(); }
+      else if (b.a === 'txtpnr') { usrMsg(b.lbl); await doTxtPNR(); }
+      else if (b.a === 'cnf_seat') { usrMsg(b.lbl); await doCnfSeat(); }
+      else if (b.a === 'try_s') { usrMsg(b.lbl); await doTryS(); }
+      else if (b.a === 'add20') { usrMsg(b.lbl); await doAddBag(20,35); }
+      else if (b.a === 'add32') { usrMsg(b.lbl); await doAddBag(32,55); }
+      else if (b.a === 'notif') { usrMsg(b.lbl); await doNotif(); }
+      else if (b.a === 'tmap') { usrMsg(b.lbl); await doTMap(); }
+      else if (b.a === 'remind') { usrMsg(b.lbl); await doRemind(); }
+      else if (b.a === 'cknow') { usrMsg(b.lbl); await doCkNow(); }
+      else if (b.val) { await processInput(b.val); }
+    } finally {
+      busy = false;
+    }
+  }
+
+  // ── Intent ──
+  function detect(text) {
+    const t = text.toLowerCase();
+    if (/booking|ref|pnr|confirm|reservation|abc123|sk456/.test(t)) return 'book';
+    if (/seat|change seat|12a|window|aisle/.test(t)) return 'seat';
+    if (/baggage|bag|luggage|cabin|kg|hold|carry/.test(t)) return 'bag';
+    if (/status|delay|on time|gate|depart|arrive/.test(t)) return 'status';
+    if (/check|checkin|check-in|boarding pass/.test(t)) return 'check';
+    return null;
+  }
+
+  // ── Core processor (no busy check) ──
+  async function processInput(text) {
+    usrMsg(text);
+    iEl.value = '';
+
+    if (state === S.AWAIT_REF) { await handleRef(text); return; }
+    if (state === S.AWAIT_SEAT_BK) { await handleSeatBk(text); return; }
+    if (state === S.AWAIT_SEAT_SEL) { await handleSeatSel(text); return; }
+
+    const intent = detect(text);
+    if (intent === 'book') await startBook();
+    else if (intent === 'seat') await startSeat();
+    else if (intent === 'bag') await startBag();
+    else if (intent === 'status') await startStatus();
+    else if (intent === 'check') await startCheckin();
+    else await fallback();
+  }
+
+  async function handleInput(text) {
+    if (busy) return;
+    busy = true;
+    try { await processInput(text); } finally { busy = false; }
+  }
+
+  // ── Booking Flow ──
+  async function startBook() {
+    state = S.AWAIT_REF;
+    await typing(800);
+    botMsg('Sure! I can help with your booking. ✈️<br><br>Please enter your <strong>booking reference</strong> (e.g., ABC123 or SK456).');
+    setQR([]);
+  }
+
+  async function handleRef(ref) {
+    const r = ref.trim().toUpperCase();
+    await typing(1400);
+    state = S.IDLE;
+    botMsg(`I've found your booking <strong>${r}</strong> to Bangkok! ✉️<br><br>I've resent the confirmation to your email. Need anything else?`);
+    setQR([
+      { lbl: '📧 Resend to email', a: 'resend' },
+      { lbl: '📱 Text PNR', a: 'txtpnr' },
+      { lbl: '⬅️ Back', a: 'back' }
+    ]);
+  }
+
+  async function doResend() {
+    await typing(1000);
+    botMsg('📧 Done! Confirmation resent to <strong>chris@email.com</strong>. Check your inbox (and spam folder!).');
+    setQR(backQR());
+  }
+
+  async function doTxtPNR() {
+    await typing(1000);
+    botMsg('📱 Sent! Your PNR has been texted to <strong>+65 **** 1234</strong>.');
+    setQR(backQR());
+  }
+
+  // ── Seat Flow ──
+  let seatSelectedEl = null;
+
+  async function startSeat() {
+    state = S.AWAIT_SEAT_BK;
+    await typing(800);
+    botMsg('Let\'s get you a better seat! 💺<br><br>First, what\'s your <strong>booking reference</strong>?');
+    setQR([]);
+  }
+
+  async function handleSeatBk(ref) {
+    ctx.bk = ref.trim().toUpperCase();
+    await typing(1000);
+    botMsg(`Got it! Here's the seat map for <strong>${ctx.bk}</strong> (SK456 → Bangkok).`);
+    // Remove old seat map if exists
+    const old = document.querySelector('.msg-seatmap');
+    if (old) old.remove();
+    seatSelectedEl = null;
+    renderSeatMap();
+    state = S.AWAIT_SEAT_SEL;
+    setQR([]);
+  }
+
+  function renderSeatMap() {
+    // Layout: A B C | D E F
+    const cols = ['A','B','C','','D','E','F'];
+    // Taken seats
+    const taken = ['1B','1C','1D','2A','2B','3A','3C','3E','4B','4C','4D','5A','5E','5F','6B','6C','6D','7B','7C','7D','8A','8E','9C','9D','10A','10F','11B','12C'];
+    const your = '7A';
+
+    const wrap = document.createElement('div');
+    wrap.className = 'msg-seatmap';
+    wrap.style.cssText = 'margin-top:4px;width:100%;';
+
+    const grid = document.createElement('div');
+    grid.className = 'seat-map';
+
+    for (let r = 1; r <= 12; r++) {
+      for (let c = 0; c < 7; c++) {
+        const col = cols[c];
+        // Aisle column
+        if (col === '') {
+          const el = document.createElement('div');
+          el.className = 'seat aisle';
+          grid.appendChild(el);
+          continue;
+        }
+        const seatId = r + col;
+        const el = document.createElement('div');
+        el.className = 'seat';
+        if (taken.includes(seatId)) {
+          el.className = 'seat taken';
+          el.textContent = '▢';
+        } else if (seatId === your) {
+          el.className = 'seat yours';
+          el.textContent = '●';
+        } else {
+          el.className = 'seat available';
+          el.textContent = seatId;
+          el.dataset.seat = seatId;
+          el.addEventListener('click', function(e) {
+            if (seatSelectedEl) {
+              const prev = seatSelectedEl.dataset.seat;
+              seatSelectedEl.className = 'seat available';
+              seatSelectedEl.textContent = prev || '';
+            }
+            this.className = 'seat available selected';
+            this.textContent = '✓ ' + this.dataset.seat;
+            seatSelectedEl = this;
+            ctx.selSeat = this.dataset.seat;
+            setQR([
+              { lbl: '💳 Confirm ' + ctx.selSeat, a: 'cnf_seat' },
+              { lbl: '🔄 Try another', a: 'try_s' },
+              { lbl: '⬅️ Back', a: 'back' }
+            ]);
+          });
+        }
+        grid.appendChild(el);
+      }
+    }
+
+    wrap.appendChild(grid);
+
+    const legend = document.createElement('div');
+    legend.className = 'seat-legend';
+    legend.innerHTML = '<span><span class="swatch" style="background:#E8F5E9;border:1px solid #C8E6C9"></span> Available</span><span><span class="swatch" style="background:#ECEFF1"></span> Taken</span><span><span class="swatch" style="background:#4AB8EB"></span> Your seat</span><span><span class="swatch" style="background:#FF7A2F"></span> Selected</span>';
+    wrap.appendChild(legend);
+
+    const msgEl = document.createElement('div');
+    msgEl.className = 'message bot msg-seatmap';
+    msgEl.style.padding = '6px 12px 12px';
+    msgEl.appendChild(wrap);
+    mEl.appendChild(msgEl);
+    scrollB();
+  }
+
+  async function doCnfSeat() {
+    await typing(1200);
+    botMsg(`<strong>${escapeHtml(ctx.selSeat || '12A')}</strong> is yours! ✅ Seat changed successfully.<br><span class="c-badge">✅ Confirmed</span>`);
+    state = S.IDLE;
+    seatSelectedEl = null;
+    setQR(backQR());
+  }
+
+  async function doTryS() {
+    await typing(600);
+    botMsg('Sure! Tap any other <strong>green</strong> seat to try.');
+    if (seatSelectedEl) {
+      const prev = seatSelectedEl.dataset.seat;
+      seatSelectedEl.className = 'seat available';
+      seatSelectedEl.textContent = prev || '';
+      seatSelectedEl = null;
+    }
+    ctx.selSeat = null;
+    setQR([]);
+  }
+
+  async function handleSeatSel(text) {
+    const m = text.toUpperCase().match(/(\d{1,2}[A-G])/);
+    if (m) {
+      const seat = m[1];
+      const el = document.querySelector(`.seat.available[data-seat="${seat}"]`);
+      if (el) { el.click(); return; }
+      else {
+        await typing(800);
+        botMsg(`Sorry, seat <strong>${seat}</strong> isn't available. Try a green one! 🟢`);
+        return;
+      }
+    }
+    await typing(600);
+    botMsg('Just tap a seat on the map above, or type a seat number like <strong>12A</strong>.');
+  }
+
+  // ── Baggage Flow ──
+  async function startBag() {
+    await typing(1000);
+    const html = `<div class="baggage-card">
+      <div class="br"><span class="bl">🧳 Cabin</span><span class="bv">1 bag (7kg)</span></div>
+      <div class="br"><span class="bl">🛄 Hold</span><span class="bv" style="color:#E74C3C;">Not included</span></div>
+      <div class="br"><span class="bl">💰 Add 20kg</span><span class="bv"><span class="price">$35</span> <button class="add-bag-btn" data-kg="20" data-price="35">+ Add</button></span></div>
+      <div class="br"><span class="bl">💰 Add 32kg</span><span class="bv"><span class="price">$55</span> <button class="add-bag-btn" data-kg="32" data-price="55">+ Add</button></span></div>
+      <div style="font-size:11px;color:#90A4AE;margin-top:6px;">📏 Dimensions: 40×30×20cm</div>
+    </div>`;
+    botMsg(html);
+    setQR([
+      { lbl: '🧳 Add 20kg – $35', a: 'add20' },
+      { lbl: '🧳 Add 32kg – $55', a: 'add32' },
+      { lbl: '⬅️ Back', a: 'back' }
+    ]);
+  }
+
+  async function doAddBag(kg, price) {
+    await typing(1200);
+    botMsg(`Done! <strong>${kg}kg</strong> extra baggage added to your booking for <strong>$${price}</strong>. 🛄<br><span class="c-badge">✅ Added to booking</span>`);
+    setQR([{ lbl: '🧳 Add more', a: 'baggage' }, { lbl: '⬅️ Back', a: 'back' }]);
+  }
+
+  // ── Flight Status ──
+  async function startStatus() {
+    await typing(1000);
+    const html = `<div class="flight-card">
+      <div class="fr">✈️ SK456 Bangkok → Singapore</div>
+      <div class="fd">📅 30 Jun 2026</div>
+      <div class="fs-row">
+        <span class="fs-badge ot">🟢 ON TIME</span>
+        <span>Depart <strong>14:30</strong></span>
+        <span>Arrive <strong>17:45</strong></span>
+        <span class="fg">Gate B12</span>
+      </div>
+    </div>`;
+    botMsg(html);
+    setQR([
+      { lbl: '🔔 Notify changes', a: 'notif' },
+      { lbl: '🗺️ Terminal map', a: 'tmap' },
+      { lbl: '⬅️ Back', a: 'back' }
+    ]);
+  }
+
+  async function doNotif() {
+    await typing(800);
+    botMsg('🔔 We\'ll text you if anything changes for SK456. You\'re covered!');
+    setQR(backQR());
+  }
+
+  async function doTMap() {
+    await typing(1000);
+    botMsg('🗺️ <strong>Terminal 1 Guide</strong><br><br>🛂 Check-in Row 4<br>🛍️ Shopping past security<br>🍜 Food court near Gate B8<br>🚶 Gate B12: ~8 min walk<br><br><em>Pro tip: arrive 2h before departure!</em>');
+    setQR(backQR());
+  }
+
+  // ── Check-in Flow ──
+  async function startCheckin() {
+    const dep = new Date('2026-06-30T14:30:00');
+    const now = new Date();
+    const hrs = (dep - now) / (1000*60*60);
+
+    if (hrs > 24) {
+      await typing(1000);
+      const h = Math.floor(hrs);
+      botMsg(`<div class="checkin-card"><div class="ci">⏳</div><div class="ct">Check-in opens soon!</div><div class="cs">Opens <strong>24h before</strong> departure.<br>About <strong>${h}h</strong> from now.<br>📅 ${dep.toDateString()} at 14:30</div></div>`);
+      setQR([
+        { lbl: '⏰ Remind me', a: 'remind' },
+        { lbl: '⬅️ Back', a: 'back' }
+      ]);
+    } else {
+      await typing(800);
+      botMsg(`<div class="checkin-card"><div class="ci">✅</div><div class="ct">Check-in is OPEN!</div><div class="cs">You can check in now for SK456.<br>Gate B12 | Depart 14:30</div></div>`);
+      setQR([
+        { lbl: '✅ Check in now', a: 'cknow' },
+        { lbl: '⬅️ Back', a: 'back' }
+      ]);
+    }
+  }
+
+  async function doRemind() {
+    await typing(800);
+    botMsg('⏰ Reminder set! We\'ll nudge you 24h before departure. 😊');
+    setQR(backQR());
+  }
+
+  async function doCkNow() {
+    await typing(1500);
+    botMsg('✅ You\'re checked in! 🎉<br><br>🪪 <strong>Seat:</strong> 12A (window)<br>📱 <strong>Boarding pass:</strong> Sent to your phone<br>🛄 <strong>Bag drop:</strong> Counter B4<br><br><span class="c-badge">✅ Checked in</span>');
+    setQR(backQR());
+  }
+
+  // ── Fallback ──
+  async function fallback() {
+    await typing(800);
+    botMsg('I\'m here to help with your flight! 😊<br><br>Try:<br>🔍 <strong>Find booking</strong><br>💺 <strong>Change seat</strong><br>🧳 <strong>Baggage info</strong><br>✈️ <strong>Flight status</strong><br>✅ <strong>Check-in</strong>');
+    setQR(mainQR());
+  }
+
+  // ── Reset ──
+  function reset() {
+    state = S.IDLE;
+    ctx = {};
+    if (seatSelectedEl) {
+      const prev = seatSelectedEl.dataset.seat;
+      seatSelectedEl.className = 'seat available';
+      seatSelectedEl.textContent = prev || '';
+      seatSelectedEl = null;
+    }
+    welcome();
+  }
+
+  function escapeHtml(t) {
+    const d = document.createElement('div');
+    d.textContent = t;
+    return d.innerHTML;
+  }
+
+  // ── Welcome ──
+  function welcome() {
+    setQR(mainQR());
+  }
+
+  // ── Init ──
+  async function init() {
+    await slp(400);
+    botMsg('Hi! I\'m your <strong>SkyWing assistant</strong> 🛩️<br><br>I can help with:<br>🔍 Finding your booking<br>💺 Changing your seat<br>🧳 Baggage info<br>✈️ Flight status<br>✅ Check-in<br><br><em>What can I help you with?</em>');
+    welcome();
+    scrollB();
+  }
+
+  // Baggage add button delegation
+  mEl.addEventListener('click', function(ev) {
+    const btn = ev.target.closest('.add-bag-btn');
+    if (!btn) return;
+    const kg = +btn.dataset.kg;
+    onQR({ lbl: `🧳 Add ${kg}kg`, a: kg === 20 ? 'add20' : 'add32' });
+  });
+
+  sBtn.addEventListener('click', () => {
+    const t = iEl.value.trim();
+    if (!t || busy) return;
+    handleInput(t);
+  });
+  iEl.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') { e.preventDefault(); const t = iEl.value.trim(); if (t && !busy) handleInput(t); }
+  });
+
+  init();
+})();
+</script>
+</body>
+</html>
