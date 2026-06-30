@@ -74,6 +74,61 @@ body { background: linear-gradient(135deg, #e8f0fe 0%, #d4e8f5 100%); display: f
 .send-btn:active { transform: scale(0.92); }
 .send-btn:disabled { opacity: 0.4; transform: none; box-shadow: none; }
 
+/* ── Mic Button ── */
+.mic-btn {
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  color: #78909C;
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.25s cubic-bezier(0.34,1.56,0.64,1);
+  flex-shrink: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+.mic-btn:hover { background: #F0F6FA; color: #1A2A3A; }
+.mic-btn:active { transform: scale(0.92); }
+.mic-btn.listening {
+  background: #FF7A2F;
+  color: #FFFFFF;
+  box-shadow: 0 0 0 0 rgba(255,122,47,0.3);
+  animation: micPulse 1.2s ease-in-out infinite;
+}
+@keyframes micPulse {
+  0% { box-shadow: 0 0 0 0 rgba(255,122,47,0.4); }
+  50% { box-shadow: 0 0 0 14px rgba(255,122,47,0); }
+  100% { box-shadow: 0 0 0 0 rgba(255,122,47,0); }
+}
+.mic-btn.processing {
+  background: #78909C;
+  color: #FFFFFF;
+  pointer-events: none;
+}
+
+/* ── Avatar Speaking ── */
+.bot-avatar.speaking {
+  animation: avatarSpeak 0.5s ease-in-out infinite alternate;
+  box-shadow: 0 0 0 3px rgba(255,122,47,0.4), 0 2px 12px rgba(255,122,47,0.3);
+}
+@keyframes avatarSpeak {
+  from { transform: scale(1); }
+  to { transform: scale(1.12); }
+}
+
+/* ── Header Status ── */
+.header-badge.speaking {
+  background: #2ECC71;
+  animation: statusPulse 0.8s ease-in-out infinite alternate;
+}
+@keyframes statusPulse {
+  from { opacity: 0.7; }
+  to { opacity: 1; }
+}
+
 /* ── Seat Map ── */
 .seat-map { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; margin-top: 8px; width: 100%; }
 .seat { display: flex; align-items: center; justify-content: center; height: 32px; border-radius: 6px; font-size: 10px; font-weight: 600; cursor: pointer; transition: all 0.15s; border: 1px solid transparent; user-select: none; }
@@ -262,6 +317,7 @@ body { background: linear-gradient(135deg, #e8f0fe 0%, #d4e8f5 100%); display: f
   <div class="quick-reply-tray" id="qrTray"></div>
 
   <div class="input-bar">
+    <button class="mic-btn" id="micBtn" title="Voice input">🎤</button>
     <input type="text" id="chatInput" placeholder="Type a message..." autocomplete="off">
     <button class="send-btn" id="sendBtn">➤</button>
   </div>
@@ -277,12 +333,21 @@ body { background: linear-gradient(135deg, #e8f0fe 0%, #d4e8f5 100%); display: f
   const sBtn = document.getElementById('sendBtn');
   const tEl = document.getElementById('typingIndicator');
   const qEl = document.getElementById('qrTray');
+  const micBtn = document.getElementById('micBtn');
 
   // ── State ──
   const S = { IDLE:0, AWAIT_REF:1, AWAIT_SEAT_BK:2, AWAIT_SEAT_SEL:3 };
   let state = S.IDLE;
   let ctx = {};
   let busy = false;
+
+  // ── Voice State ──
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  let recognition = null;
+  let isListening = false;
+  let voiceTriggered = false;
+  const synth = window.speechSynthesis;
+  let voicesReady = false;
 
   function scrollB() { requestAnimationFrame(() => { mEl.scrollTop = mEl.scrollHeight; }); }
   function slp(ms) { return new Promise(r => setTimeout(r, ms)); }
@@ -329,6 +394,10 @@ body { background: linear-gradient(135deg, #e8f0fe 0%, #d4e8f5 100%); display: f
       bubble.innerHTML = html;
       mEl.appendChild(wrap);
       scrollB();
+    }
+    if (voiceTriggered && opts.speak !== false && !/<(?:div|img|svg|table|button|input)/.test(html)) {
+      const plain = stripHtml(html);
+      if (plain) { speakText(plain); voiceTriggered = false; }
     }
     return wrap;
   }
@@ -399,6 +468,89 @@ body { background: linear-gradient(135deg, #e8f0fe 0%, #d4e8f5 100%); display: f
     r.style.top = (e.clientY - rect.top - size / 2) + 'px';
     el.appendChild(r);
     setTimeout(() => r.remove(), 700);
+  }
+
+  // ── Voice ──
+  function stripHtml(html) {
+    const t = document.createElement('div');
+    t.innerHTML = html;
+    return t.textContent.replace(/\s+/g, ' ').trim();
+  }
+
+  function speakText(text, cb) {
+    if (!synth || !text) { if (cb) cb(); return; }
+    synth.cancel();
+    const utt = new SpeechSynthesisUtterance(text.substring(0, 300));
+    utt.lang = 'en-US';
+    utt.rate = 1.0;
+    utt.pitch = 1.05;
+    const voices = synth.getVoices();
+    const en = voices.find(v => v.lang.startsWith('en') && /Samantha|Alex|Google US|Microsoft/.test(v.name));
+    if (en) utt.voice = en;
+    const avatars = document.querySelectorAll('.bot-avatar');
+    const badge = document.querySelector('.header-badge');
+    utt.onstart = () => {
+      avatars.forEach(a => a.classList.add('speaking'));
+      if (badge) { badge.textContent = '🔊 SPEAKING'; badge.classList.add('speaking'); }
+    };
+    utt.onend = () => {
+      avatars.forEach(a => a.classList.remove('speaking'));
+      if (badge) { badge.textContent = '● ONLINE'; badge.classList.remove('speaking'); }
+      if (cb) cb();
+    };
+    utt.onerror = () => {
+      avatars.forEach(a => a.classList.remove('speaking'));
+      if (badge) { badge.textContent = '● ONLINE'; badge.classList.remove('speaking'); }
+      if (cb) cb();
+    };
+    synth.speak(utt);
+  }
+
+  function initSpeech() {
+    if (!SpeechRecognition) { micBtn.style.display = 'none'; return; }
+    recognition = new SpeechRecognition();
+    recognition.continuous = false;
+    recognition.interimResults = true;
+    recognition.lang = 'en-US';
+    recognition.onresult = (e) => {
+      let final = '';
+      for (let i = e.resultIndex; i < e.results.length; i++) {
+        if (e.results[i].isFinal) final += e.results[i][0].transcript;
+      }
+      if (final) {
+        iEl.value = final;
+        stopListening();
+        voiceTriggered = true;
+        handleInput(final);
+      } else {
+        iEl.value = e.results[e.results.length - 1][0].transcript;
+      }
+    };
+    recognition.onerror = (ev) => {
+      stopListening();
+      if (ev.error !== 'no-speech' && ev.error !== 'aborted') {
+        botMsg(`🎤 Sorry, voice error: ${ev.error}. Try typing?`);
+      }
+    };
+    recognition.onend = () => stopListening();
+  }
+
+  function startListening() {
+    if (!recognition || isListening) return;
+    try {
+      recognition.start();
+      isListening = true;
+      micBtn.classList.add('listening');
+      iEl.placeholder = '🎤 Listening...';
+      iEl.focus();
+    } catch (_) {}
+  }
+
+  function stopListening() {
+    if (recognition) try { recognition.stop(); } catch (_) {}
+    isListening = false;
+    micBtn.classList.remove('listening', 'processing');
+    iEl.placeholder = 'Type a message...';
   }
 
   function usrMsg(text) {
@@ -801,6 +953,8 @@ body { background: linear-gradient(135deg, #e8f0fe 0%, #d4e8f5 100%); display: f
 
   // ── Init ──
   async function init() {
+    initSpeech();
+    if (synth) synth.getVoices(); // prime voice list
     await slp(400);
     botMsg('Hi! I\'m your <strong>SkyWing assistant</strong> 🛩️<br><br>I can help with:<br>🔍 Finding your booking<br>💺 Changing your seat<br>🧳 Baggage info<br>✈️ Flight status<br>✅ Check-in<br><br><em>What can I help you with?</em>', { tw: true });
     welcome();
@@ -813,6 +967,11 @@ body { background: linear-gradient(135deg, #e8f0fe 0%, #d4e8f5 100%); display: f
     if (!btn) return;
     const kg = +btn.dataset.kg;
     onQR({ lbl: `🧳 Add ${kg}kg`, a: kg === 20 ? 'add20' : 'add32' });
+  });
+
+  micBtn.addEventListener('click', () => {
+    if (isListening) { stopListening(); return; }
+    startListening();
   });
 
   sBtn.addEventListener('click', (e) => {
